@@ -9,18 +9,49 @@ using UnityEngine.UIElements;
 
 public class GraphEditorWindow : EditorWindow
 {
-    private VisualTreeAsset graphViewTreeAsset;
+    public VisualTreeAsset graphViewTreeAsset;
     private CustomGraphView graphView;
-
-    private VisualElement scriptFieldContainer;
     private ObjectField scriptField;
     private Button loadButton;
+    private VisualElement graphViewContainer;
+    private VisualElement toolboxViewContainer;
 
     [MenuItem("Tools/Graph %g")]
     public static void OpenGraphEditorWindow()
     {
         GraphEditorWindow window = GetWindow<GraphEditorWindow>("Graph Editor");
         window.minSize = new Vector2(800, 600);
+        window.Initialize();
+    }
+
+    private void Initialize()
+    {
+        if (this.graphViewTreeAsset == null)
+            return;
+
+
+        VisualElement root = rootVisualElement;
+        graphViewTreeAsset.CloneTree(root);
+
+        this.scriptField = root.Q<ObjectField>("_scriptField");
+        this.loadButton = root.Q<Button>("_loadButton");
+        this.graphViewContainer = root.Q<VisualElement>("_graphField");
+        this.toolboxViewContainer = root.Q<VisualElement>("_toolBox");
+
+
+        this.loadButton.clicked += OnLoadButtonClicked;
+        ConstructGraph();
+
+    }
+    private void ConstructGraph()
+    {
+        this.graphView = new CustomGraphView()
+        {
+            name = "Graph View"
+        };
+
+        this.graphViewContainer.Add(this.graphView);
+        this.graphView.StretchToParentSize();
     }
 
     private void OnLoadButtonClicked()
