@@ -14,7 +14,7 @@ public class GraphEditorWindow : EditorWindow
     private ObjectField scriptField;
     private Button loadButton;
     private VisualElement graphViewContainer;
-    private VisualElement toolboxViewContainer;
+    private ScrollView toolboxViewContainer;
 
     [MenuItem("Tools/Graph %g")]
     public static void OpenGraphEditorWindow()
@@ -36,7 +36,7 @@ public class GraphEditorWindow : EditorWindow
         this.scriptField = root.Q<ObjectField>("_scriptField");
         this.loadButton = root.Q<Button>("_loadButton");
         this.graphViewContainer = root.Q<VisualElement>("_graphField");
-        this.toolboxViewContainer = root.Q<VisualElement>("_toolBox");
+        this.toolboxViewContainer = root.Q<ScrollView>("_toolBoxContainer");
 
 
         this.loadButton.clicked += OnLoadButtonClicked;
@@ -64,26 +64,55 @@ public class GraphEditorWindow : EditorWindow
             {
                 Debug.Log($"Class: {scriptType.Name}");
 
-                // Get and print fields
+                // Create foldouts for fields, properties, and methods
+                Foldout fieldsFoldout = new Foldout() { text = "Fields" };
+                Foldout propertiesFoldout = new Foldout() { text = "Properties" };
+                Foldout methodsFoldout = new Foldout() { text = "Methods" };
+
+                // Get and add fields
                 FieldInfo[] fields = scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (FieldInfo field in fields)
                 {
-                    Debug.Log($"Field: {field.Name} ({field.FieldType})");
+                    Button fieldButton = new Button(() => Debug.Log($"Field: {field.Name} ({field.FieldType})"))
+                    {
+                        text = $"{field.Name}"// ({field.FieldType})"
+                    };
+                    fieldButton.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    fieldButton.enableRichText = true;
+                    fieldsFoldout.Add(fieldButton);
                 }
 
-                // Get and print properties
+                // Get and add properties
                 PropertyInfo[] properties = scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (PropertyInfo property in properties)
                 {
-                    Debug.Log($"Property: {property.Name} ({property.PropertyType})");
+                    Button propertyButton = new Button(() => Debug.Log($"Property: {property.Name} ({property.PropertyType})"))
+                    {
+                        text = $"{property.Name}"// ({property.PropertyType})"
+                    };
+                    propertyButton.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    propertyButton.enableRichText = true;
+                    propertiesFoldout.Add(propertyButton);
                 }
 
-                // Get and print methods
+                // Get and add methods
                 MethodInfo[] methods = scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (MethodInfo method in methods)
                 {
-                    Debug.Log($"Method: {method.Name} (Return Type: {method.ReturnType})");
+                    Button methodButton = new Button(() => Debug.Log($"Method: {method.Name} (Return Type: {method.ReturnType})"))
+                    {
+                        text = $"{method.Name} (Return Type: {method.ReturnType})"
+                    };
+                    methodButton.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    methodButton.enableRichText = true;
+                    methodsFoldout.Add(methodButton);
                 }
+
+                // Clear the toolbox container and add the foldouts
+                toolboxViewContainer.Clear();
+                toolboxViewContainer.Add(fieldsFoldout);
+                toolboxViewContainer.Add(propertiesFoldout);
+                toolboxViewContainer.Add(methodsFoldout);
             }
             else
             {

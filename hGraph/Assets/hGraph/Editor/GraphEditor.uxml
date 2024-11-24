@@ -1,10 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement name="_scriptView" style="flex-grow: 1; height: 0; min-height: 0; flex-direction: row; justify-content: space-between; align-items: flex-end; align-self: stretch; max-height: 30px;">
+    <ui:VisualElement name="_scriptView" style="flex-grow: 1; height: 0; min-height: 0; flex-direction: row; justify-content: flex-start; align-items: flex-end; align-self: stretch; max-height: 30px; flex-basis: 100%;">
         <uie:ObjectField label="Object Field" name="_scriptField" style="height: auto; width: 80%; flex-basis: 80%; flex-direction: row;" />
-        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="_loadButton" />
+        <ui:Button text="Load" parse-escape-sequences="true" display-tooltip-when-elided="true" name="_loadButton" style="width: auto; justify-content: flex-start; align-items: stretch; flex-direction: column; flex-grow: 1;" />
     </ui:VisualElement>
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement name="_toolBox" style="flex-grow: 1; align-self: auto;" />
+        <ui:VisualElement name="_toolBox" style="flex-grow: 1; align-self: auto;">
+            <ui:ScrollView touch-scroll-type="Clamped" name="_toolBoxContainer" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Auto" style="width: 100%; min-width: 100%; max-width: 0;" />
+        </ui:VisualElement>
         <ui:VisualElement name="_graphField" style="flex-grow: 1; width: 60%;" />
     </ui:VisualElement>
 </ui:UXML>
