@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="_scriptView" style="flex-grow: 1; height: 0; min-height: 0; flex-direction: row; justify-content: center; align-items: flex-start; align-self: stretch; max-height: 30px;">
+        <uie:ObjectField label="Object Field" style="height: auto; width: 80%; flex-basis: 80%; flex-direction: row;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+    </ui:VisualElement>
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="_toolBox" style="flex-grow: 1; align-self: auto;" />
+        <ui:VisualElement name="_graphField" style="flex-grow: 1; width: 60%;" />
+    </ui:VisualElement>
+</ui:UXML>

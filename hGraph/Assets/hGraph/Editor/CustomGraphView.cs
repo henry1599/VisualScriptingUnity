@@ -12,7 +12,6 @@ public class CustomGraphView : GraphView
         // Add a grid background
         GridBackground grid = new GridBackground();
         Insert(0, grid);
-        grid.StretchToParentSize();
 
         // Add manipulators for zooming and panning
         this.AddManipulator(new ContentZoomer());
@@ -39,6 +38,9 @@ public class CustomGraphView : GraphView
             title = $"{nodeType} Node"
         };
         node.SetPosition(node.rect);
+        node.AddInputPort("Param");
+        node.AddOutputPort("Output");
+        node.Refresh();
         AddElement(node);
     }
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
