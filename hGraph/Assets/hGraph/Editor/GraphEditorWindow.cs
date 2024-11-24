@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Codice.Client.BaseCommands;
 using UnityEditor;
@@ -64,51 +65,87 @@ public class GraphEditorWindow : EditorWindow
             {
                 Debug.Log($"Class: {scriptType.Name}");
 
-                // Create foldouts for fields, properties, and methods
+                // Create main foldouts for fields, properties, and methods
                 Foldout fieldsFoldout = new Foldout() { text = "Fields" };
                 Foldout propertiesFoldout = new Foldout() { text = "Properties" };
                 Foldout methodsFoldout = new Foldout() { text = "Methods" };
+                
+                // Enable rich text for main foldouts
+                fieldsFoldout.Q<Label>().enableRichText = true;
+                propertiesFoldout.Q<Label>().enableRichText = true;
+                methodsFoldout.Q<Label>().enableRichText = true;
+
+                // Dictionaries to store namespace foldouts
+                Dictionary<string, Foldout> fieldNamespaceFoldouts = new Dictionary<string, Foldout>();
+                Dictionary<string, Foldout> propertyNamespaceFoldouts = new Dictionary<string, Foldout>();
+                Dictionary<string, Foldout> methodNamespaceFoldouts = new Dictionary<string, Foldout>();
 
                 // Get and add fields
                 FieldInfo[] fields = scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (FieldInfo field in fields)
                 {
-                    Button fieldButton = new Button(() => Debug.Log($"Field: {field.Name} ({field.FieldType})"))
+                    string namespaceName = field.DeclaringType.Namespace ?? "No Namespace";
+                    if (!fieldNamespaceFoldouts.ContainsKey(namespaceName))
                     {
-                        text = $"{field.Name}"// ({field.FieldType})"
-                    };
-                    fieldButton.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    fieldButton.enableRichText = true;
-                    fieldsFoldout.Add(fieldButton);
+                        fieldNamespaceFoldouts[namespaceName] = new Foldout() { text = namespaceName };
+                    }
+
+                    string text = $"<color=yellow>({field.FieldType})</color> {field.Name}";
+                    Label fieldLabel = new Label(text);
+                    fieldLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    fieldLabel.enableRichText = true;
+                    fieldNamespaceFoldouts[namespaceName].Add(fieldLabel);
                 }
 
                 // Get and add properties
                 PropertyInfo[] properties = scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (PropertyInfo property in properties)
                 {
-                    Button propertyButton = new Button(() => Debug.Log($"Property: {property.Name} ({property.PropertyType})"))
+                    string namespaceName = property.DeclaringType.Namespace ?? "No Namespace";
+                    if (!propertyNamespaceFoldouts.ContainsKey(namespaceName))
                     {
-                        text = $"{property.Name}"// ({property.PropertyType})"
-                    };
-                    propertyButton.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    propertyButton.enableRichText = true;
-                    propertiesFoldout.Add(propertyButton);
+                        propertyNamespaceFoldouts[namespaceName] = new Foldout() { text = namespaceName };
+                    }
+
+                    string text = $"<color=yellow>({property.PropertyType})</color> {property.Name}";
+                    Label propertyLabel = new Label(text);
+                    propertyLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    propertyLabel.enableRichText = true;
+                    propertyNamespaceFoldouts[namespaceName].Add(propertyLabel);
                 }
 
                 // Get and add methods
                 MethodInfo[] methods = scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (MethodInfo method in methods)
                 {
-                    Button methodButton = new Button(() => Debug.Log($"Method: {method.Name} (Return Type: {method.ReturnType})"))
+                    string namespaceName = method.DeclaringType.Namespace ?? "No Namespace";
+                    if (!methodNamespaceFoldouts.ContainsKey(namespaceName))
                     {
-                        text = $"{method.Name} (Return Type: {method.ReturnType})"
-                    };
-                    methodButton.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    methodButton.enableRichText = true;
-                    methodsFoldout.Add(methodButton);
+                        methodNamespaceFoldouts[namespaceName] = new Foldout() { text = namespaceName };
+                    }
+
+                    string text = $"<color=yellow>({method.ReturnType})</color> {method.Name}";
+                    Label methodLabel = new Label(text);
+                    methodLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    methodLabel.enableRichText = true;
+                    methodNamespaceFoldouts[namespaceName].Add(methodLabel);
                 }
 
-                // Clear the toolbox container and add the foldouts
+                // Add namespace foldouts to main foldouts
+                foreach (var foldout in fieldNamespaceFoldouts.Values)
+                {
+                    fieldsFoldout.Add(foldout);
+                }
+                foreach (var foldout in propertyNamespaceFoldouts.Values)
+                {
+                    propertiesFoldout.Add(foldout);
+                }
+                foreach (var foldout in methodNamespaceFoldouts.Values)
+                {
+                    methodsFoldout.Add(foldout);
+                }
+
+                // Clear the toolbox container and add the main foldouts
                 toolboxViewContainer.Clear();
                 toolboxViewContainer.Add(fieldsFoldout);
                 toolboxViewContainer.Add(propertiesFoldout);
