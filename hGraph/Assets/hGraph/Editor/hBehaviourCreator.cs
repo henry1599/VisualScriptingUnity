@@ -7,13 +7,9 @@ public class hBehaviourCreator : Editor
     [MenuItem("Assets/Create/hBehaviour", false, 80)] // Creates a menu item under 'Assets > Create'
     private static void CreateHBehaviourTemplate()
     {
-        string template = 
-@"using UnityEngine;
-
-public class #SCRIPTNAME# : hBehaviour
-{
-}
-";
+        var icon = EditorGUIUtility.IconContent("d_Skybox Icon");
+        string templatePath = Application.dataPath + "/hGraph/Template.txt";
+        string template = File.ReadAllText(templatePath);
 
         // Default filename
         string defaultFileName = "NewHBehaviour.cs";
@@ -43,5 +39,9 @@ public class #SCRIPTNAME# : hBehaviour
         // Automatically focus on and rename the created file
         Object newScript = AssetDatabase.LoadAssetAtPath<Object>(path);
         ProjectWindowUtil.ShowCreatedAsset(newScript);
+        if (icon != null)
+        {
+            // Assign icon to the created file in unity editor
+        }
     }
 }

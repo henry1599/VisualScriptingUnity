@@ -27,27 +27,6 @@ namespace hGraph.Editor
         private ToolbarSearchField toolbarSearchField;
         string filterText;
         private hBehaviour chosenHBehaviour;
-        private void OnEnable()
-        {
-            string savedBehaviourJson = EditorPrefs.GetString(EditorPrefsKey, null);
-            if (!string.IsNullOrEmpty(savedBehaviourJson))
-            {
-                chosenHBehaviour = JsonUtility.FromJson<hBehaviour>(savedBehaviourJson);
-                if (chosenHBehaviour != null)
-                {
-                    Initialize(chosenHBehaviour);
-                }
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (chosenHBehaviour != null)
-            {
-                string behaviourJson = JsonUtility.ToJson(chosenHBehaviour);
-                EditorPrefs.SetString(EditorPrefsKey, behaviourJson);
-            }
-        }
         public static void OpenGraphEditorWindow(hBehaviour hBehaviour)
         {
             
@@ -226,12 +205,10 @@ namespace hGraph.Editor
                         value = false
                     };
                 }
-
-                string text = $"<b><color=yellow>({SimplifyTypeName(field.FieldType)})</color> {field.Name}</b>";
-                Label fieldLabel = new Label(text);
-                fieldLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-                fieldLabel.enableRichText = true;
-                fieldNamespaceFoldouts[namespaceName].Add(fieldLabel);
+                var icon = EditorGUIUtility.IconContent("d_AreaEffector2D Icon").image;
+                string displayName = ObjectNames.NicifyVariableName(field.Name);
+                Button fieldButton = Common.CreateButtonWithIcon(icon, new Button() { text = displayName });
+                fieldNamespaceFoldouts[namespaceName].Add(fieldButton);
             }
             return fieldNamespaceFoldouts;
         }
@@ -240,7 +217,7 @@ namespace hGraph.Editor
             Dictionary<string, Foldout> propertyNamespaceFoldouts = new Dictionary<string, Foldout>();
             foreach (PropertyInfo property in properties)
             {
-                string namespaceName = property.DeclaringType.Namespace ?? "No Namespace";
+                string namespaceName = property.DeclaringType.Namespace ?? "Global Namespace";
                 if (!propertyNamespaceFoldouts.ContainsKey(namespaceName))
                 {
                     propertyNamespaceFoldouts[namespaceName] = new Foldout() 
@@ -250,11 +227,10 @@ namespace hGraph.Editor
                     };
                 }
 
-                string text = $"<b><color=yellow>({SimplifyTypeName(property.PropertyType)})</color> {property.Name}</b>";
-                Label propertyLabel = new Label(text);
-                propertyLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-                propertyLabel.enableRichText = true;
-                propertyNamespaceFoldouts[namespaceName].Add(propertyLabel);
+                var icon = EditorGUIUtility.IconContent("d_LODGroup Icon").image;
+                string displayName = ObjectNames.NicifyVariableName(property.Name);
+                Button propertyButton = Common.CreateButtonWithIcon(icon, new Button() { text = displayName });
+                propertyNamespaceFoldouts[namespaceName].Add(propertyButton);
             }
             return propertyNamespaceFoldouts;
         }
@@ -263,7 +239,7 @@ namespace hGraph.Editor
             Dictionary<string, Foldout> methodNamespaceFoldouts = new Dictionary<string, Foldout>();
             foreach (MethodInfo method in methods)
             {
-                string namespaceName = method.DeclaringType.Namespace ?? "No Namespace";
+                string namespaceName = method.DeclaringType.Namespace ?? "Global Namespace";
                 if (!methodNamespaceFoldouts.ContainsKey(namespaceName))
                 {
                     methodNamespaceFoldouts[namespaceName] = new Foldout() 
@@ -272,12 +248,10 @@ namespace hGraph.Editor
                         value = false 
                     };
                 }
+                var icon = EditorGUIUtility.IconContent("d_Tile Icon").image;
+                Button methodButton = Common.CreateButtonWithIcon(icon, new Button() { text = method.Name });
 
-                string text = $"<b><color=yellow>({SimplifyTypeName(method.ReturnType)})</color> {method.Name}</b>";
-                Label methodLabel = new Label(text);
-                methodLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-                methodLabel.enableRichText = true;
-                methodNamespaceFoldouts[namespaceName].Add(methodLabel);
+                methodNamespaceFoldouts[namespaceName].Add(methodButton);
             }
             return methodNamespaceFoldouts;
         }

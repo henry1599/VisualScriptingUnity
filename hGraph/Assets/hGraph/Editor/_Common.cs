@@ -9,6 +9,7 @@ using System.Reflection;
 using Microsoft.CSharp;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public static class Common
 {
@@ -21,6 +22,34 @@ public static class Common
         result.SetPixels(pix);
         result.Apply();
         return result;
+    }
+    public static Button CreateButtonWithIcon(Texture icon, Button button)
+    {
+        VisualElement container = new VisualElement();
+        container.style.flexDirection = FlexDirection.Row;
+        Image iconImage = new Image() { image = icon };
+        container.Add(iconImage);
+        Label label = new Label(button.text);
+        container.Add(label);
+        button.text = string.Empty;
+        container.style.maxHeight = 20f;
+        button.Add(container);
+        return button;
+    }
+    public static List<string> GetNamespaces(this Type scriptType)
+    {
+        var namespaces = new HashSet<string>();
+        var allTypes = scriptType.Assembly.GetTypes();
+
+        foreach (var type in allTypes)
+        {
+            if (type.Namespace != null && type.Namespace.StartsWith(scriptType.Namespace))
+            {
+                namespaces.Add(type.Namespace);
+            }
+        }
+
+        return namespaces.ToList();
     }
     public static List<FieldInfo> GetFieldList(this Type scriptType, List<string> namespaces)
     {

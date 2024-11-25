@@ -21,7 +21,7 @@ public class hBehaviourScriptEditor : Editor
             }
         }
         else
-        { 
+        {
             base.OnInspectorGUI();
         }
     }
