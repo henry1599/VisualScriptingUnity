@@ -1,9 +1,13 @@
 using System;
 using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.CSharp;
+using UnityEditor;
 using UnityEngine;
 
 public static class Common
@@ -18,18 +22,35 @@ public static class Common
         result.Apply();
         return result;
     }
-    
-    public static List<FieldInfo> GetFieldList(this Type scriptType)
+    public static List<FieldInfo> GetFieldList(this Type scriptType, List<string> namespaces)
     {
-        return scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).ToList();
+        var fields = new List<FieldInfo>();
+        fields.AddRange(scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
+
+        return fields;
     }
-    public static List<PropertyInfo> GetPropertyList(this Type scriptType)
+    public static List<PropertyInfo> GetPropertyList(this Type scriptType, List<string> namespaces)
     {
-        return scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).ToList();
+        var properties = new List<PropertyInfo>();
+        properties.AddRange(scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
+
+        return properties;
     }
-    public static List<MethodInfo> GetMethodList(this Type scriptType)
+
+    public static List<MethodInfo> GetMethodList(this Type scriptType, List<string> namespaces)
     {
-        return scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).ToList();
+        var methods = new List<MethodInfo>();
+        methods.AddRange(scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
+
+        return methods;
+    }
+
+    private static List<Type> GetTypesInNamespace(string namespaceName)
+    {
+        return AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(assembly => assembly.GetTypes())
+            .Where(type => type.Namespace == namespaceName)
+            .ToList();
     }
     public static List<FieldInfo> Filter(this List<FieldInfo> list, string filterText)
     {

@@ -156,9 +156,9 @@ public class GraphEditorWindow : EditorWindow
             };
 
             // Dictionaries to store namespace foldouts
-            List<FieldInfo> fieldInfos = scriptType.GetFieldList().Filter(this.filterText);
-            List<PropertyInfo> propertyInfos = scriptType.GetPropertyList().Filter(this.filterText);
-            List<MethodInfo> methodInfos = scriptType.GetMethodList().Filter(this.filterText);
+            List<FieldInfo> fieldInfos = scriptType.GetFieldList(namespaces).Filter(this.filterText);
+            List<PropertyInfo> propertyInfos = scriptType.GetPropertyList(namespaces).Filter(this.filterText);
+            List<MethodInfo> methodInfos = scriptType.GetMethodList(namespaces).Filter(this.filterText);
 
             Dictionary<string, Foldout> fieldNamespaceFoldouts = GroupFieldsByNamespaces(fieldInfos);
             Dictionary<string, Foldout> propertyNamespaceFoldouts = GroupPropertiesByNamespaces(propertyInfos);
@@ -219,7 +219,13 @@ public class GraphEditorWindow : EditorWindow
                 fieldNamespaceFoldouts[namespaceName] = new Foldout() { text = $"<b>{namespaceName}</b>" };
             }
 
-            string text = $"<b><color=yellow>({SimplifyTypeName(field.FieldType)})</color> {field.Name}</b>";
+            bool isInstance = field.DeclaringType == scriptField.value.GetType();
+            
+            string text = string.Empty;
+            if (isInstance)
+                text = $"<b><color=yellow>(Instance)</color> {field.Name}</b>";
+            else
+                text = $"<b><color=yellow>({SimplifyTypeName(field.FieldType)})</color> {field.Name}</b>";
             Label fieldLabel = new Label(text);
             fieldLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
             fieldLabel.enableRichText = true;
@@ -276,7 +282,8 @@ public class GraphEditorWindow : EditorWindow
             {
                 typeName = typeName.Substring(0, index);
             }
-            return $"{typeName}<{fieldType.GenericTypeArguments[0].Name}>";
+            if (fieldType.GenericTypeArguments.Length > 0)
+                return $"{typeName}<{fieldType.GenericTypeArguments[0].Name}>";
         }
         return fieldType.Name;
     }
