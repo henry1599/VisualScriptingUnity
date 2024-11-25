@@ -29,10 +29,46 @@ public static class Common
 
         return fields;
     }
+    public static List<FieldInfo> GetMinimalFieldList(this Type scriptType, List<string> namespaces)
+    {
+        var fields = new List<FieldInfo>();
+        var allFields = scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+        var baseFields = scriptType.BaseType?.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static) ?? new FieldInfo[0];
+
+        foreach (var field in allFields)
+        {
+            if (field.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+            {
+                continue;
+            }
+            if (!baseFields.Any(baseField => baseField.Name == field.Name && baseField.FieldType == field.FieldType))
+            {
+                fields.Add(field);
+            }
+        }
+
+        return fields;
+    }
     public static List<PropertyInfo> GetPropertyList(this Type scriptType, List<string> namespaces)
     {
         var properties = new List<PropertyInfo>();
         properties.AddRange(scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
+
+        return properties;
+    }
+    public static List<PropertyInfo> GetMinimalPropertyList(this Type scriptType, List<string> namespaces)
+    {
+        var properties = new List<PropertyInfo>();
+        var allProperties = scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+        var baseProperties = scriptType.BaseType?.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static) ?? new PropertyInfo[0];
+
+        foreach (var property in allProperties)
+        {
+            if (!baseProperties.Any(baseProperty => baseProperty.Name == property.Name && baseProperty.PropertyType == property.PropertyType))
+            {
+                properties.Add(property);
+            }
+        }
 
         return properties;
     }
@@ -41,6 +77,26 @@ public static class Common
     {
         var methods = new List<MethodInfo>();
         methods.AddRange(scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static));
+
+        return methods;
+    }
+    public static List<MethodInfo> GetMinimalMethodList(this Type scriptType, List<string> namespaces)
+    {
+        var methods = new List<MethodInfo>();
+        var allMethods = scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+        var baseMethods = scriptType.BaseType?.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static) ?? new MethodInfo[0];
+
+        foreach (var method in allMethods)
+        {
+            if (method.IsSpecialName && method.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+            {
+                continue;
+            }
+            if (!baseMethods.Any(baseMethod => baseMethod.Name == method.Name && baseMethod.GetParameters().Select(p => p.ParameterType).SequenceEqual(method.GetParameters().Select(p => p.ParameterType))))
+            {
+                methods.Add(method);
+            }
+        }
 
         return methods;
     }

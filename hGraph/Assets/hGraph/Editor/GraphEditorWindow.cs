@@ -1,126 +1,130 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Codice.Client.BaseCommands;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
-public class GraphEditorWindow : EditorWindow
+namespace hGraph.Editor
 {
-    public VisualTreeAsset graphViewTreeAsset;
-    private CustomGraphView graphView;
-    private ObjectField scriptField;
-    private Button loadButton;
-
-    private VisualElement mainLayout;
-    private Label classNameLabel;
-    private VisualElement graphViewContainer;
-    private VisualElement toolboxVisualElement;
-    private ScrollView toolboxViewContainer;
-    private ListView namespaceListView;
-    private ToolbarSearchField toolbarSearchField;
-    string filterText;
-
-    [MenuItem("Tools/Graph %g")]
-    public static void OpenGraphEditorWindow()
+    public class GraphEditorWindow : EditorWindow
     {
-        GraphEditorWindow window = GetWindow<GraphEditorWindow>("Graph Editor");
-        window.minSize = new Vector2(800, 600);
-        window.Initialize();
-    }
+        private const string EditorPrefsKey = "GraphEditorWindow_hBehaviour";
+        public VisualTreeAsset graphViewTreeAsset;
+        private CustomGraphView graphView;
+        private Button loadButton;
 
-    private void Initialize()
-    {
-        if (this.graphViewTreeAsset == null)
-            return;
-
-        VisualElement root = rootVisualElement;
-        graphViewTreeAsset.CloneTree(root);
-
-        this.scriptField = root.Q<ObjectField>("_scriptField");
-        this.loadButton = root.Q<Button>("_loadButton");
-        this.graphViewContainer = root.Q<VisualElement>("_graphField");
-        this.toolboxViewContainer = root.Q<ScrollView>("_toolBoxContainer");
-        this.toolboxVisualElement = root.Q<VisualElement>("_toolBox");
-        this.mainLayout = root.Q<VisualElement>("_mainLayout");
-        this.classNameLabel = root.Q<Label>("_classNameLabel");
-        this.namespaceListView = root.Q<ListView>("_namespaceListView");
-        this.toolbarSearchField = root.Q<ToolbarSearchField>("_toolbarSearchField");
-
-        TwoPaneSplitView splitView = new TwoPaneSplitView(0, 250, TwoPaneSplitViewOrientation.Horizontal);
-        splitView.Add(toolboxVisualElement);
-        splitView.Add(graphViewContainer);
-        mainLayout.Add(splitView);
-        splitView.StretchToParentSize();
-
-        this.loadButton.clicked += OnLoadButtonClicked;
-        this.toolbarSearchField.RegisterValueChangedCallback(OnToolbarSearchFieldChanged);
-        ConstructGraph();
-    }
-
-    private void OnToolbarSearchFieldChanged(ChangeEvent<string> evt)
-    {
-        this.filterText = evt.newValue;
-        ReloadContent(scriptField.value as MonoScript);
-    }
-
-    private void ConstructGraph()
-    {
-        this.graphView = new CustomGraphView()
+        private VisualElement mainLayout;
+        private Label classNameLabel;
+        private VisualElement graphViewContainer; 
+        private VisualElement toolboxVisualElement;
+        private ScrollView toolboxViewContainer;
+        private ListView namespaceListView;
+        private ToolbarSearchField toolbarSearchField;
+        string filterText;
+        private hBehaviour chosenHBehaviour;
+        private void OnEnable()
         {
-            name = "Graph View"
-        };
+            string savedBehaviourJson = EditorPrefs.GetString(EditorPrefsKey, null);
+            if (!string.IsNullOrEmpty(savedBehaviourJson))
+            {
+                chosenHBehaviour = JsonUtility.FromJson<hBehaviour>(savedBehaviourJson);
+                if (chosenHBehaviour != null)
+                {
+                    Initialize(chosenHBehaviour);
+                }
+            }
+        }
 
-        this.graphViewContainer.Add(this.graphView);
-        this.graphView.StretchToParentSize();
-    }
-
-    void ReloadContent(MonoScript monoScript)
-    {
-        this.toolboxViewContainer.Clear();
-        Type scriptType = monoScript.GetClass();
-
-        // * Label
-        this.classNameLabel.text = $"<b>Class: <color=green>{scriptType.Name}</color></b>";
-
-
-
-        // * Namespaces
-        var namespaces = scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-            .Select(f => f.DeclaringType.Namespace)
-            .Concat(scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-            .Select(p => p.DeclaringType.Namespace))
-            .Concat(scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-            .Select(m => m.DeclaringType.Namespace))
-            .Where(ns => !string.IsNullOrEmpty(ns))
-            .Distinct()
-            .ToList();
-
-        namespaceListView.headerTitle = "Namespaces";
-        namespaceListView.itemsSource = namespaces;
-        namespaceListView.makeItem = () =>
+        private void OnDisable()
         {
-            TextField textField = new TextField();
-            textField.isReadOnly = false;
-            return textField;
-        };
-        namespaceListView.bindItem = (element, i) =>
+            if (chosenHBehaviour != null)
+            {
+                string behaviourJson = JsonUtility.ToJson(chosenHBehaviour);
+                EditorPrefs.SetString(EditorPrefsKey, behaviourJson);
+            }
+        }
+        public static void OpenGraphEditorWindow(hBehaviour hBehaviour)
         {
-            (element as TextField).value = namespaces[i];
-        };
-        namespaceListView.Rebuild();
+            
+            GraphEditorWindow window = GetWindow<GraphEditorWindow>("Graph Editor"); 
+            window.minSize = new Vector2(800, 600);
+            window.Initialize(hBehaviour);
+        }
 
-
-
-        if (scriptType != null)
+        private void Initialize(hBehaviour hBehaviour)
         {
-            Debug.Log($"Class: {scriptType.Name}");
+            if (this.graphViewTreeAsset == null)
+                return;
+            
+            this.chosenHBehaviour = hBehaviour;
+            VisualElement root = rootVisualElement;
+            graphViewTreeAsset.CloneTree(root);
+
+            // this.scriptField = root.Q<ObjectField>("_scriptField");
+            this.loadButton = root.Q<Button>("_loadButton");
+            this.graphViewContainer = root.Q<VisualElement>("_graphField");
+            this.toolboxViewContainer = root.Q<ScrollView>("_toolBoxContainer");
+            this.toolboxVisualElement = root.Q<VisualElement>("_toolBox");
+            this.mainLayout = root.Q<VisualElement>("_mainLayout");
+            this.classNameLabel = root.Q<Label>("_classNameLabel");
+            this.namespaceListView = root.Q<ListView>("_namespaceListView");
+            this.toolbarSearchField = root.Q<ToolbarSearchField>("_toolbarSearchField");
+
+            TwoPaneSplitView splitView = new TwoPaneSplitView(0, 250, TwoPaneSplitViewOrientation.Horizontal);
+            splitView.Add(toolboxVisualElement);
+            splitView.Add(graphViewContainer);
+            mainLayout.Add(splitView);
+            splitView.StretchToParentSize();
+
+            this.toolbarSearchField.RegisterValueChangedCallback(OnToolbarSearchFieldChanged);
+            ConstructGraph();
+
+            ReadContent();
+        }
+        private void ReadContent()
+        {
+            hBehaviour behaviour = this.chosenHBehaviour;
+
+            this.toolboxViewContainer.Clear();
+            Type scriptType = behaviour.GetType();
+
+            // * Label
+            this.classNameLabel.text = $"<b>Class: <color=green>{scriptType.Name}</color></b>";
+
+
+
+            // * Namespaces
+            var namespaces = scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                .Select(f => f.DeclaringType.Namespace)
+                .Concat(scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                .Select(p => p.DeclaringType.Namespace))
+                .Concat(scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                .Select(m => m.DeclaringType.Namespace))
+                .Where(ns => !string.IsNullOrEmpty(ns))
+                .Distinct()
+                .ToList();
+
+            namespaceListView.headerTitle = "Namespaces";
+            namespaceListView.itemsSource = namespaces;
+            namespaceListView.makeItem = () =>
+            {
+                TextField textField = new TextField();
+                textField.isReadOnly = false;
+                return textField;
+            };
+            namespaceListView.bindItem = (element, i) =>
+            {
+                (element as TextField).value = namespaces[i];
+            };
+            namespaceListView.Rebuild();
+
             // Create main foldouts for fields, properties, and methods
-            Foldout fieldsFoldout = new Foldout
+            Foldout variableFoldout = new Foldout
             {
                 style =
                     {
@@ -142,7 +146,7 @@ public class GraphEditorWindow : EditorWindow
                         borderRightWidth = 1
                     }
             };
-            Foldout methodsFoldout = new Foldout
+            Foldout functionFoldout = new Foldout
             {
                 style =
                     {
@@ -156,9 +160,9 @@ public class GraphEditorWindow : EditorWindow
             };
 
             // Dictionaries to store namespace foldouts
-            List<FieldInfo> fieldInfos = scriptType.GetFieldList(namespaces).Filter(this.filterText);
-            List<PropertyInfo> propertyInfos = scriptType.GetPropertyList(namespaces).Filter(this.filterText);
-            List<MethodInfo> methodInfos = scriptType.GetMethodList(namespaces).Filter(this.filterText);
+            List<FieldInfo> fieldInfos = scriptType.GetMinimalFieldList(namespaces).Filter(this.filterText);
+            List<PropertyInfo> propertyInfos = scriptType.GetMinimalPropertyList(namespaces).Filter(this.filterText);
+            List<MethodInfo> methodInfos = scriptType.GetMinimalMethodList(namespaces).Filter(this.filterText);
 
             Dictionary<string, Foldout> fieldNamespaceFoldouts = GroupFieldsByNamespaces(fieldInfos);
             Dictionary<string, Foldout> propertyNamespaceFoldouts = GroupPropertiesByNamespaces(propertyInfos);
@@ -166,10 +170,10 @@ public class GraphEditorWindow : EditorWindow
 
             // Add namespace foldouts to main foldouts
             int fieldCount = fieldNamespaceFoldouts.Values.Select(child => child.childCount).Sum();
-            fieldsFoldout.text = $"<b>Fields ({fieldCount})</b>";
+            variableFoldout.text = $"<b>Variables ({fieldCount})</b>";
             foreach (var foldout in fieldNamespaceFoldouts.Values)
             {
-                fieldsFoldout.Add(foldout);
+                variableFoldout.Add(foldout);
             }
 
             int propertyCount = propertyNamespaceFoldouts.Values.Select(child => child.childCount).Sum();
@@ -180,111 +184,118 @@ public class GraphEditorWindow : EditorWindow
             }
 
             int methodCount = methodNamespaceFoldouts.Values.Select(child => child.childCount).Sum();
-            methodsFoldout.text = $"<b>Methods ({methodCount})</b>";
+            functionFoldout.text = $"<b>Functions ({methodCount})</b>";
             foreach (var foldout in methodNamespaceFoldouts.Values)
             {
-                methodsFoldout.Add(foldout);
+                functionFoldout.Add(foldout);
             }
 
             // Clear the toolbox container and add the main foldouts
-            toolboxViewContainer.Add(fieldsFoldout);
+            toolboxViewContainer.Add(variableFoldout);
             toolboxViewContainer.Add(propertiesFoldout);
-            toolboxViewContainer.Add(methodsFoldout);
+            toolboxViewContainer.Add(functionFoldout);
         }
-        else
+        private void OnToolbarSearchFieldChanged(ChangeEvent<string> evt)
         {
-            Debug.LogError("Selected script does not have a valid class.");
+            this.filterText = evt.newValue;
+            ReadContent();
         }
-    }
-    private void OnLoadButtonClicked()
-    {
-        MonoScript monoScript = scriptField.value as MonoScript;
-        if (monoScript != null)
-        {
-            ReloadContent(monoScript);
-        }
-        else
-        {
-            Debug.LogError("No script selected.");
-        }
-    }
-    Dictionary<string, Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)
-    {
-        Dictionary<string, Foldout> fieldNamespaceFoldouts = new Dictionary<string, Foldout>();
-        foreach (FieldInfo field in fieldInfos)
-        {
-            string namespaceName = field.DeclaringType.Namespace ?? "No Namespace";
-            if (!fieldNamespaceFoldouts.ContainsKey(namespaceName))
-            {
-                fieldNamespaceFoldouts[namespaceName] = new Foldout() { text = $"<b>{namespaceName}</b>" };
-            }
 
-            bool isInstance = field.DeclaringType == scriptField.value.GetType();
-            
-            string text = string.Empty;
-            if (isInstance)
-                text = $"<b><color=yellow>(Instance)</color> {field.Name}</b>";
-            else
-                text = $"<b><color=yellow>({SimplifyTypeName(field.FieldType)})</color> {field.Name}</b>";
-            Label fieldLabel = new Label(text);
-            fieldLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-            fieldLabel.enableRichText = true;
-            fieldNamespaceFoldouts[namespaceName].Add(fieldLabel);
-        }
-        return fieldNamespaceFoldouts;
-    }
-    Dictionary<string, Foldout> GroupPropertiesByNamespaces(List<PropertyInfo> properties)
-    {
-        Dictionary<string, Foldout> propertyNamespaceFoldouts = new Dictionary<string, Foldout>();
-        foreach (PropertyInfo property in properties)
+        private void ConstructGraph()
         {
-            string namespaceName = property.DeclaringType.Namespace ?? "No Namespace";
-            if (!propertyNamespaceFoldouts.ContainsKey(namespaceName))
+            this.graphView = new CustomGraphView()
             {
-                propertyNamespaceFoldouts[namespaceName] = new Foldout() { text = $"<b>{namespaceName}</b>" };
-            }
+                name = "Graph View"
+            };
 
-            string text = $"<b><color=yellow>({SimplifyTypeName(property.PropertyType)})</color> {property.Name}</b>";
-            Label propertyLabel = new Label(text);
-            propertyLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-            propertyLabel.enableRichText = true;
-            propertyNamespaceFoldouts[namespaceName].Add(propertyLabel);
+            this.graphViewContainer.Add(this.graphView);
+            this.graphView.StretchToParentSize();
         }
-        return propertyNamespaceFoldouts;
-    }
-    Dictionary<string, Foldout> GroupMethodsByNamespaces(List<MethodInfo> methods)
-    {
-        Dictionary<string, Foldout> methodNamespaceFoldouts = new Dictionary<string, Foldout>();
-        foreach (MethodInfo method in methods)
+
+        Dictionary<string, Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)
         {
-            string namespaceName = method.DeclaringType.Namespace ?? "No Namespace";
-            if (!methodNamespaceFoldouts.ContainsKey(namespaceName))
+            Dictionary<string, Foldout> fieldNamespaceFoldouts = new Dictionary<string, Foldout>();
+            foreach (FieldInfo field in fieldInfos)
             {
-                methodNamespaceFoldouts[namespaceName] = new Foldout() { text = $"<b>{namespaceName}</b>" };
+                string namespaceName = field.DeclaringType.Namespace ?? "Global Namespace";
+                if (!fieldNamespaceFoldouts.ContainsKey(namespaceName))
+                {
+                    fieldNamespaceFoldouts[namespaceName] = new Foldout() 
+                    { 
+                        text = $"<b>{namespaceName}</b>",
+                        value = false
+                    };
+                }
+
+                string text = $"<b><color=yellow>({SimplifyTypeName(field.FieldType)})</color> {field.Name}</b>";
+                Label fieldLabel = new Label(text);
+                fieldLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                fieldLabel.enableRichText = true;
+                fieldNamespaceFoldouts[namespaceName].Add(fieldLabel);
             }
-
-            string text = $"<b><color=yellow>({SimplifyTypeName(method.ReturnType)})</color> {method.Name}</b>";
-            Label methodLabel = new Label(text);
-            methodLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-            methodLabel.enableRichText = true;
-            methodNamespaceFoldouts[namespaceName].Add(methodLabel);
+            return fieldNamespaceFoldouts;
         }
-        return methodNamespaceFoldouts;
-    }
-
-    private object SimplifyTypeName(Type fieldType)
-    {
-        if (fieldType.IsGenericType)
+        Dictionary<string, Foldout> GroupPropertiesByNamespaces(List<PropertyInfo> properties)
         {
-            string typeName = fieldType.Name;
-            int index = typeName.IndexOf('`');
-            if (index > 0)
+            Dictionary<string, Foldout> propertyNamespaceFoldouts = new Dictionary<string, Foldout>();
+            foreach (PropertyInfo property in properties)
             {
-                typeName = typeName.Substring(0, index);
+                string namespaceName = property.DeclaringType.Namespace ?? "No Namespace";
+                if (!propertyNamespaceFoldouts.ContainsKey(namespaceName))
+                {
+                    propertyNamespaceFoldouts[namespaceName] = new Foldout() 
+                    { 
+                        text = $"<b>{namespaceName}</b>",    
+                        value = false 
+                    };
+                }
+
+                string text = $"<b><color=yellow>({SimplifyTypeName(property.PropertyType)})</color> {property.Name}</b>";
+                Label propertyLabel = new Label(text);
+                propertyLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                propertyLabel.enableRichText = true;
+                propertyNamespaceFoldouts[namespaceName].Add(propertyLabel);
             }
-            if (fieldType.GenericTypeArguments.Length > 0)
-                return $"{typeName}<{fieldType.GenericTypeArguments[0].Name}>";
+            return propertyNamespaceFoldouts;
         }
-        return fieldType.Name;
+        Dictionary<string, Foldout> GroupMethodsByNamespaces(List<MethodInfo> methods)
+        {
+            Dictionary<string, Foldout> methodNamespaceFoldouts = new Dictionary<string, Foldout>();
+            foreach (MethodInfo method in methods)
+            {
+                string namespaceName = method.DeclaringType.Namespace ?? "No Namespace";
+                if (!methodNamespaceFoldouts.ContainsKey(namespaceName))
+                {
+                    methodNamespaceFoldouts[namespaceName] = new Foldout() 
+                    { 
+                        text = $"<b>{namespaceName}</b>",
+                        value = false 
+                    };
+                }
+
+                string text = $"<b><color=yellow>({SimplifyTypeName(method.ReturnType)})</color> {method.Name}</b>";
+                Label methodLabel = new Label(text);
+                methodLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                methodLabel.enableRichText = true;
+                methodNamespaceFoldouts[namespaceName].Add(methodLabel);
+            }
+            return methodNamespaceFoldouts;
+        }
+
+        private object SimplifyTypeName(Type fieldType)
+        {
+            if (fieldType.IsGenericType)
+            {
+                string typeName = fieldType.Name;
+                int index = typeName.IndexOf('`');
+                if (index > 0)
+                {
+                    typeName = typeName.Substring(0, index);
+                }
+                if (fieldType.GenericTypeArguments.Length > 0)
+                    return $"{typeName}<{fieldType.GenericTypeArguments[0].Name}>";
+            }
+            return fieldType.Name;
+        }
     }
 }

@@ -1,8 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement name="_scriptView" style="flex-grow: 1; height: 0; min-height: 0; flex-direction: row; justify-content: flex-start; align-items: flex-end; align-self: stretch; max-height: 30px; flex-basis: 100%;">
-        <uie:ObjectField label="Object Field" name="_scriptField" style="height: auto; width: 80%; flex-basis: 80%; flex-direction: row;" />
-        <ui:Button text="Load" parse-escape-sequences="true" display-tooltip-when-elided="true" name="_loadButton" style="width: auto; justify-content: flex-start; align-items: stretch; flex-direction: column; flex-grow: 1;" />
-    </ui:VisualElement>
     <ui:VisualElement name="_mainLayout" style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="_toolBox" style="flex-grow: 1; align-self: auto;">
             <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="_classNameLabel" style="-unity-font-style: bold; font-size: 16px; padding-bottom: 0; padding-top: 15px;" />
