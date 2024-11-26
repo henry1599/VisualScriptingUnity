@@ -189,6 +189,8 @@ namespace hGraph.Editor
 
             this.graphViewContainer.Add(this.graphView);
             this.graphView.StretchToParentSize();
+
+            this.graphView.SetEdgeWidth(10);
         }
 
         Dictionary<string, Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)
