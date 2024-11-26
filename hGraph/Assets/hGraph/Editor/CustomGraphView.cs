@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -7,8 +8,10 @@ using UnityEngine.UIElements;
 
 public class CustomGraphView : GraphView
 {
-    public CustomGraphView()
+    private GraphData data;
+    public CustomGraphView(GraphData graphData)
     {
+        data = graphData;
         // Add a grid background
         GridBackground grid = new GridBackground();
         Insert(0, grid);
@@ -29,8 +32,17 @@ public class CustomGraphView : GraphView
             evt.menu.AppendAction("Add Node/Update", action => AddNode(evt.localMousePosition, "Update"));
             evt.menu.AppendAction("Add Node/Function", action => AddNode(evt.localMousePosition, "Function"));
         }));
+
+        this.data.OnNewNodeAddedToGraph += OnNewNodeAddedToGraph;
     }
-    private void OnGUI() {
+
+    private void OnNewNodeAddedToGraph(NodeDataBase node)
+    {
+        // TODO
+    }
+
+    private void OnGUI() 
+    {
         SetEdgeWidth(10);
     }
 

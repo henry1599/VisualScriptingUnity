@@ -10,21 +10,40 @@ using UnityEngine;
 public class GraphData
 {
     public List<string> Namespaces;
+
     public List<NodeDataBase> Nodes;
     public List<NodeConnectionBase> Connections;
+
+    private List<NodeDataBase> nodesInGraph;
 
     public string Name;
     public List<FieldInfo> Variables;
     public List<PropertyInfo> Properties;
     public List<MethodInfo> Functions;
     hBehaviour behaviour;
+
+    public event Action<NodeDataBase> OnNewNodeAddedToGraph;
     public GraphData(hBehaviour behaviour)
     {
         this.behaviour = behaviour;
         Nodes = new List<NodeDataBase>();
         Connections = new List<NodeConnectionBase>();
+        this.nodesInGraph = new List<NodeDataBase>();
 
         ReadBehaviour(behaviour);
+
+        
+        GraphEvents.ON_TOOLBOX_ITEM_CLICKED += HandleToolboxItemClicked;
+    }
+
+    private void HandleToolboxItemClicked(eNodeType nodeType, string name, Type type)
+    {
+        Debug.Log($"Add node Type: {nodeType}, Name: {name}, Type: {type}");
+        NodeDataBase candidate = Nodes.Find(n => n.Name == name && n.NodeType == nodeType && n.Type == type);
+        if (candidate == null)
+            return;
+        this.nodesInGraph.Add(candidate);
+        OnNewNodeAddedToGraph?.Invoke(candidate);
     }
 
     private void ReadBehaviour(hBehaviour behaviour)
@@ -58,6 +77,7 @@ public class GraphData
                 DisplayName = ObjectNames.NicifyVariableName(field.Name),
                 Info = field.FieldType.Name,
                 NodeType = eNodeType.Variable,
+                Type = field.FieldType,
                 InputPorts = null,
                 OutputPorts = new List<NodePortBase>()
                 {
@@ -79,6 +99,7 @@ public class GraphData
                 DisplayName = ObjectNames.NicifyVariableName(property.Name),
                 Info = property.PropertyType.Name,
                 NodeType = eNodeType.Property,
+                Type = property.PropertyType,
                 InputPorts = null,
                 OutputPorts = new List<NodePortBase>()
                 {
@@ -100,6 +121,7 @@ public class GraphData
                 DisplayName = method.Name,
                 Info = method.ReturnType.Name,
                 NodeType = eNodeType.Function,
+                Type = method.ReturnType,
                 InputPorts = method.GetParameters().Select(p => new NodePortBase()
                 {
                     Name = p.Name,

@@ -158,4 +158,9 @@ public static class Common
             x.ReturnType.ToString().ToLower().Contains(filterText.ToLower())
         ).ToList();
     }
+    public static CustomNode ToGraphNode(this NodeDataBase node)
+    {
+        // TODO
+        return null;
+    }
 }

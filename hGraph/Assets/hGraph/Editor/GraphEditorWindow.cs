@@ -168,15 +168,14 @@ namespace hGraph.Editor
 
         private void ConstructGraph(hBehaviour behaviour)
         {
-            this.graphView = new CustomGraphView()
+            this.graphData = new GraphData(behaviour);
+            this.graphView = new CustomGraphView(this.graphData)
             {
                 name = "Graph View"
             };
 
             this.graphViewContainer.Add(this.graphView);
             this.graphView.StretchToParentSize();
-
-            this.graphData = new GraphData(behaviour);
         }
 
         Dictionary<string, Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)
@@ -237,7 +236,15 @@ namespace hGraph.Editor
                     };
                 }
                 var icon = EditorGUIUtility.IconContent("d_Tile Icon").image;
-                Button methodButton = Common.CreateButtonWithIcon(icon, new Button() { text = method.Name });
+                Button methodButton = Common.CreateButtonWithIcon(icon, new Button(
+                    () => 
+                    {
+                        eNodeType nodeType = eNodeType.Function;
+                        string nodeName = method.Name;
+                        Type nodeReturnType = method.ReturnType;
+                        GraphEvents.ON_TOOLBOX_ITEM_CLICKED?.Invoke(nodeType, nodeName, nodeReturnType);
+                    }
+                ) { text = method.Name });
 
                 methodNamespaceFoldouts[namespaceName].Add(methodButton);
             }

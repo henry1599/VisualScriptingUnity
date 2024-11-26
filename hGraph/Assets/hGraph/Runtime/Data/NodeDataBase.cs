@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class NodeDataBase
     public string Name;
     public string DisplayName;
     public string Info;
+    public Type Type;
     public EntryPort Entry;
     public FinishPort Finish;
     public List<NodePortBase> InputPorts;
