@@ -25,8 +25,10 @@ namespace hGraph.Editor
         private ScrollView toolboxViewContainer;
         private ListView namespaceListView;
         private ToolbarSearchField toolbarSearchField;
+        private ToolbarBreadcrumbs toolbarBreadcrumbs;
         string filterText;
         private hBehaviour chosenHBehaviour;
+        private GraphData graphData;
         public static void OpenGraphEditorWindow(hBehaviour hBehaviour)
         {
             
@@ -61,32 +63,16 @@ namespace hGraph.Editor
             splitView.StretchToParentSize();
 
             this.toolbarSearchField.RegisterValueChangedCallback(OnToolbarSearchFieldChanged);
-            ConstructGraph();
+            ConstructGraph(hBehaviour);
 
             ReadContent();
         }
         private void ReadContent()
         {
-            hBehaviour behaviour = this.chosenHBehaviour;
-
-            this.toolboxViewContainer.Clear();
-            Type scriptType = behaviour.GetType();
-
             // * Label
-            this.classNameLabel.text = $"<b>Class: <color=green>{scriptType.Name}</color></b>";
+            this.classNameLabel.text = $"<b>Class: <color=green>{this.graphData.Name}</color></b>";
 
-
-
-            // * Namespaces
-            var namespaces = scriptType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                .Select(f => f.DeclaringType.Namespace)
-                .Concat(scriptType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                .Select(p => p.DeclaringType.Namespace))
-                .Concat(scriptType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                .Select(m => m.DeclaringType.Namespace))
-                .Where(ns => !string.IsNullOrEmpty(ns))
-                .Distinct()
-                .ToList();
+            List<string> namespaces = this.graphData.Namespaces;
 
             namespaceListView.headerTitle = "Namespaces";
             namespaceListView.itemsSource = namespaces;
@@ -139,9 +125,9 @@ namespace hGraph.Editor
             };
 
             // Dictionaries to store namespace foldouts
-            List<FieldInfo> fieldInfos = scriptType.GetMinimalFieldList(namespaces).Filter(this.filterText);
-            List<PropertyInfo> propertyInfos = scriptType.GetMinimalPropertyList(namespaces).Filter(this.filterText);
-            List<MethodInfo> methodInfos = scriptType.GetMinimalMethodList(namespaces).Filter(this.filterText);
+            List<FieldInfo> fieldInfos = this.graphData.Variables.Filter(this.filterText);
+            List<PropertyInfo> propertyInfos = this.graphData.Properties.Filter(this.filterText);
+            List<MethodInfo> methodInfos = this.graphData.Functions.Filter(this.filterText);
 
             Dictionary<string, Foldout> fieldNamespaceFoldouts = GroupFieldsByNamespaces(fieldInfos);
             Dictionary<string, Foldout> propertyNamespaceFoldouts = GroupPropertiesByNamespaces(propertyInfos);
@@ -180,7 +166,7 @@ namespace hGraph.Editor
             ReadContent();
         }
 
-        private void ConstructGraph()
+        private void ConstructGraph(hBehaviour behaviour)
         {
             this.graphView = new CustomGraphView()
             {
@@ -190,7 +176,7 @@ namespace hGraph.Editor
             this.graphViewContainer.Add(this.graphView);
             this.graphView.StretchToParentSize();
 
-            this.graphView.SetEdgeWidth(10);
+            this.graphData = new GraphData(behaviour);
         }
 
         Dictionary<string, Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)

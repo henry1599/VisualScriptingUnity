@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum eNodeType
 {
+    Class,
     Variable,
     Property,
     Function,
@@ -39,8 +40,15 @@ public class NodeDataBase
         Name = "New Node";
         DisplayName = "New Node";
         Info = "New Node Info";
-        NodeType = eNodeType.Custom;
+        NodeType = eNodeType.Class;
     }
+}
+public class NodeConnectionBase
+{
+    public NodeDataBase NodeFrom;
+    public NodeDataBase NodeTo;
+    public NodePortBase PortFrom;
+    public NodePortBase PortTo;
 }
 
 public class NodePortBase
