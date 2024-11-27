@@ -14,6 +14,7 @@ public class CustomNode : Node
     private VisualElement entryContainer;
     private VisualElement finishContainer;
     private Color nodeBackgroundColor = new Color(90f / 255f, 90f / 255f, 90f / 255f, 1f);
+    private NodeDataBase data;
 
     public CustomNode(string nodeName)
     {
@@ -23,9 +24,32 @@ public class CustomNode : Node
         this.mainContainer.style.height = this.size.y;
         
         // Ports
-        CreateSidePorts();
+        CreateInputPorts(null);
+        CreateOutputPorts(null);
         CreateEntryPort();
         CreateFinishPort();
+
+        RefreshExpandedState();
+        RefreshPorts();
+    }
+    public CustomNode(NodeDataBase nodeData)
+    {
+        this.data = nodeData;
+        title = this.data.DisplayName;
+        SetupNodeStyle();
+        this.mainContainer.style.height = this.size.y;
+
+        CreateInputPorts(this.data.InputPorts);
+        CreateOutputPorts(this.data.OutputPort);
+
+        if (this.data.Entry != null)
+        {
+            CreateEntryPort();
+        }
+        if (this.data.Finish != null)
+        {
+            CreateFinishPort();
+        }
 
         RefreshExpandedState();
         RefreshPorts();
@@ -100,16 +124,32 @@ public class CustomNode : Node
         this.mainContainer.Add(finishContainer);
     }
 
-    private void CreateSidePorts()
+    private void CreateInputPorts(List<NodePortBase> nodePortBases)
     {
-        // Example input on the left
-        var inputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, this.GetType());
-        inputPort.portName = "Input";
-        inputContainer.Add(inputPort);
+        if (nodePortBases == null)
+        {
+            return;
+        }
+        foreach (var nodePortBase in nodePortBases)
+        {
+            var inputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, nodePortBase.Type);
+            inputPort.portName = nodePortBase.Name;
+            inputContainer.Add(inputPort);
+        }
 
-        // Example output on the right
-        var outputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, this.GetType());
-        outputPort.portName = "Output";
+    }
+    private void CreateOutputPorts(NodePortBase nodePortBase)
+    {
+        if (nodePortBase == null)
+        {
+            return;
+        }
+        if (nodePortBase.Type == typeof(void))
+        {
+            return;
+        }
+        var outputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, nodePortBase.Type);
+        outputPort.portName = nodePortBase.Name;
         outputContainer.Add(outputPort);
     }
 

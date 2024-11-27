@@ -79,13 +79,10 @@ public class GraphData
                 NodeType = eNodeType.Variable,
                 Type = field.FieldType,
                 InputPorts = null,
-                OutputPorts = new List<NodePortBase>()
+                OutputPort = new NodePortBase()
                 {
-                    new NodePortBase()
-                    {
-                        Name = "Value",
-                        Type = field.FieldType
-                    }
+                    Name = "Value",
+                    Type = field.FieldType
                 }
             };
             Nodes.Add(node);
@@ -101,13 +98,10 @@ public class GraphData
                 NodeType = eNodeType.Property,
                 Type = property.PropertyType,
                 InputPorts = null,
-                OutputPorts = new List<NodePortBase>()
+                OutputPort = new NodePortBase()
                 {
-                    new NodePortBase()
-                    {
-                        Name = "Value",
-                        Type = property.PropertyType
-                    }
+                    Name = "Value",
+                    Type = property.PropertyType
                 }
             };
             Nodes.Add(node);
@@ -115,7 +109,8 @@ public class GraphData
 
         foreach (MethodInfo method in Functions)
         {
-            NodeDataBase node = new NodeDataBase
+            bool isStartMethod = method.Name == "Start" && method.ReturnType == typeof(void) && method.DeclaringType.IsSubclassOf(typeof(MonoBehaviour));
+            NodeDataBase node = new NodeDataBase (!isStartMethod)
             {
                 Name = method.Name,
                 DisplayName = method.Name,
@@ -127,13 +122,10 @@ public class GraphData
                     Name = p.Name,
                     Type = p.ParameterType
                 }).ToList(),
-                OutputPorts = new List<NodePortBase>()
+                OutputPort = new NodePortBase()
                 {
-                    new NodePortBase()
-                    {
-                        Name = "Value",
-                        Type = method.ReturnType
-                    }
+                    Name = "Value",
+                    Type = method.ReturnType
                 }
             };
             Nodes.Add(node);

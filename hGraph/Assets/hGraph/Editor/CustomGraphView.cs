@@ -28,9 +28,9 @@ public class CustomGraphView : GraphView
         // Handle right-click context menu
         this.AddManipulator(new ContextualMenuManipulator(evt =>
         {
-            evt.menu.AppendAction("Add Node/Start", action => AddNode(evt.localMousePosition, "Start"));
-            evt.menu.AppendAction("Add Node/Update", action => AddNode(evt.localMousePosition, "Update"));
-            evt.menu.AppendAction("Add Node/Function", action => AddNode(evt.localMousePosition, "Function"));
+            // evt.menu.AppendAction("Add Node/Start", action => AddNode(evt.localMousePosition, "Start"));
+            // evt.menu.AppendAction("Add Node/Update", action => AddNode(evt.localMousePosition, "Update"));
+            // evt.menu.AppendAction("Add Node/Function", action => AddNode(evt.localMousePosition, "Function"));
         }));
 
         this.data.OnNewNodeAddedToGraph += OnNewNodeAddedToGraph;
@@ -39,6 +39,10 @@ public class CustomGraphView : GraphView
     private void OnNewNodeAddedToGraph(NodeDataBase node)
     {
         // TODO
+        CustomNode customNode = new CustomNode(node);
+        var currentMousePositionOnGraph = this.contentViewContainer.WorldToLocal(Event.current.mousePosition);
+        customNode.SetPosition(new Rect(currentMousePositionOnGraph, Vector2.zero));
+        AddElement(customNode);
     }
 
     private void OnGUI() 

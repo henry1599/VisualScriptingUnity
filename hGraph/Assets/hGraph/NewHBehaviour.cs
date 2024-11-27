@@ -14,4 +14,16 @@ public class NewHBehaviour : hBehaviour
     {
         
     }
+    public int TestMethod1(int inputA, string inputB)
+    {
+        return 0;
+    }
+    public void TestMethod2()
+    {
+        
+    }
+    public string TestMethod3(int input1)
+    {
+        return "";
+    }
 }

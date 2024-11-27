@@ -27,15 +27,15 @@ public class NodeDataBase
     public EntryPort Entry;
     public FinishPort Finish;
     public List<NodePortBase> InputPorts;
-    public List<NodePortBase> OutputPorts;
+    public NodePortBase OutputPort;
     public NodeDataBase NodeFrom;
     public NodeDataBase NodeTo;
-    public NodeDataBase()
+    public NodeDataBase(bool hasEntryPort = true)
     {
-        Entry = new EntryPort();
+        Entry = hasEntryPort ? new EntryPort() : null;
         Finish = new FinishPort();
         InputPorts = new List<NodePortBase>();
-        OutputPorts = new List<NodePortBase>();
+        OutputPort = null;
         NodeFrom = null;
         NodeTo = null;
 
