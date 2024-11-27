@@ -21,7 +21,7 @@ public class GraphData
     public List<PropertyInfo> Properties;
     public List<MethodInfo> Functions;
     hBehaviour behaviour;
-
+    MethodInfo methodInfo;
     public event Action<NodeDataBase> OnNewNodeAddedToGraph;
     public GraphData(hBehaviour behaviour)
     {
@@ -33,6 +33,18 @@ public class GraphData
         ReadBehaviour(behaviour);
 
         
+        GraphEvents.ON_TOOLBOX_ITEM_CLICKED += HandleToolboxItemClicked;
+    }
+    public GraphData(hBehaviour behaviour, MethodInfo methodInfo)
+    {
+        this.behaviour = behaviour;
+        this.methodInfo = methodInfo;
+        Nodes = new List<NodeDataBase>();
+        Connections = new List<NodeConnectionBase>();
+        this.nodesInGraph = new List<NodeDataBase>();
+
+        ReadBehaviour(behaviour);
+
         GraphEvents.ON_TOOLBOX_ITEM_CLICKED += HandleToolboxItemClicked;
     }
 

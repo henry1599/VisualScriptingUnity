@@ -8,8 +8,6 @@ public class CustomNode : Node
 {
     private Port entryPort;
     private Port finishPort;
-    private List<Port> inputPorts;
-    private List<Port> outputPorts;
     private Vector2 size;
     private VisualElement entryContainer;
     private VisualElement finishContainer;

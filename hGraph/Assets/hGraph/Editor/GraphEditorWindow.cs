@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -29,10 +30,13 @@ namespace hGraph.Editor
         string filterText;
         private hBehaviour chosenHBehaviour;
         private GraphData graphData;
+        public static GraphEditorWindow window;
+        public static CustomGraphView CurrentGraphView => window.graphView;
+        private Dictionary<MethodInfo, CustomGraphView> functionGraphView = new Dictionary<MethodInfo, CustomGraphView>();
         public static void OpenGraphEditorWindow(hBehaviour hBehaviour)
         {
             
-            GraphEditorWindow window = GetWindow<GraphEditorWindow>("Graph Editor"); 
+            window = GetWindow<GraphEditorWindow>("Graph Editor"); 
             window.minSize = new Vector2(800, 600);
             window.Initialize(hBehaviour);
         }
@@ -55,6 +59,7 @@ namespace hGraph.Editor
             this.classNameLabel = root.Q<Label>("_classNameLabel");
             this.namespaceListView = root.Q<ListView>("_namespaceListView");
             this.toolbarSearchField = root.Q<ToolbarSearchField>("_toolbarSearchField");
+            this.toolbarBreadcrumbs = root.Q<ToolbarBreadcrumbs>("_toolbarBreadCrumbs");
 
             TwoPaneSplitView splitView = new TwoPaneSplitView(0, 250, TwoPaneSplitViewOrientation.Horizontal);
             splitView.Add(toolboxVisualElement);
@@ -65,12 +70,15 @@ namespace hGraph.Editor
             this.toolbarSearchField.RegisterValueChangedCallback(OnToolbarSearchFieldChanged);
             ConstructGraph(hBehaviour);
 
+
+            // * Label
+            string initalClassName = $"<b>Class: <color=green>{this.graphData.Name}</color></b>";
+            this.toolbarBreadcrumbs.PushItem(initalClassName);
+
             ReadContent();
         }
         private void ReadContent()
         {
-            // * Label
-            this.classNameLabel.text = $"<b>Class: <color=green>{this.graphData.Name}</color></b>";
 
             List<string> namespaces = this.graphData.Namespaces;
 
