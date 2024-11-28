@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4783a4e791578d49b7840c53119593a, type: 3}
+  m_Name: New Graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - rid: 6957871857988272128
+  - rid: 6957871857988272129
+  - rid: 6957871857988272130
+  comments: []
+  assetVersion: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 6957871857988272128
+      type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
+      data:
+        id: acb65bad-adab-4cf3-a276-7c9b7107386b
+        name: Add
+        graph: {fileID: 11400000}
+        position: {x: 168, y: -313.59998}
+        ports:
+        - name: a
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: b
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: result
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 1
+          direction: 1
+          connections:
+          - nodeId: ae73ec6b-316f-4f30-8e07-e3ed446fc468
+            portName: a
+        a: 4
+        b: 5
+        result: 0
+    - rid: 6957871857988272129
+      type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
+      data:
+        id: ae73ec6b-316f-4f30-8e07-e3ed446fc468
+        name: Add
+        graph: {fileID: 11400000}
+        position: {x: 423.19998, y: -279.2}
+        ports:
+        - name: a
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 0
+          direction: 0
+          connections:
+          - nodeId: acb65bad-adab-4cf3-a276-7c9b7107386b
+            portName: result
+        - name: b
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 0
+          direction: 0
+          connections:
+          - nodeId: f1e4a359-4a21-4323-9c5b-1fd140c1a939
+            portName: result
+        - name: result
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 1
+          direction: 1
+          connections: []
+        a: 0
+        b: 0
+        result: 0
+    - rid: 6957871857988272130
+      type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
+      data:
+        id: f1e4a359-4a21-4323-9c5b-1fd140c1a939
+        name: Add
+        graph: {fileID: 11400000}
+        position: {x: 156, y: -169.6}
+        ports:
+        - name: a
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: b
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: result
+          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          capacity: 1
+          direction: 1
+          connections:
+          - nodeId: ae73ec6b-316f-4f30-8e07-e3ed446fc468
+            portName: b
+        a: 0
+        b: 0
+        result: 0

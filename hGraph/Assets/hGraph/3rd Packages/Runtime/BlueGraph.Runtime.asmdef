@@ -1,10 +1,9 @@
 {
-    "name": "hGraph.Editor",
-    "rootNamespace": "",
+    "name": "BlueGraph.Runtime",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": true,
+    "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
