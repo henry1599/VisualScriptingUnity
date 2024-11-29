@@ -7,7 +7,6 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using GraphViewNode = UnityEditor.Experimental.GraphView.Node;
 using static UnityEngine.UIElements.DropdownMenuAction;
-using NUnit.Framework;
 
 namespace BlueGraph.Editor
 {
@@ -27,6 +26,7 @@ namespace BlueGraph.Editor
         protected CanvasView Canvas { get; set; }
 
         private Label errorMessage;
+        private Texture2D FlowTexture;
 
         internal void Initialize(Node node, CanvasView canvas, EdgeConnectorListener connectorListener)
         {
@@ -73,6 +73,7 @@ namespace BlueGraph.Editor
             ReloadPorts();
             ReloadEditables();
             RefreshErrorState();
+            ReloadEntryExitPorts();
 
             OnInitialize();
         }
@@ -191,13 +192,10 @@ namespace BlueGraph.Editor
             {
                 Inputs.Insert(0, view);
                 inputContainer.Insert(0, view);
+                return;
             }
-            else
-            {
-                Inputs.Add(view);
-                inputContainer.Add(view);
-            }
-
+            Inputs.Add(view);
+            inputContainer.Add(view);
         }
         private bool IsEntryPort(Port port)
         {
@@ -207,7 +205,30 @@ namespace BlueGraph.Editor
         {
             return port.Name.Equals("exit", System.StringComparison.OrdinalIgnoreCase);
         }
-
+        private void UpdatePortVisualElement(PortView view, Port port)
+        {
+            Label label = view.Q<Label>("type");
+            if (this.FlowTexture == null)
+            {
+                this.FlowTexture = Resources.Load("Icon/RightArrow") as Texture2D;
+            }
+            label.style.backgroundImage = new StyleBackground(this.FlowTexture);
+            label.text = port.Name = "    ";
+        }
+        void ReloadEntryExitPorts()
+        {
+            foreach (var (name, port) in Target.Ports)
+            {
+                if (Target.HasEntry && string.Equals(name, "entry", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    UpdatePortVisualElement(Inputs.Find((port) => port.portName == name), port);
+                }
+                if (Target.HasExit && string.Equals(name, "exit", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    UpdatePortVisualElement(Outputs.Find((port) => port.portName == name), port);
+                }
+            }
+        }
         protected virtual void AddOutputPort(Port port)
         {
             var view = PortView.Create(port, ConnectorListener);
@@ -216,12 +237,10 @@ namespace BlueGraph.Editor
             {
                 Outputs.Insert(0, view);
                 outputContainer.Insert(0, view);
+                return;
             }
-            else
-            {
-                Outputs.Add(view);
-                outputContainer.Add(view);
-            }
+            Outputs.Add(view);
+            outputContainer.Add(view);
         }
 
         public PortView GetInputPort(string name)

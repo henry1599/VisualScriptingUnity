@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BlueGraph;
 
-[Node(Path = "Math/Add", Name = "Add")]
+[Node(Path = "Math", Name = "Add")]
 public class hNode_Add : Node
 {
     [Input] public float a;
