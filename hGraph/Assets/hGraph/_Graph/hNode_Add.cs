@@ -16,3 +16,18 @@ public class hNode_Add : Node
         return aValue + bValue;
     }
 }
+
+[Node(Path = "Monobehaviour", Name = "Start")]
+public class hNode_Start : Node
+{
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        HasEntry = false;
+    }
+    public override object OnRequestValue(Port port)
+    {
+        return this;
+    }
+}
+

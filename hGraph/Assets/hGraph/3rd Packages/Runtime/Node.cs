@@ -8,6 +8,10 @@ namespace BlueGraph
     [Serializable]
     public abstract class Node
     {
+        [Input] public Node entry;
+        [Output] public Node exit;
+        public bool HasEntry = true;
+        public bool HasExit = true;
         public event Action OnValidateEvent;
         public event Action OnErrorEvent;
 

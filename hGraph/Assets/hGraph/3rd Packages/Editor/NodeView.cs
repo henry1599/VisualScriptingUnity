@@ -7,13 +7,13 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using GraphViewNode = UnityEditor.Experimental.GraphView.Node;
 using static UnityEngine.UIElements.DropdownMenuAction;
+using NUnit.Framework;
 
 namespace BlueGraph.Editor
 {
     public class NodeView : GraphViewNode, ICanDirty
     {
         public Node Target { get; private set; }
-
         public List<PortView> Inputs { get; set; } = new List<PortView>();
 
         public List<PortView> Outputs { get; set; } = new List<PortView>();
@@ -76,7 +76,6 @@ namespace BlueGraph.Editor
 
             OnInitialize();
         }
-
         /// <summary>
         /// Executed after receiving a node target and initial configuration
         /// but before being added to the graph.
@@ -126,8 +125,16 @@ namespace BlueGraph.Editor
         /// </summary>
         protected void ReloadPorts()
         {
-            foreach (var port in Target.Ports.Values)
+            foreach (var (name, port) in Target.Ports)
             {
+                if (!Target.HasEntry && string.Equals(name, "entry", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                if (!Target.HasExit && string.Equals(name, "exit", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 if (port.Direction == PortDirection.Input)
                 {
                     AddInputPort(port);
@@ -180,16 +187,41 @@ namespace BlueGraph.Editor
                 view.SetEditorField(container);
             }
 
-            Inputs.Add(view);
-            inputContainer.Add(view);
+            if (IsEntryPort(port))
+            {
+                Inputs.Insert(0, view);
+                inputContainer.Insert(0, view);
+            }
+            else
+            {
+                Inputs.Add(view);
+                inputContainer.Add(view);
+            }
+
+        }
+        private bool IsEntryPort(Port port)
+        {
+            return port.Name.Equals("entry", System.StringComparison.OrdinalIgnoreCase);
+        }
+        private bool IsExitPort(Port port)
+        {
+            return port.Name.Equals("exit", System.StringComparison.OrdinalIgnoreCase);
         }
 
         protected virtual void AddOutputPort(Port port)
         {
             var view = PortView.Create(port, ConnectorListener);
 
-            Outputs.Add(view);
-            outputContainer.Add(view);
+            if (IsExitPort(port))
+            {
+                Outputs.Insert(0, view);
+                outputContainer.Insert(0, view);
+            }
+            else
+            {
+                Outputs.Add(view);
+                outputContainer.Add(view);
+            }
         }
 
         public PortView GetInputPort(string name)

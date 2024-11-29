@@ -13,21 +13,46 @@ MonoBehaviour:
   m_Name: New Graph
   m_EditorClassIdentifier: 
   nodes:
-  - rid: 6957871857988272128
-  - rid: 6957871857988272129
-  - rid: 6957871857988272130
+  - rid: 6695517399662723076
+  - rid: 6695517399662723077
   comments: []
   assetVersion: 1
   references:
     version: 2
     RefIds:
-    - rid: 6957871857988272128
+    - rid: 6695517399662723076
+      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: 56c86b68-7617-414b-88e0-93e784b90409
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: -40, y: -322}
+        ports:
+        - name: entry
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: exit
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 1
+          direction: 1
+          connections:
+          - nodeId: d2356b68-aead-486f-b489-2c709f190986
+            portName: entry
+    - rid: 6695517399662723077
       type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
       data:
-        id: acb65bad-adab-4cf3-a276-7c9b7107386b
+        HasEntry: 1
+        HasExit: 1
+        id: d2356b68-aead-486f-b489-2c709f190986
         name: Add
         graph: {fileID: 11400000}
-        position: {x: 168, y: -313.59998}
+        position: {x: 187, y: -237}
         ports:
         - name: a
           type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -43,67 +68,21 @@ MonoBehaviour:
           type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           capacity: 1
           direction: 1
-          connections:
-          - nodeId: ae73ec6b-316f-4f30-8e07-e3ed446fc468
-            portName: a
-        a: 4
-        b: 5
-        result: 0
-    - rid: 6957871857988272129
-      type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
-      data:
-        id: ae73ec6b-316f-4f30-8e07-e3ed446fc468
-        name: Add
-        graph: {fileID: 11400000}
-        position: {x: 423.19998, y: -279.2}
-        ports:
-        - name: a
-          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          connections: []
+        - name: entry
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           capacity: 0
           direction: 0
           connections:
-          - nodeId: acb65bad-adab-4cf3-a276-7c9b7107386b
-            portName: result
-        - name: b
-          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          capacity: 0
-          direction: 0
-          connections:
-          - nodeId: f1e4a359-4a21-4323-9c5b-1fd140c1a939
-            portName: result
-        - name: result
-          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          - nodeId: 56c86b68-7617-414b-88e0-93e784b90409
+            portName: exit
+        - name: exit
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           capacity: 1
           direction: 1
           connections: []
-        a: 0
-        b: 0
-        result: 0
-    - rid: 6957871857988272130
-      type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
-      data:
-        id: f1e4a359-4a21-4323-9c5b-1fd140c1a939
-        name: Add
-        graph: {fileID: 11400000}
-        position: {x: 156, y: -169.6}
-        ports:
-        - name: a
-          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          capacity: 0
-          direction: 0
-          connections: []
-        - name: b
-          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          capacity: 0
-          direction: 0
-          connections: []
-        - name: result
-          type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          capacity: 1
-          direction: 1
-          connections:
-          - nodeId: ae73ec6b-316f-4f30-8e07-e3ed446fc468
-            portName: b
         a: 0
         b: 0
         result: 0
