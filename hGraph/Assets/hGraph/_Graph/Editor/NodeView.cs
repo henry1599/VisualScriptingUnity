@@ -12,6 +12,7 @@ namespace BlueGraph.Editor
 {
     public class NodeView : GraphViewNode, ICanDirty
     {
+        public static readonly Color DefaultEditorColor = new Color(56f / 255f, 56f / 255f, 56f / 255f);
         public Node Target { get; private set; }
         public List<PortView> Inputs { get; set; } = new List<PortView>();
 
@@ -213,7 +214,7 @@ namespace BlueGraph.Editor
                 this.FlowTexture = Resources.Load("Icon/RightArrow") as Texture2D;
             }
             label.style.backgroundImage = new StyleBackground(this.FlowTexture);
-            label.text = port.Name = Common.Empty(4);
+            label.style.color = DefaultEditorColor;
         }
         void ReloadEntryExitPorts()
         {
