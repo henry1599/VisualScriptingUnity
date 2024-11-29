@@ -213,7 +213,7 @@ namespace BlueGraph.Editor
                 this.FlowTexture = Resources.Load("Icon/RightArrow") as Texture2D;
             }
             label.style.backgroundImage = new StyleBackground(this.FlowTexture);
-            label.text = port.Name = "    ";
+            label.text = port.Name = Common.Empty(4);
         }
         void ReloadEntryExitPorts()
         {

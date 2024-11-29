@@ -158,4 +158,13 @@ public static class Common
             x.ReturnType.ToString().ToLower().Contains(filterText.ToLower())
         ).ToList();
     }
+    public static string Empty(int space)
+    {
+        string empty = string.Empty;
+        for (int i = 0; i < space; i++)
+        {
+            empty += " ";
+        }
+        return empty;
+    }
 }

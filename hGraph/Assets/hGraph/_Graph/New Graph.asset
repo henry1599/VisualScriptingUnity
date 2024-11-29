@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: New Graph
   m_EditorClassIdentifier: 
   nodes:
-  - rid: 6695517399662723082
-  - rid: 6695517399662723083
+  - rid: 6695517399662723084
+  - rid: 6695517399662723085
   comments: []
   assetVersion: 1
   references:
     version: 2
     RefIds:
-    - rid: 6695517399662723082
+    - rid: 6695517399662723084
       type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
       data:
         HasEntry: 0
         HasExit: 1
-        id: 7bd6705d-1a40-4dc7-bfc9-35aa0feb4a5b
+        id: 037d2567-8e16-4657-a456-5352323e89d7
         name: Start
         graph: {fileID: 11400000}
-        position: {x: 178.44559, y: -79.66322}
+        position: {x: 157.04141, y: -111.41974}
         ports:
         - name: entry
           type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
@@ -42,15 +42,15 @@ MonoBehaviour:
           capacity: 1
           direction: 1
           connections: []
-    - rid: 6695517399662723083
+    - rid: 6695517399662723085
       type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
       data:
         HasEntry: 1
         HasExit: 1
-        id: a240f6c1-856b-4fe3-96b8-6b83130c6a2c
+        id: 11b4432d-9a5f-4b26-98db-36a8840ef246
         name: Add
         graph: {fileID: 11400000}
-        position: {x: 317.6165, y: -140.61658}
+        position: {x: 304.5129, y: -198.04663}
         ports:
         - name: a
           type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
