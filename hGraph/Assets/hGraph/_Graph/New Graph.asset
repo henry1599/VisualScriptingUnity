@@ -13,44 +13,22 @@ MonoBehaviour:
   m_Name: New Graph
   m_EditorClassIdentifier: 
   nodes:
-  - rid: 6695517399662723084
-  - rid: 6695517399662723085
+  - rid: 1360960768868614144
+  - rid: 1360960768868614145
   comments: []
   assetVersion: 1
   references:
     version: 2
     RefIds:
-    - rid: 6695517399662723084
-      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
-      data:
-        HasEntry: 0
-        HasExit: 1
-        id: 037d2567-8e16-4657-a456-5352323e89d7
-        name: Start
-        graph: {fileID: 11400000}
-        position: {x: 157.04141, y: -111.41974}
-        ports:
-        - name: entry
-          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          capacity: 0
-          direction: 0
-          connections: []
-        - name: '    '
-          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          capacity: 1
-          direction: 1
-          connections: []
-    - rid: 6695517399662723085
+    - rid: 1360960768868614144
       type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
       data:
         HasEntry: 1
         HasExit: 1
-        id: 11b4432d-9a5f-4b26-98db-36a8840ef246
+        id: 19a559f8-aa41-429f-8249-442c482b3b2b
         name: Add
         graph: {fileID: 11400000}
-        position: {x: 304.5129, y: -198.04663}
+        position: {x: 126.678154, y: -147.5862}
         ports:
         - name: a
           type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -67,13 +45,15 @@ MonoBehaviour:
           capacity: 1
           direction: 1
           connections: []
-        - name: '    '
+        - name: entry
           type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
             PublicKeyToken=null
           capacity: 0
           direction: 0
-          connections: []
-        - name: '    '
+          connections:
+          - nodeId: 5eb1ef28-e053-42b9-b4bc-e0bbe52b9b87
+            portName: exit
+        - name: exit
           type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
             PublicKeyToken=null
           capacity: 1
@@ -82,3 +62,27 @@ MonoBehaviour:
         a: 0
         b: 0
         result: 0
+    - rid: 1360960768868614145
+      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: 5eb1ef28-e053-42b9-b4bc-e0bbe52b9b87
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: -8, y: -258.24}
+        ports:
+        - name: entry
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: exit
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 1
+          direction: 1
+          connections:
+          - nodeId: 19a559f8-aa41-429f-8249-442c482b3b2b
+            portName: entry
