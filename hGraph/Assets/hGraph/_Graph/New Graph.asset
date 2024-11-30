@@ -15,8 +15,10 @@ MonoBehaviour:
   nodes:
   - rid: 1360960768868614144
   - rid: 1360960768868614145
+  - rid: 1360960788542783488
   comments: []
   assetVersion: 1
+  Script: {fileID: 11500000, guid: 0993b49788c54db4f9cf76610158f99f, type: 3}
   references:
     version: 2
     RefIds:
@@ -70,7 +72,7 @@ MonoBehaviour:
         id: 5eb1ef28-e053-42b9-b4bc-e0bbe52b9b87
         name: Start
         graph: {fileID: 11400000}
-        position: {x: -8, y: -258.24}
+        position: {x: -102.400024, y: -356}
         ports:
         - name: entry
           type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
@@ -86,3 +88,25 @@ MonoBehaviour:
           connections:
           - nodeId: 19a559f8-aa41-429f-8249-442c482b3b2b
             portName: entry
+    - rid: 1360960788542783488
+      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: 15faf010-6a9a-4653-afc0-f3be0c6879be
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: 55.072586, y: -419}
+        ports:
+        - name: entry
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: exit
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 1
+          direction: 1
+          connections: []

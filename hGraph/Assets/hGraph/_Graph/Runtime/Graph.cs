@@ -30,7 +30,7 @@ namespace BlueGraph
         /// </summary>
         public virtual string Title 
         {
-            get { return "BLUEGRAPH"; }
+            get { return ""; }
         }
 
         /// <summary>

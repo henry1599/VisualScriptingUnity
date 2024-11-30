@@ -74,7 +74,6 @@ namespace BlueGraph.Editor
             ReloadPorts();
             ReloadEditables();
             RefreshErrorState();
-            ReloadEntryExitPorts();
 
             OnInitialize();
         }
@@ -215,20 +214,6 @@ namespace BlueGraph.Editor
             }
             label.style.backgroundImage = new StyleBackground(this.FlowTexture);
             label.style.color = DefaultEditorColor;
-        }
-        void ReloadEntryExitPorts()
-        {
-            foreach (var (name, port) in Target.Ports)
-            {
-                if (Target.HasEntry && string.Equals(name, "entry", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    UpdatePortVisualElement(Inputs.Find((port) => port.portName == name), port);
-                }
-                if (Target.HasExit && string.Equals(name, "exit", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    UpdatePortVisualElement(Outputs.Find((port) => port.portName == name), port);
-                }
-            }
         }
         protected virtual void AddOutputPort(Port port)
         {

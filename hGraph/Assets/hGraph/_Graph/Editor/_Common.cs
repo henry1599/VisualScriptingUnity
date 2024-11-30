@@ -34,6 +34,8 @@ public class ParsedScript
     public List<string> ClassNames = new List<string>();
     public Dictionary<string, List<ParsedMethod>> ClassMethods;
     public Dictionary<string, List<ParsedField>> ClassFields;
+    public List<string> Namespaces = new List<string>();
+    public List<string> UsingDirectives = new List<string>();
     public ParsedScript()
     {
         this.ClassMethods = new ();
@@ -54,6 +56,20 @@ public class ParsedScript
         parsedScript.ClassNames.Clear();
         parsedScript.ClassMethods.Clear();
         parsedScript.ClassFields.Clear();
+        parsedScript.Namespaces.Clear();
+        parsedScript.UsingDirectives.Clear();
+
+         // Extract using directives
+        foreach (var usingDirective in root.DescendantNodes().OfType<UsingDirectiveSyntax>())
+        {
+            parsedScript.UsingDirectives.Add(usingDirective.Name.ToString());
+        }
+
+        // Extract namespaces
+        foreach (var namespaceNode in root.DescendantNodes().OfType<NamespaceDeclarationSyntax>())
+        {
+            parsedScript.Namespaces.Add(namespaceNode.Name.ToString());
+        }
 
         foreach (var classNode in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
         {
