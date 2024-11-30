@@ -4,6 +4,7 @@ using BlueGraph;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Graph", menuName = "Graph")]
-public class hGraph : Graph
+public class hCustomGraph : Graph
 {
+    public Object Script;
 }

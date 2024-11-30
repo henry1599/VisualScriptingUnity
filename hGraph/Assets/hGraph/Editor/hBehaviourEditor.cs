@@ -1,28 +1,19 @@
+using BlueGraph;
+using BlueGraph.Editor;
 using UnityEditor;
 using UnityEngine;
-using hGraph.Editor;
 
-[CustomEditor(typeof(MonoScript))]
+[CustomEditor(typeof(hCustomGraph))]
 public class hBehaviourScriptEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        MonoScript monoScript = (MonoScript)target;
 
-        System.Type scriptClass = monoScript.GetClass();
-        if (scriptClass != null && typeof(hBehaviour).IsAssignableFrom(scriptClass))
-        {
-            base.OnInspectorGUI();
+        base.OnInspectorGUI();
 
-            if (GUILayout.Button("Open Node Editor"))
-            {
-                hBehaviour instance = (hBehaviour)System.Activator.CreateInstance(scriptClass);
-                GraphEditorWindow.OpenGraphEditorWindow(instance);
-            }
-        }
-        else
+        if (GUILayout.Button("Open Node Editor"))
         {
-            base.OnInspectorGUI();
+            GraphEditorWindow.OpenGraphEditorWindow(target as hCustomGraph);
         }
     }
 }
@@ -36,7 +27,7 @@ public class hBehaviourComponentEditor : Editor
 
         if (GUILayout.Button("Open Node Editor"))
         {
-            GraphEditorWindow.OpenGraphEditorWindow((hBehaviour)target);
+            GraphEditorWindow.OpenGraphEditorWindow(target as hCustomGraph);
         }
     }
 }

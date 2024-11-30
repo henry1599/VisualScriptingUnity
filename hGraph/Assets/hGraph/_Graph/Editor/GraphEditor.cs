@@ -9,7 +9,7 @@ namespace BlueGraph.Editor
     /// Typically, you should build your own inspectors that
     /// open an instance of GraphEditorWindow for the asset.
     /// </summary>
-    [CustomEditor(typeof(Graph), true)]
+    // [CustomEditor(typeof(Graph), true)]
     public class GraphEditor : UnityEditor.Editor
     {
         /// <summary>

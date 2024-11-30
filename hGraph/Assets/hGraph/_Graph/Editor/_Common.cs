@@ -10,7 +10,93 @@ using Microsoft.CSharp;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+public class ParsedField
+{
+    public string Name;
+    public Type Type;
+}
+public class ParsedMethod
+{
+    public string Name;
+    public Type ReturnType;
+    public List<ParsedField> Params;
+    public string Content;
+}
+public class ParsedScript
+{
+    public string Name;
+    public string Path;
+    public string Content;
+    public List<string> ClassNames = new List<string>();
+    public Dictionary<string, List<ParsedMethod>> ClassMethods;
+    public Dictionary<string, List<ParsedField>> ClassFields;
+    public ParsedScript()
+    {
+        this.ClassMethods = new ();
+        this.ClassFields = new ();
+    }
+    public static ParsedScript Create(string path)
+    {
+        ParsedScript parsedScript = new ParsedScript
+        {
+            Path = path,
+            Name = System.IO.Path.GetFileNameWithoutExtension(path),
+            Content = File.ReadAllText(path)
+        };
+        SyntaxTree tree = CSharpSyntaxTree.ParseText(parsedScript.Content);
+        var root = tree.GetCompilationUnitRoot();
+
+        // Clear previous data
+        parsedScript.ClassNames.Clear();
+        parsedScript.ClassMethods.Clear();
+        parsedScript.ClassFields.Clear();
+
+        foreach (var classNode in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
+        {
+            string className = classNode.Identifier.Text;
+            parsedScript.ClassNames.Add(className);
+            parsedScript.ClassMethods[className] = new List<ParsedMethod>();
+            parsedScript.ClassFields[className] = new List<ParsedField>();
+
+            // Extract methods
+            foreach (var methodNode in classNode.DescendantNodes().OfType<MethodDeclarationSyntax>())
+            {
+                string methodName = $"{methodNode.ReturnType} {methodNode.Identifier.Text}()";
+                ParsedMethod parsedMethod = new ParsedMethod
+                {
+                    Name = methodName,
+                    ReturnType = methodNode.ReturnType.GetType(),
+                    Params = new List<ParsedField>(),
+                    Content = methodNode.ToString()
+                };
+                parsedScript.ClassMethods[className].Add(parsedMethod);
+
+
+            }
+
+            // Extract fields
+            foreach (var fieldNode in classNode.DescendantNodes().OfType<FieldDeclarationSyntax>())
+            {
+                string fieldType = fieldNode.Declaration.Type.ToString();
+                foreach (var variable in fieldNode.Declaration.Variables)
+                {
+                    ParsedField parsedField = new ParsedField
+                    {
+                        Name = variable.Identifier.Text,
+                        Type = fieldNode.Declaration.Type.GetType()
+                    };
+                    parsedScript.ClassFields[className].Add(parsedField);
+
+                }
+            }
+        }
+        return parsedScript;
+    }
+}
 public static class Common
 {
     public static Texture2D MakeTex(int width, int height, Color col)

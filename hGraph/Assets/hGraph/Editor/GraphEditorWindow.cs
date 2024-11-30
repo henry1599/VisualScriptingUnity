@@ -16,7 +16,7 @@ namespace hGraph.Editor
     {
         private const string EditorPrefsKey = "GraphEditorWindow_hBehaviour";
         public VisualTreeAsset graphViewTreeAsset;
-        private CustomGraphView graphView;
+        // private CustomGraphView graphView;
         private Button loadButton;
 
         private VisualElement mainLayout;
@@ -31,8 +31,8 @@ namespace hGraph.Editor
         private hBehaviour chosenHBehaviour;
         private GraphData graphData;
         public static GraphEditorWindow window;
-        public static CustomGraphView CurrentGraphView => window.graphView;
-        private Dictionary<MethodInfo, CustomGraphView> functionGraphView = new Dictionary<MethodInfo, CustomGraphView>();
+        // public static CustomGraphView CurrentGraphView => window.graphView;
+        // private Dictionary<MethodInfo, CustomGraphView> functionGraphView = new Dictionary<MethodInfo, CustomGraphView>();
         public static void OpenGraphEditorWindow(hBehaviour hBehaviour)
         {
             
@@ -176,14 +176,14 @@ namespace hGraph.Editor
 
         private void ConstructGraph(hBehaviour behaviour)
         {
-            this.graphData = new GraphData(behaviour);
-            this.graphView = new CustomGraphView(this.graphData)
-            {
-                name = "Graph View"
-            };
+            // this.graphData = new GraphData(behaviour);
+            // this.graphView = new CustomGraphView(this.graphData)
+            // {
+            //     name = "Graph View"
+            // };
 
-            this.graphViewContainer.Add(this.graphView);
-            this.graphView.StretchToParentSize();
+            // this.graphViewContainer.Add(this.graphView);
+            // this.graphView.StretchToParentSize();
         }
 
         Dictionary<string, Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)
