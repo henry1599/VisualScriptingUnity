@@ -1,5 +1,7 @@
 using BlueGraph;
 using UnityEngine;
+using NaughtyAttributes;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

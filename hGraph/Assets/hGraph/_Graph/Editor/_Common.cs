@@ -1,39 +1,41 @@
 using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.CSharp;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using AYellowpaper.SerializedCollections;
 
+[Serializable]
 public class ParsedField
 {
     public string Name;
-    public Type Type;
+    public string Type;
 }
+[Serializable]
 public class ParsedMethod
 {
     public string Name;
-    public Type ReturnType;
+    public string ReturnType;
     public List<ParsedField> Params;
     public string Content;
 }
+[Serializable]
 public class ParsedScript
 {
     public string Name;
     public string Path;
     public string Content;
     public List<string> ClassNames = new List<string>();
-    public Dictionary<string, List<ParsedMethod>> ClassMethods;
-    public Dictionary<string, List<ParsedField>> ClassFields;
+    [SerializedDictionary("ClassNames", "ClassMethods")]
+    public SerializedDictionary<string, List<ParsedMethod>> ClassMethods;
+    [SerializedDictionary("ClassNames", "ClassFields")]
+    public SerializedDictionary<string, List<ParsedField>> ClassFields;
     public List<string> Namespaces = new List<string>();
     public List<string> UsingDirectives = new List<string>();
     public ParsedScript()
@@ -75,20 +77,33 @@ public class ParsedScript
         {
             string className = classNode.Identifier.Text;
             parsedScript.ClassNames.Add(className);
-            parsedScript.ClassMethods[className] = new List<ParsedMethod>();
-            parsedScript.ClassFields[className] = new List<ParsedField>();
+            parsedScript.ClassMethods.TryAdd(className, new List<ParsedMethod>());
+            parsedScript.ClassFields.TryAdd(className, new List<ParsedField>());
 
             // Extract methods
             foreach (var methodNode in classNode.DescendantNodes().OfType<MethodDeclarationSyntax>())
             {
-                string methodName = $"{methodNode.ReturnType} {methodNode.Identifier.Text}()";
+                string methodName = methodNode.Identifier.Text;
                 ParsedMethod parsedMethod = new ParsedMethod
                 {
                     Name = methodName,
-                    ReturnType = methodNode.ReturnType.GetType(),
+                    ReturnType = methodNode.ReturnType.ToString(),
                     Params = new List<ParsedField>(),
                     Content = methodNode.ToString()
                 };
+                // Extract parameters
+                foreach (var paramNode in methodNode.ParameterList.Parameters)
+                {
+                    string paramName = paramNode.Identifier.Text;
+
+                    ParsedField paramField = new ParsedField
+                    {
+                        Name = paramName,
+                        Type = paramNode.Type.ToString()
+                    };
+
+                    parsedMethod.Params.Add(paramField);
+                }
                 parsedScript.ClassMethods[className].Add(parsedMethod);
 
 
@@ -103,7 +118,7 @@ public class ParsedScript
                     ParsedField parsedField = new ParsedField
                     {
                         Name = variable.Identifier.Text,
-                        Type = fieldNode.Declaration.Type.GetType()
+                        Type = fieldNode.Declaration.Type.ToString()
                     };
                     parsedScript.ClassFields[className].Add(parsedField);
 

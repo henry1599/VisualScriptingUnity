@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
+using System;
 
 public class RoslynScriptAnalyzer : EditorWindow
 {
@@ -13,7 +14,6 @@ public class RoslynScriptAnalyzer : EditorWindow
     private List<string> classNames = new List<string>();
     private Dictionary<string, List<string>> classMethods = new Dictionary<string, List<string>>();
     private Dictionary<string, List<string>> classFields = new Dictionary<string, List<string>>();
-    private Dictionary<string, Dictionary<string, List<string>>> methodDetails = new Dictionary<string, Dictionary<string, List<string>>>();
     private Vector2 scrollPos;
     private MonoScript script;
 
@@ -33,11 +33,6 @@ public class RoslynScriptAnalyzer : EditorWindow
             filePath = AssetDatabase.GetAssetPath(script);
         }
 
-        // if (script != null)
-        // {
-        //     filePath = AssetDatabase.GetAssetPath(script);
-        // }
-        // filePath = EditorGUILayout.TextField("File Path:", filePath);
 
         if (GUILayout.Button("Analyze"))
         {
@@ -65,15 +60,6 @@ public class RoslynScriptAnalyzer : EditorWindow
                     foreach (var method in classMethods[className])
                     {
                         GUILayout.Label($"- {method}", EditorStyles.boldLabel);
-
-                        // Display local variables and functions
-                        if (methodDetails[className].ContainsKey(method))
-                        {
-                            foreach (var detail in methodDetails[className][method])
-                            {
-                                GUILayout.Label($"  {detail}", EditorStyles.miniLabel);
-                            }
-                        }
                     }
                 }
 
@@ -92,60 +78,48 @@ public class RoslynScriptAnalyzer : EditorWindow
 
     private void AnalyzeScript(string path)
     {
-        string code = File.ReadAllText(path);
-        SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
-        var root = tree.GetCompilationUnitRoot();
+        ParsedScript parsedScript = ParsedScript.Create(path);
 
         // Clear previous data
         classNames.Clear();
         classMethods.Clear();
         classFields.Clear();
-        methodDetails.Clear();
 
-        foreach (var classNode in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
+        foreach (var classNode in parsedScript.ClassNames)
         {
-            string className = classNode.Identifier.Text;
+            string className = classNode;
             classNames.Add(className);
 
             classMethods[className] = new List<string>();
             classFields[className] = new List<string>();
-            methodDetails[className] = new Dictionary<string, List<string>>();
 
             // Extract methods
-            foreach (var methodNode in classNode.DescendantNodes().OfType<MethodDeclarationSyntax>())
+            foreach (var methodNode in parsedScript.ClassMethods[className])
             {
-                string methodName = $"{methodNode.ReturnType} {methodNode.Identifier.Text}()";
+                List<string> parameters = new();
+                foreach (var param in methodNode.Params)
+                {
+                    parameters.Add($"{ShortenType(param.Type)} {param.Name}");
+                }
+                string parametersString = string.Join(", ", parameters);
+                string methodName = $"{ShortenType(methodNode.ReturnType)} {methodNode.Name}({parametersString})";
                 classMethods[className].Add(methodName);
-
-                methodDetails[className][methodName] = new List<string>();
-
-                // Extract local variables
-                foreach (var localVar in methodNode.DescendantNodes().OfType<LocalDeclarationStatementSyntax>())
-                {
-                    var variable = localVar.Declaration.Variables.First();
-                    string localVarType = localVar.Declaration.Type.ToString();
-                    string localVarName = variable.Identifier.Text;
-                    methodDetails[className][methodName].Add($"Local Var: {localVarType} {localVarName}");
-                }
-
-                // Extract local functions
-                foreach (var localFunc in methodNode.DescendantNodes().OfType<LocalFunctionStatementSyntax>())
-                {
-                    string localFuncReturnType = localFunc.ReturnType.ToString();
-                    string localFuncName = localFunc.Identifier.Text;
-                    methodDetails[className][methodName].Add($"Local Func: {localFuncReturnType} {localFuncName}()");
-                }
             }
 
             // Extract fields
-            foreach (var fieldNode in classNode.DescendantNodes().OfType<FieldDeclarationSyntax>())
+            foreach (var fieldNode in parsedScript.ClassFields[className])
             {
-                string fieldType = fieldNode.Declaration.Type.ToString();
-                foreach (var variable in fieldNode.Declaration.Variables)
-                {
-                    classFields[className].Add($"{fieldType} {variable.Identifier.Text}");
-                }
+                string fieldType = fieldNode.Type.ToString();
+                classFields[className].Add($"{ShortenType(fieldType)} {fieldNode.Name}");
             }
         }
+    }
+    private string ShortenType(Type type)
+    {
+        return ShortenType(type.ToString());
+    }
+    private string ShortenType(string type)
+    {
+        return type.Split(".")[^1];
     }
 }

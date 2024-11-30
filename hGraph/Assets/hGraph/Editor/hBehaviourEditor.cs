@@ -10,7 +10,11 @@ public class hBehaviourScriptEditor : Editor
     {
 
         base.OnInspectorGUI();
-
+        
+        if (GUILayout.Button("Parse"))
+        {
+            (target as hCustomGraph)?.Parse();
+        }
         if (GUILayout.Button("Open Node Editor"))
         {
             GraphEditorWindow.OpenGraphEditorWindow(target as hCustomGraph);
@@ -25,6 +29,10 @@ public class hBehaviourComponentEditor : Editor
     {
         DrawDefaultInspector();
 
+        if (GUILayout.Button("Parse"))
+        {
+            (target as hCustomGraph)?.Parse();
+        }
         if (GUILayout.Button("Open Node Editor"))
         {
             GraphEditorWindow.OpenGraphEditorWindow(target as hCustomGraph);
