@@ -94,7 +94,7 @@ public class RoslynScriptAnalyzer : EditorWindow
             classFields[className] = new List<string>();
 
             // Extract methods
-            foreach (var methodNode in parsedScript.ClassMethods[className])
+            foreach (var methodNode in parsedScript.ClassMethods[className].Data)
             {
                 List<string> parameters = new();
                 foreach (var param in methodNode.Params)
@@ -107,7 +107,7 @@ public class RoslynScriptAnalyzer : EditorWindow
             }
 
             // Extract fields
-            foreach (var fieldNode in parsedScript.ClassFields[className])
+            foreach (var fieldNode in parsedScript.ClassFields[className].Data)
             {
                 string fieldType = fieldNode.Type.ToString();
                 classFields[className].Add($"{ShortenType(fieldType)} {fieldNode.Name}");

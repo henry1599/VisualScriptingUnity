@@ -26,6 +26,18 @@ public class ParsedMethod
     public string Content;
 }
 [Serializable]
+public class ParsedMethodList
+{
+    public List<ParsedMethod> Data = new();
+    public ParsedMethodList() => Data = new();
+}
+[Serializable]
+public class ParsedFieldList
+{
+    public List<ParsedField> Data;
+    public ParsedFieldList() => Data = new();
+}
+[Serializable]
 public class ParsedScript
 {
     public string Name;
@@ -33,9 +45,9 @@ public class ParsedScript
     public string Content;
     public List<string> ClassNames = new List<string>();
     [SerializedDictionary("ClassNames", "ClassMethods")]
-    public SerializedDictionary<string, List<ParsedMethod>> ClassMethods;
+    public SerializedDictionary<string, ParsedMethodList> ClassMethods;
     [SerializedDictionary("ClassNames", "ClassFields")]
-    public SerializedDictionary<string, List<ParsedField>> ClassFields;
+    public SerializedDictionary<string, ParsedFieldList> ClassFields;
     public List<string> Namespaces = new List<string>();
     public List<string> UsingDirectives = new List<string>();
     public ParsedScript()
@@ -77,8 +89,8 @@ public class ParsedScript
         {
             string className = classNode.Identifier.Text;
             parsedScript.ClassNames.Add(className);
-            parsedScript.ClassMethods.TryAdd(className, new List<ParsedMethod>());
-            parsedScript.ClassFields.TryAdd(className, new List<ParsedField>());
+            parsedScript.ClassMethods.TryAdd(className, new());
+            parsedScript.ClassFields.TryAdd(className, new());
 
             // Extract methods
             foreach (var methodNode in classNode.DescendantNodes().OfType<MethodDeclarationSyntax>())
@@ -104,7 +116,7 @@ public class ParsedScript
 
                     parsedMethod.Params.Add(paramField);
                 }
-                parsedScript.ClassMethods[className].Add(parsedMethod);
+                parsedScript.ClassMethods[className].Data.Add(parsedMethod);
 
 
             }
@@ -120,7 +132,7 @@ public class ParsedScript
                         Name = variable.Identifier.Text,
                         Type = fieldNode.Declaration.Type.ToString()
                     };
-                    parsedScript.ClassFields[className].Add(parsedField);
+                    parsedScript.ClassFields[className].Data.Add(parsedField);
 
                 }
             }
