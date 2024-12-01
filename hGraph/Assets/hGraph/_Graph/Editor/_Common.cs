@@ -134,6 +134,10 @@ public static class Common
             .Where(type => type.Namespace == namespaceName)
             .ToList();
     }
+    public static List<string> Filter(this List<string> list, string filterText)
+    {
+        return string.IsNullOrEmpty(filterText) ? list : list.Where(x => x.ToLower().Contains(filterText.ToLower())).ToList();
+    }
     public static List<FieldInfo> Filter(this List<FieldInfo> list, string filterText)
     {
         return string.IsNullOrEmpty(filterText) ? list : list.Where(x => 
