@@ -34,6 +34,7 @@ namespace BlueGraph.Editor
             viewDataKey = node.ID;
             Target = node;
             Canvas = canvas;
+            var nodeType = node.GetType();
             ReflectionData = NodeReflection.GetNodeType(node.GetType());
             ConnectorListener = connectorListener;
 
@@ -314,8 +315,12 @@ namespace BlueGraph.Editor
             evt.menu.AppendAction("Edit/Node View Script", (e) => EditNodeViewScript(), GetNodeViewScriptStatus);
 
             //Add ContextMethods by Attributes from node
-            var contextMethods = ReflectionData.ContextMethods;
+            var contextMethods = ReflectionData?.ContextMethods;
 
+            if (contextMethods == null)
+            {
+                return;
+            }
             foreach (var attr in contextMethods.Keys)
             {
                 string title = string.IsNullOrEmpty(attr.menuItem) ? contextMethods[attr].Name : attr.menuItem;
