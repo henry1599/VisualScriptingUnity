@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace BlueGraph
@@ -31,7 +32,7 @@ namespace BlueGraph
 
         [SerializeField] private string name;
 
-        public string Name
+        [ShowInInspector] public string Name
         {
             get { return name; }
             set { name = value; }
@@ -238,8 +239,16 @@ namespace BlueGraph
         /// </summary>
         public void DisconnectAllPorts()
         {
+            if (portMap == null)
+            {
+                return;
+            }
             foreach (var port in portMap.Values)
             {
+                if (port == null)
+                {
+                    continue;
+                }
                 port.DisconnectAll();
             }
         }

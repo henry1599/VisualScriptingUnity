@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 namespace BlueGraph.Editor
 {
@@ -22,7 +21,7 @@ namespace BlueGraph.Editor
             var windows = Resources.FindObjectsOfTypeAll<GraphEditorWindow>();
             foreach (var window in windows)
             {
-                if (window.Graph == graph)
+                if (window.ActiveGraph == graph)
                 {
                     return window;
                 }

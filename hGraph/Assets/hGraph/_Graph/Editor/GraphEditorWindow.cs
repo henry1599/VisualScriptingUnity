@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Graph = BlueGraph.Graph;
 
 namespace BlueGraph.Editor
 {
@@ -13,16 +14,34 @@ namespace BlueGraph.Editor
     /// </summary>
     public class GraphEditorWindow : EditorWindow
     {
+        public class GraphSelection 
+        {
+            public eParsedDataType Type;
+            public string Name;
+            public override bool Equals(object obj)
+            {
+                return obj is GraphSelection selection &&
+                       Type == selection.Type &&
+                       Name == selection.Name;
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+        }
         public VisualTreeAsset graphViewTreeAsset;
         private VisualElement mainLayout;
         public CanvasView Canvas { get; protected set; }
-        public hCustomGraph Graph { get; protected set; }
+        public hCustomGraph ActiveGraph { get; protected set; }
         public static GraphEditorWindow window;
         string filterText;
+        GraphSelection currentSelection;
+        Stack<GraphSelection> selectionStack = new Stack<GraphSelection>();
 
         // * Visual Elements
         private VisualElement graphViewContainer; 
         private VisualElement toolboxVisualElement;
+        private VisualElement bottomMainLayout;
         private ScrollView toolboxViewContainer;
         private ListView namespaceListView;
         private ToolbarSearchField toolbarSearchField;
@@ -40,7 +59,7 @@ namespace BlueGraph.Editor
             if (this.graphViewTreeAsset == null)
                 return;
             
-            this.Graph = graph;
+            this.ActiveGraph = graph;
             VisualElement root = rootVisualElement;
             graphViewTreeAsset.CloneTree(root);
 
@@ -51,14 +70,83 @@ namespace BlueGraph.Editor
             this.namespaceListView = root.Q<ListView>("_namespaceListView");
             this.toolbarSearchField = root.Q<ToolbarSearchField>("_toolbarSearchField");
             this.toolbarBreadcrumbs = root.Q<ToolbarBreadcrumbs>("_toolbarBreadCrumbs");
+            this.bottomMainLayout = root.Q<VisualElement>("_bottomMainLayout");
 
             TwoPaneSplitView splitView = new TwoPaneSplitView(0, 250, TwoPaneSplitViewOrientation.Horizontal);
             splitView.Add(toolboxVisualElement);
             splitView.Add(graphViewContainer);
-            mainLayout.Add(splitView);
+            this.bottomMainLayout.Add(splitView);
             splitView.StretchToParentSize();
 
-            Load(this.Graph);
+            // * Get first class
+            var firstGraph = this.ActiveGraph.ParsedScript.Classes.Values.First();
+            this.currentSelection = new GraphSelection() 
+            {
+                Type = firstGraph.ParsedDataType, 
+                Name = firstGraph.Name
+            };
+        
+            // this.toolbarBreadcrumbs.Clear();
+
+            this.selectionStack ??= new Stack<GraphSelection>();
+            this.selectionStack.Clear();
+            SelectItem(this.currentSelection);
+
+            Load(this.ActiveGraph);
+        }
+        
+        public void SelectItem(GraphSelection selection)
+        {
+            Debug.Log($"Selected {selection.Name}");
+            if (this.selectionStack.Count == 0)
+            {
+                this.selectionStack.Push(this.currentSelection);
+                this.toolbarBreadcrumbs.PushItem(this.currentSelection.Name, () => SelectItem(this.currentSelection));
+                return;
+            }
+            while (this.selectionStack.Count > 0)
+            {
+                this.currentSelection = this.selectionStack.Peek();
+                if (this.currentSelection.Equals(selection))
+                {
+                    break;
+                }
+                else if (IsChildOf(selection, this.currentSelection))
+                {
+                    this.selectionStack.Push(selection);
+                    this.toolbarBreadcrumbs.PushItem(selection.Name, () => SelectItem(selection));
+                    break;
+                }
+                else
+                {
+                    this.selectionStack.Pop();
+                    this.toolbarBreadcrumbs.PopItem();
+                }
+            }
+            if (this.selectionStack.Count == 0)
+            {
+                this.selectionStack.Push(this.currentSelection);
+                this.toolbarBreadcrumbs.PushItem(this.currentSelection.Name, () => SelectItem(this.currentSelection));
+            }
+        }
+        public bool IsChildOf(GraphSelection childTest, GraphSelection parentTest)
+        {
+            if (childTest.Type == eParsedDataType.Method && parentTest.Type == eParsedDataType.Class)
+            {
+                return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Methods.Any(m => m.Name == childTest.Name && m.ClassName == parentTest.Name);
+            }
+            if (childTest.Type == eParsedDataType.Field && parentTest.Type == eParsedDataType.Class)
+            {
+                return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Fields.Any(f => f.Name == childTest.Name && f.ClassName == parentTest.Name);
+            }
+            // * Check if a field is a child (local var) of a method
+            // * Check if a field is a child (parameter) of a method
+            // * Check if a field is a child of a class (global var)
+            // if (childTest.Type == eParsedDataType.Field && parentTest.Type == eParsedDataType.Method)
+            // {
+            //     return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Methods.Any(m => m.Params.Any(p => p.Name == childTest.Name));
+            // }
+            return false;
         }
 
         public virtual void Load(hCustomGraph graph)
@@ -67,29 +155,29 @@ namespace BlueGraph.Editor
             Canvas.Load(graph);
             this.graphViewContainer.Add(Canvas);
             Canvas.StretchToParentSize();
-            ReadGraph();
+            ReadCurrentGraph(graph);
         }
-        public void ReadGraph()
+        public void ReadCurrentGraph(hCustomGraph graph)
         {
+            graph.BuildGraph(this.currentSelection.Type, this.currentSelection.Name);
             // * Namespaces
             namespaceListView.headerTitle = "Namespaces";
-            namespaceListView.itemsSource = this.Graph.ParsedScript.AllNamespaces;
+            namespaceListView.itemsSource = graph.ParsedScript.AllNamespaces;
             namespaceListView.makeItem = () =>
             {
-                TextField textField = new TextField();
-                textField.isReadOnly = false;
+                TextField textField = new TextField
+                {
+                    isReadOnly = true
+                };
                 return textField;
             };
             namespaceListView.bindItem = (element, i) =>
             {
-                (element as TextField).value = this.Graph.ParsedScript.AllNamespaces[i];
+                (element as TextField).value = graph.ParsedScript.AllNamespaces[i];
             };
             namespaceListView.Rebuild();
 
-            string firstClass = this.Graph.ParsedScript.ClassNames.FirstOrDefault();
-
             // * Foldout
-            // Create main foldouts for fields, properties, and methods
             Foldout variableFoldout = new Foldout
             {
                 style =
@@ -115,8 +203,8 @@ namespace BlueGraph.Editor
                     }
             };
             // Dictionaries to store namespace foldouts
-            ParsedFieldList fieldInfos = this.Graph.ParsedScript.ClassFields[firstClass];
-            ParsedMethodList methodInfos = this.Graph.ParsedScript.ClassMethods[firstClass];
+            List<ParsedField> fieldInfos = graph.ParsedScript.Classes[this.currentSelection.Name].Fields;
+            List<ParsedMethod> methodInfos = graph.ParsedScript.Classes[this.currentSelection.Name].Methods;
 
             Dictionary<string, Foldout> fieldNamespaceFoldouts = GroupFieldsByNamespaces(fieldInfos);
             Dictionary<string, Foldout> methodNamespaceFoldouts = GroupMethodsByNamespaces(methodInfos);
@@ -142,12 +230,12 @@ namespace BlueGraph.Editor
         }
 
 
-        Dictionary<string, Foldout> GroupFieldsByNamespaces(ParsedFieldList fieldInfos)
+        Dictionary<string, Foldout> GroupFieldsByNamespaces(List<ParsedField> fieldInfos)
         {
             Dictionary<string, Foldout> fieldNamespaceFoldouts = new Dictionary<string, Foldout>();
-            foreach (var field in fieldInfos.Data)
+            foreach (var field in fieldInfos)
             {
-                string namespaceName = field.RootNamespace ?? "Global Namespace";
+                string namespaceName = string.IsNullOrEmpty(field.RootNamespace) ? "Global Namespace" : field.RootNamespace;
                 if (!fieldNamespaceFoldouts.ContainsKey(namespaceName))
                 {
                     fieldNamespaceFoldouts[namespaceName] = new Foldout() 
@@ -163,12 +251,12 @@ namespace BlueGraph.Editor
             }
             return fieldNamespaceFoldouts;
         }
-        Dictionary<string, Foldout> GroupMethodsByNamespaces(ParsedMethodList methods)
+        Dictionary<string, Foldout> GroupMethodsByNamespaces(List<ParsedMethod> methods)
         {
             Dictionary<string, Foldout> methodNamespaceFoldouts = new Dictionary<string, Foldout>();
-            foreach (var method in methods.Data)
+            foreach (var method in methods)
             {
-                string namespaceName = method.RootNamespace ?? "Global Namespace";
+                string namespaceName = string.IsNullOrEmpty(method.RootNamespace) ? "Global Namespace" : method.RootNamespace;
                 if (!methodNamespaceFoldouts.ContainsKey(namespaceName))
                 {
                     methodNamespaceFoldouts[namespaceName] = new Foldout() 
@@ -181,6 +269,7 @@ namespace BlueGraph.Editor
                 Button methodButton = Common.CreateButtonWithIcon(icon, new Button(
                     () => 
                     {
+                        SelectItem(new GraphSelection() { Type = eParsedDataType.Method, Name = method.Name });
                     }
                 ) { text = method.Name });
 

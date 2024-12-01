@@ -55,11 +55,11 @@ namespace BlueGraph.Editor
             SetPosition(new Rect(node.Position, Vector2.one));
             title = node.Name;
 
-            if (!ReflectionData.Deletable)
+            if (ReflectionData != null && !ReflectionData.Deletable)
             {
                 capabilities &= ~Capabilities.Deletable;
             }
-            if (!ReflectionData.Moveable)
+            if (ReflectionData != null && !ReflectionData.Moveable)
             {
                 capabilities &= ~Capabilities.Movable;
             }
@@ -177,7 +177,7 @@ namespace BlueGraph.Editor
 
             // If we're exposing a control element via reflection: include it in the view
             var reflection = NodeReflection.GetNodeType(Target.GetType());
-            var element = reflection.GetPortByName(port.Name)?.GetControlElement(this);
+            var element = reflection?.GetPortByName(port.Name)?.GetControlElement(this);
 
             if (element != null)
             {

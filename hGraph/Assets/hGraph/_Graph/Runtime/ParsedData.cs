@@ -6,83 +6,77 @@ using UnityEngine;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Sherbert.Framework.Generic;
 using Sirenix.OdinInspector;
-using System.Collections;
 
-
+public enum eParsedDataType
+{
+    Class,
+    Method,
+    Field
+}
 [Serializable]
 public class ParsedField
 {
+    [ShowInInspector] public eParsedDataType ParsedDataType => eParsedDataType.Field;
+    public string ClassName;
     public string Name;
     public string RootNamespace;
     public string Type;
     public override string ToString()
     {
-        return $"{RootNamespace} {Type} {Name}";
+        return $"{RootNamespace} <- {ClassName} <- {Type} <- {Name}";
     }
 }
 [Serializable]
 public class ParsedMethod
 {
+    [ShowInInspector] public eParsedDataType ParsedDataType => eParsedDataType.Method;
+    public string ClassName;
     public string Name;
     public string ReturnType;
     public string RootNamespace;
     public List<ParsedField> Params;
-    public string Content;
+    [FoldoutGroup("Content"), TextArea(10, 20)] public string Content; // Makes the string field bigger and scrollable
     public override string ToString()
     {
-        return $"{RootNamespace} {ReturnType} {Name}({string.Join(", ", Params.Select(p => $"{p.Type} {p.Name}"))})";
+        return $"{RootNamespace} <- {ClassName} <- {ReturnType} <- {Name}({string.Join(", ", Params.Select(p => $"{p.Type} {p.Name}"))})";
     }
 }
 [Serializable]
-public class ParsedMethodList
+public class ParsedClass
 {
-    public List<ParsedMethod> Data;
-    public ParsedMethodList()
+    [ShowInInspector] public eParsedDataType ParsedDataType => eParsedDataType.Class;
+    public string Name;
+    public string RootNamespace;
+    public List<ParsedMethod> Methods;
+    public List<ParsedField> Fields;
+    public ParsedClass()
     {
-        this.Data = new List<ParsedMethod>();
+        this.Methods = new List<ParsedMethod>();
+        this.Fields = new List<ParsedField>();
     }
     public override string ToString()
     {
-        return string.Join(", ", Data.Select(m => m.ToString()));
+        return $"{RootNamespace} <- {Name}";
     }
+
 }
 [Serializable]
-public class ParsedFieldList
-{
-    public List<ParsedField> Data;
-    public ParsedFieldList()
-    {
-        this.Data = new List<ParsedField>();
-    }
-    public override string ToString()
-    {
-        return string.Join(", ", Data.Select(f => f.ToString()));
-    }
-}
-[Serializable]
-public class MethodDict : UnitySerializedDictionary<string, ParsedMethodList> { }
-[Serializable]
-public class FieldDict : UnitySerializedDictionary<string, ParsedFieldList> { }
+public class ClassDict : UnitySerializedDictionary<string, ParsedClass> { }
 [Serializable]
 public class ParsedScript
 {
     public string Name;
     public string Path;
     public string Content;
-    public List<string> ClassNames = new List<string>();
     [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)] 
-    public MethodDict ClassMethods;
-    [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)] 
-    public FieldDict ClassFields;
+    public ClassDict Classes = new ();
     public List<string> Namespaces = new List<string>();
     public List<string> UsingDirectives = new List<string>();
     public List<string> AllNamespaces => Namespaces.Concat(UsingDirectives).ToList();
     public ParsedScript()
     {
-        this.ClassMethods = new ();
-        this.ClassFields =  new ();
+        this.Classes = new ClassDict();
     }
     public static ParsedScript Create(string path)
     {
@@ -96,9 +90,7 @@ public class ParsedScript
         var root = tree.GetCompilationUnitRoot();
 
         // Clear previous data
-        parsedScript.ClassNames.Clear();
-        parsedScript.ClassMethods.Clear();
-        parsedScript.ClassFields.Clear();
+        parsedScript.Classes.Clear();
         parsedScript.Namespaces.Clear();
         parsedScript.UsingDirectives.Clear();
 
@@ -117,9 +109,11 @@ public class ParsedScript
         foreach (var classNode in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
         {
             string className = classNode.Identifier.Text;
-            parsedScript.ClassNames.Add(className);
-            parsedScript.ClassMethods.TryAdd(className, new());
-            parsedScript.ClassFields.TryAdd(className, new());
+            parsedScript.Classes.TryAdd(className, new ParsedClass()
+            {
+                Name = className,
+                RootNamespace = classNode.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault()?.Name.ToString()
+            });
 
             // Extract methods
             foreach (var methodNode in classNode.DescendantNodes().OfType<MethodDeclarationSyntax>())
@@ -128,6 +122,7 @@ public class ParsedScript
                 string rootNamespaceMethod = methodNode.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault()?.Name.ToString();
                 ParsedMethod parsedMethod = new ParsedMethod
                 {
+                    ClassName = className,
                     Name = methodName,
                     ReturnType = methodNode.ReturnType.ToString(),
                     RootNamespace = rootNamespaceMethod,
@@ -140,13 +135,15 @@ public class ParsedScript
                     string paramName = paramNode.Identifier.Text;
                     ParsedField paramField = new ParsedField
                     {
+                        ClassName = className,
                         Name = paramName,
+                        RootNamespace = rootNamespaceMethod,
                         Type = paramNode.Type.ToString()
                     };
 
                     parsedMethod.Params.Add(paramField);
                 }
-                parsedScript.ClassMethods[className].Data.Add(parsedMethod);
+                parsedScript.Classes[className].Methods.Add(parsedMethod);
 
 
             }
@@ -159,11 +156,12 @@ public class ParsedScript
                 {
                     ParsedField parsedField = new ParsedField
                     {
+                        ClassName = className,
                         Name = variable.Identifier.Text,
                         RootNamespace = rootNamespaceField,
                         Type = fieldNode.Declaration.Type.ToString()
                     };
-                    parsedScript.ClassFields[className].Data.Add(parsedField);
+                    parsedScript.Classes[className].Fields.Add(parsedField);
 
                 }
             }

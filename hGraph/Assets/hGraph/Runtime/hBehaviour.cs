@@ -5,11 +5,12 @@ using UnityEngine;
 [Icon("d_Skybox Icon")]
 public class hBehaviour : MonoBehaviour
 {
-    [Searchable]
-    public List<int> testList = new List<int>();
-    [Button]
-    public void TestButton()
+    void Start()
     {
-
+        
+    }
+    void Update()
+    {
+        
     }
 }

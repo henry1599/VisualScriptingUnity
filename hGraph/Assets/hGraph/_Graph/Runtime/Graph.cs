@@ -74,7 +74,7 @@ namespace BlueGraph
             get { return nodes.AsReadOnly(); }
         }
 
-        [SerializeReference, HideInInspector] 
+        [SerializeReference, ShowInInspector] 
         private List<Node> nodes = new List<Node>();
         
         /// <summary>
@@ -207,6 +207,7 @@ namespace BlueGraph
             nodes.Add(node);
 
             node.OnAddedToGraph();
+
             node.Enable();
         }
 
@@ -254,6 +255,21 @@ namespace BlueGraph
             node.DisconnectAllPorts();
             nodes.Remove(node);
             node.Graph = null;
+        }
+        public void RemoveAllNodes()
+        {
+            if (nodes == null)
+                return;
+            foreach (var node in nodes)
+            {
+                if (node == null)
+                    continue;
+                node.Disable();
+                node.OnRemovedFromGraph();
+                node.DisconnectAllPorts();
+                node.Graph = null;
+            }
+            nodes?.Clear();
         }
 
         /// <summary>
