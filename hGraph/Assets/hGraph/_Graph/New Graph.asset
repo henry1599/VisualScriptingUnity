@@ -12,25 +12,218 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4783a4e791578d49b7840c53119593a, type: 3}
   m_Name: New Graph
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   nodes:
-  - rid: 1360960768868614144
-  - rid: 1360960768868614145
-  - rid: 1360960788542783488
+  - rid: 6957871857988272131
+  - rid: 6957871857988272132
   comments: []
   assetVersion: 1
   Script: {fileID: 11500000, guid: 0993b49788c54db4f9cf76610158f99f, type: 3}
+  ParsedScript:
+    Name: GraphEditorWindow
+    Path: Assets/hGraph/Editor/GraphEditorWindow.cs
+    Content: "using System;\r\nusing System.CodeDom;\r\nusing System.Collections.Generic;\r\nusing
+      System.Linq;\r\nusing System.Reflection;\r\nusing System.Runtime.CompilerServices;\r\nusing
+      UnityEditor;\r\nusing UnityEditor.UIElements;\r\nusing UnityEngine;\r\nusing
+      UnityEngine.UIElements;\r\nusing Object = UnityEngine.Object;\r\n\r\nnamespace
+      hGraph.Editor\r\n{\r\n    public class GraphEditorWindow : EditorWindow\r\n   
+      {\r\n        private const string EditorPrefsKey = \"GraphEditorWindow_hBehaviour\";\r\n       
+      public VisualTreeAsset graphViewTreeAsset;\r\n        // private CustomGraphView
+      graphView;\r\n        private Button loadButton;\r\n\r\n        private VisualElement
+      mainLayout;\r\n        private Label classNameLabel;\r\n        private VisualElement
+      graphViewContainer; \r\n        private VisualElement toolboxVisualElement;\r\n       
+      private ScrollView toolboxViewContainer;\r\n        private ListView namespaceListView;\r\n       
+      private ToolbarSearchField toolbarSearchField;\r\n        private ToolbarBreadcrumbs
+      toolbarBreadcrumbs;\r\n        string filterText;\r\n        private hBehaviour
+      chosenHBehaviour;\r\n        private GraphData graphData;\r\n        public
+      static GraphEditorWindow window;\r\n        // public static CustomGraphView
+      CurrentGraphView => window.graphView;\r\n        // private Dictionary<MethodInfo,
+      CustomGraphView> functionGraphView = new Dictionary<MethodInfo, CustomGraphView>();\r\n       
+      public static void OpenGraphEditorWindow(hBehaviour hBehaviour)\r\n       
+      {\r\n            \r\n            window = GetWindow<GraphEditorWindow>(\"Graph
+      Editor\"); \r\n            window.minSize = new Vector2(800, 600);\r\n           
+      window.Initialize(hBehaviour);\r\n        }\r\n\r\n        private void Initialize(hBehaviour
+      hBehaviour)\r\n        {\r\n            if (this.graphViewTreeAsset == null)\r\n               
+      return;\r\n            \r\n            this.chosenHBehaviour = hBehaviour;\r\n           
+      VisualElement root = rootVisualElement;\r\n            graphViewTreeAsset.CloneTree(root);\r\n\r\n           
+      // this.scriptField = root.Q<ObjectField>(\"_scriptField\");\r\n           
+      this.loadButton = root.Q<Button>(\"_loadButton\");\r\n            this.graphViewContainer
+      = root.Q<VisualElement>(\"_graphField\");\r\n            this.toolboxViewContainer
+      = root.Q<ScrollView>(\"_toolBoxContainer\");\r\n            this.toolboxVisualElement
+      = root.Q<VisualElement>(\"_toolBox\");\r\n            this.mainLayout = root.Q<VisualElement>(\"_mainLayout\");\r\n           
+      this.classNameLabel = root.Q<Label>(\"_classNameLabel\");\r\n            this.namespaceListView
+      = root.Q<ListView>(\"_namespaceListView\");\r\n            this.toolbarSearchField
+      = root.Q<ToolbarSearchField>(\"_toolbarSearchField\");\r\n            this.toolbarBreadcrumbs
+      = root.Q<ToolbarBreadcrumbs>(\"_toolbarBreadCrumbs\");\r\n\r\n            TwoPaneSplitView
+      splitView = new TwoPaneSplitView(0, 250, TwoPaneSplitViewOrientation.Horizontal);\r\n           
+      splitView.Add(toolboxVisualElement);\r\n            splitView.Add(graphViewContainer);\r\n           
+      mainLayout.Add(splitView);\r\n            splitView.StretchToParentSize();\r\n\r\n           
+      this.toolbarSearchField.RegisterValueChangedCallback(OnToolbarSearchFieldChanged);\r\n           
+      ConstructGraph(hBehaviour);\r\n\r\n\r\n            // * Label\r\n           
+      string initalClassName = $\"<b>Class: <color=green>{this.graphData.Name}</color></b>\";\r\n           
+      this.toolbarBreadcrumbs.PushItem(initalClassName);\r\n\r\n            ReadContent();\r\n       
+      }\r\n        private void ReadContent()\r\n        {\r\n\r\n            List<string>
+      namespaces = this.graphData.Namespaces;\r\n\r\n            namespaceListView.headerTitle
+      = \"Namespaces\";\r\n            namespaceListView.itemsSource = namespaces;\r\n           
+      namespaceListView.makeItem = () =>\r\n            {\r\n                TextField
+      textField = new TextField();\r\n                textField.isReadOnly = false;\r\n               
+      return textField;\r\n            };\r\n            namespaceListView.bindItem
+      = (element, i) =>\r\n            {\r\n                (element as TextField).value
+      = namespaces[i];\r\n            };\r\n            namespaceListView.Rebuild();\r\n\r\n           
+      // Create main foldouts for fields, properties, and methods\r\n           
+      Foldout variableFoldout = new Foldout\r\n            {\r\n                style
+      =\r\n                    {\r\n                        borderTopColor = Color.black,\r\n                       
+      borderTopWidth = 1,\r\n                        borderLeftColor = Color.black,\r\n                       
+      borderLeftWidth = 1,\r\n                        borderRightColor = Color.black,\r\n                       
+      borderRightWidth = 1\r\n                    }\r\n            };\r\n           
+      Foldout propertiesFoldout = new Foldout\r\n            {\r\n               
+      style =\r\n                    {\r\n                        borderLeftColor
+      = Color.black,\r\n                        borderLeftWidth = 1,\r\n                       
+      borderRightColor = Color.black,\r\n                        borderRightWidth
+      = 1\r\n                    }\r\n            };\r\n            Foldout functionFoldout
+      = new Foldout\r\n            {\r\n                style =\r\n                   
+      {\r\n                        borderBottomColor = Color.black,\r\n                       
+      borderBottomWidth = 1,\r\n                        borderLeftColor = Color.black,\r\n                       
+      borderLeftWidth = 1,\r\n                        borderRightColor = Color.black,\r\n                       
+      borderRightWidth = 1\r\n                    }\r\n            };\r\n\r\n           
+      // Dictionaries to store namespace foldouts\r\n            List<FieldInfo>
+      fieldInfos = this.graphData.Variables.Filter(this.filterText);\r\n           
+      List<PropertyInfo> propertyInfos = this.graphData.Properties.Filter(this.filterText);\r\n           
+      List<MethodInfo> methodInfos = this.graphData.Functions.Filter(this.filterText);\r\n\r\n           
+      Dictionary<string, Foldout> fieldNamespaceFoldouts = GroupFieldsByNamespaces(fieldInfos);\r\n           
+      Dictionary<string, Foldout> propertyNamespaceFoldouts = GroupPropertiesByNamespaces(propertyInfos);\r\n           
+      Dictionary<string, Foldout> methodNamespaceFoldouts = GroupMethodsByNamespaces(methodInfos);\r\n\r\n           
+      // Add namespace foldouts to main foldouts\r\n            int fieldCount =
+      fieldNamespaceFoldouts.Values.Select(child => child.childCount).Sum();\r\n           
+      variableFoldout.text = $\"<b>Variables ({fieldCount})</b>\";\r\n           
+      foreach (var foldout in fieldNamespaceFoldouts.Values)\r\n            {\r\n               
+      variableFoldout.Add(foldout);\r\n            }\r\n\r\n            int propertyCount
+      = propertyNamespaceFoldouts.Values.Select(child => child.childCount).Sum();\r\n           
+      propertiesFoldout.text = $\"<b>Properties ({propertyCount})</b>\";\r\n           
+      foreach (var foldout in propertyNamespaceFoldouts.Values)\r\n            {\r\n               
+      propertiesFoldout.Add(foldout);\r\n            }\r\n\r\n            int methodCount
+      = methodNamespaceFoldouts.Values.Select(child => child.childCount).Sum();\r\n           
+      functionFoldout.text = $\"<b>Functions ({methodCount})</b>\";\r\n           
+      foreach (var foldout in methodNamespaceFoldouts.Values)\r\n            {\r\n               
+      functionFoldout.Add(foldout);\r\n            }\r\n\r\n            // Clear
+      the toolbox container and add the main foldouts\r\n            toolboxViewContainer.Add(variableFoldout);\r\n           
+      toolboxViewContainer.Add(propertiesFoldout);\r\n            toolboxViewContainer.Add(functionFoldout);\r\n       
+      }\r\n        private void OnToolbarSearchFieldChanged(ChangeEvent<string> evt)\r\n       
+      {\r\n            this.filterText = evt.newValue;\r\n            ReadContent();\r\n       
+      }\r\n\r\n        private void ConstructGraph(hBehaviour behaviour)\r\n       
+      {\r\n            // this.graphData = new GraphData(behaviour);\r\n           
+      // this.graphView = new CustomGraphView(this.graphData)\r\n            // {\r\n           
+      //     name = \"Graph View\"\r\n            // };\r\n\r\n            // this.graphViewContainer.Add(this.graphView);\r\n           
+      // this.graphView.StretchToParentSize();\r\n        }\r\n\r\n        Dictionary<string,
+      Foldout> GroupFieldsByNamespaces(List<FieldInfo> fieldInfos)\r\n        {\r\n           
+      Dictionary<string, Foldout> fieldNamespaceFoldouts = new Dictionary<string,
+      Foldout>();\r\n            foreach (FieldInfo field in fieldInfos)\r\n           
+      {\r\n                string namespaceName = field.DeclaringType.Namespace ??
+      \"Global Namespace\";\r\n                if (!fieldNamespaceFoldouts.ContainsKey(namespaceName))\r\n               
+      {\r\n                    fieldNamespaceFoldouts[namespaceName] = new Foldout()
+      \r\n                    { \r\n                        text = $\"<b>{namespaceName}</b>\",\r\n                       
+      value = false\r\n                    };\r\n                }\r\n               
+      var icon = EditorGUIUtility.IconContent(\"d_AreaEffector2D Icon\").image;\r\n               
+      string displayName = ObjectNames.NicifyVariableName(field.Name);\r\n               
+      Button fieldButton = Common.CreateButtonWithIcon(icon, new Button() { text
+      = displayName });\r\n                fieldNamespaceFoldouts[namespaceName].Add(fieldButton);\r\n           
+      }\r\n            return fieldNamespaceFoldouts;\r\n        }\r\n        Dictionary<string,
+      Foldout> GroupPropertiesByNamespaces(List<PropertyInfo> properties)\r\n       
+      {\r\n            Dictionary<string, Foldout> propertyNamespaceFoldouts = new
+      Dictionary<string, Foldout>();\r\n            foreach (PropertyInfo property
+      in properties)\r\n            {\r\n                string namespaceName = property.DeclaringType.Namespace
+      ?? \"Global Namespace\";\r\n                if (!propertyNamespaceFoldouts.ContainsKey(namespaceName))\r\n               
+      {\r\n                    propertyNamespaceFoldouts[namespaceName] = new Foldout()
+      \r\n                    { \r\n                        text = $\"<b>{namespaceName}</b>\",   
+      \r\n                        value = false \r\n                    };\r\n               
+      }\r\n\r\n                var icon = EditorGUIUtility.IconContent(\"d_LODGroup
+      Icon\").image;\r\n                string displayName = ObjectNames.NicifyVariableName(property.Name);\r\n               
+      Button propertyButton = Common.CreateButtonWithIcon(icon, new Button() { text
+      = displayName });\r\n                propertyNamespaceFoldouts[namespaceName].Add(propertyButton);\r\n           
+      }\r\n            return propertyNamespaceFoldouts;\r\n        }\r\n       
+      Dictionary<string, Foldout> GroupMethodsByNamespaces(List<MethodInfo> methods)\r\n       
+      {\r\n            Dictionary<string, Foldout> methodNamespaceFoldouts = new
+      Dictionary<string, Foldout>();\r\n            foreach (MethodInfo method in
+      methods)\r\n            {\r\n                string namespaceName = method.DeclaringType.Namespace
+      ?? \"Global Namespace\";\r\n                if (!methodNamespaceFoldouts.ContainsKey(namespaceName))\r\n               
+      {\r\n                    methodNamespaceFoldouts[namespaceName] = new Foldout()
+      \r\n                    { \r\n                        text = $\"<b>{namespaceName}</b>\",\r\n                       
+      value = false \r\n                    };\r\n                }\r\n               
+      var icon = EditorGUIUtility.IconContent(\"d_Tile Icon\").image;\r\n               
+      Button methodButton = Common.CreateButtonWithIcon(icon, new Button(\r\n                   
+      () => \r\n                    {\r\n                        eNodeType nodeType
+      = eNodeType.Function;\r\n                        string nodeName = method.Name;\r\n                       
+      Type nodeReturnType = method.ReturnType;\r\n                        GraphEvents.ON_TOOLBOX_ITEM_CLICKED?.Invoke(nodeType,
+      nodeName, nodeReturnType);\r\n                    }\r\n                ) {
+      text = method.Name });\r\n\r\n                methodNamespaceFoldouts[namespaceName].Add(methodButton);\r\n           
+      }\r\n            return methodNamespaceFoldouts;\r\n        }\r\n\r\n       
+      private object SimplifyTypeName(Type fieldType)\r\n        {\r\n           
+      if (fieldType.IsGenericType)\r\n            {\r\n                string typeName
+      = fieldType.Name;\r\n                int index = typeName.IndexOf('`');\r\n               
+      if (index > 0)\r\n                {\r\n                    typeName = typeName.Substring(0,
+      index);\r\n                }\r\n                if (fieldType.GenericTypeArguments.Length
+      > 0)\r\n                    return $\"{typeName}<{fieldType.GenericTypeArguments[0].Name}>\";\r\n           
+      }\r\n            return fieldType.Name;\r\n        }\r\n    }\r\n}"
+    ClassNames:
+    - GraphEditorWindow
+    Namespaces:
+    - hGraph.Editor
+    UsingDirectives:
+    - System
+    - System.CodeDom
+    - System.Collections.Generic
+    - System.Linq
+    - System.Reflection
+    - System.Runtime.CompilerServices
+    - UnityEditor
+    - UnityEditor.UIElements
+    - UnityEngine
+    - UnityEngine.UIElements
+    - UnityEngine.Object
   references:
     version: 2
     RefIds:
-    - rid: 1360960768868614144
+    - rid: 6957871857988272131
+      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: db102fc3-13b5-4fe4-b76f-d2157282532f
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: 142.40001, y: -238.4}
+        ports:
+        - name: entry
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections: []
+        - name: exit
+          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+          capacity: 1
+          direction: 1
+          connections:
+          - nodeId: 4f0f7ca7-ffa0-49e5-90d0-d5e9db003a4d
+            portName: entry
+    - rid: 6957871857988272132
       type: {class: hNode_Add, ns: , asm: Assembly-CSharp}
       data:
         HasEntry: 1
         HasExit: 1
-        id: 19a559f8-aa41-429f-8249-442c482b3b2b
+        id: 4f0f7ca7-ffa0-49e5-90d0-d5e9db003a4d
         name: Add
         graph: {fileID: 11400000}
-        position: {x: 126.678154, y: -147.5862}
+        position: {x: 219.99995, y: -125.59999}
         ports:
         - name: a
           type: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -53,7 +246,7 @@ MonoBehaviour:
           capacity: 0
           direction: 0
           connections:
-          - nodeId: 5eb1ef28-e053-42b9-b4bc-e0bbe52b9b87
+          - nodeId: db102fc3-13b5-4fe4-b76f-d2157282532f
             portName: exit
         - name: exit
           type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
@@ -64,49 +257,3 @@ MonoBehaviour:
         a: 0
         b: 0
         result: 0
-    - rid: 1360960768868614145
-      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
-      data:
-        HasEntry: 0
-        HasExit: 1
-        id: 5eb1ef28-e053-42b9-b4bc-e0bbe52b9b87
-        name: Start
-        graph: {fileID: 11400000}
-        position: {x: -102.400024, y: -356}
-        ports:
-        - name: entry
-          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          capacity: 0
-          direction: 0
-          connections: []
-        - name: exit
-          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          capacity: 1
-          direction: 1
-          connections:
-          - nodeId: 19a559f8-aa41-429f-8249-442c482b3b2b
-            portName: entry
-    - rid: 1360960788542783488
-      type: {class: hNode_Start, ns: , asm: Assembly-CSharp}
-      data:
-        HasEntry: 0
-        HasExit: 1
-        id: 15faf010-6a9a-4653-afc0-f3be0c6879be
-        name: Start
-        graph: {fileID: 11400000}
-        position: {x: 55.072586, y: -419}
-        ports:
-        - name: entry
-          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          capacity: 0
-          direction: 0
-          connections: []
-        - name: exit
-          type: BlueGraph.Node, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          capacity: 1
-          direction: 1
-          connections: []

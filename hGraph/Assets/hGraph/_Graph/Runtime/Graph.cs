@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace BlueGraph
@@ -20,7 +21,7 @@ namespace BlueGraph
         void RemoveEdge(Port output, Port input);
     }
 
-    public abstract class Graph : ScriptableObject, IGraph
+    public abstract class Graph : SerializedScriptableObject , IGraph
     {
         /// <summary>
         /// Retrieve the title of the graph displayed in the editor.
