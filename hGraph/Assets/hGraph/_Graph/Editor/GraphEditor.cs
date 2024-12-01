@@ -38,7 +38,7 @@ namespace BlueGraph.Editor
         {
             var window = CreateInstance<GraphEditorWindow>();
             window.Show();
-            window.Load(target as Graph);
+            // window.Load(target as Graph);
             return window;
         }
         

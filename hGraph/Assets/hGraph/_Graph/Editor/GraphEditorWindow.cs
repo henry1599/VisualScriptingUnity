@@ -13,7 +13,7 @@ namespace BlueGraph.Editor
         public VisualTreeAsset graphViewTreeAsset;
         private VisualElement mainLayout;
         public CanvasView Canvas { get; protected set; }
-        public Graph Graph { get; protected set; }
+        public hCustomGraph Graph { get; protected set; }
         public static GraphEditorWindow window;
 
         // * Visual Elements
@@ -24,14 +24,14 @@ namespace BlueGraph.Editor
         private ToolbarSearchField toolbarSearchField;
         private ToolbarBreadcrumbs toolbarBreadcrumbs;
 
-        public static void OpenGraphEditorWindow(Graph graph)
+        public static void OpenGraphEditorWindow(hCustomGraph graph)
         {
             
             window = GetWindow<GraphEditorWindow>("Graph Editor"); 
             window.minSize = new Vector2(800, 600);
             window.Initialize(graph);
         }
-        private void Initialize(Graph graph)
+        private void Initialize(hCustomGraph graph)
         {
             if (this.graphViewTreeAsset == null)
                 return;
@@ -57,16 +57,29 @@ namespace BlueGraph.Editor
             Load(this.Graph);
         }
 
-        public virtual void Load(Graph graph)
+        public virtual void Load(hCustomGraph graph)
         {
-            Graph = graph;
-
             Canvas = new CanvasView(this);
             Canvas.Load(graph);
             this.graphViewContainer.Add(Canvas);
             Canvas.StretchToParentSize();
-
-            titleContent = new GUIContent(graph.name);
+            ReadGraph();
+        }
+        public void ReadGraph()
+        {
+            namespaceListView.headerTitle = "Namespaces";
+            namespaceListView.itemsSource = this.Graph.ParsedScript.AllNamespaces;
+            namespaceListView.makeItem = () =>
+            {
+                TextField textField = new TextField();
+                textField.isReadOnly = false;
+                return textField;
+            };
+            namespaceListView.bindItem = (element, i) =>
+            {
+                (element as TextField).value = this.Graph.ParsedScript.AllNamespaces[i];
+            };
+            namespaceListView.Rebuild();
         }
     }
 }

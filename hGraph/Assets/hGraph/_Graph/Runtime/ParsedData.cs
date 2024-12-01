@@ -26,9 +26,27 @@ public class ParsedMethod
     public string Content;
 }
 [Serializable]
-public class MethodDict : Dictionary<string, List<ParsedMethod>> { }
+public class ParsedMethodList
+{
+    public List<ParsedMethod> Data;
+    public ParsedMethodList()
+    {
+        this.Data = new List<ParsedMethod>();
+    }
+}
 [Serializable]
-public class FieldDict : Dictionary<string, List<ParsedField>> { }
+public class ParsedFieldList
+{
+    public List<ParsedField> Data;
+    public ParsedFieldList()
+    {
+        this.Data = new List<ParsedField>();
+    }
+}
+[Serializable]
+public class MethodDict : UnitySerializedDictionary<string, ParsedMethodList> { }
+[Serializable]
+public class FieldDict : UnitySerializedDictionary<string, ParsedFieldList> { }
 [Serializable]
 public class ParsedScript
 {
@@ -40,10 +58,11 @@ public class ParsedScript
     [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)] public FieldDict ClassFields;
     public List<string> Namespaces = new List<string>();
     public List<string> UsingDirectives = new List<string>();
+    public List<string> AllNamespaces => Namespaces.Concat(UsingDirectives).ToList();
     public ParsedScript()
     {
         this.ClassMethods = new ();
-        this.ClassFields = new ();
+        this.ClassFields =  new ();
     }
     public static ParsedScript Create(string path)
     {
@@ -106,7 +125,7 @@ public class ParsedScript
 
                     parsedMethod.Params.Add(paramField);
                 }
-                parsedScript.ClassMethods[className].Add(parsedMethod);
+                parsedScript.ClassMethods[className].Data.Add(parsedMethod);
 
 
             }
@@ -122,7 +141,7 @@ public class ParsedScript
                         Name = variable.Identifier.Text,
                         Type = fieldNode.Declaration.Type.ToString()
                     };
-                    parsedScript.ClassFields[className].Add(parsedField);
+                    parsedScript.ClassFields[className].Data.Add(parsedField);
 
                 }
             }

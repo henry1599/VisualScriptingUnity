@@ -1,7 +1,6 @@
 using BlueGraph;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using BlueGraph.Editor;
 
 
 
@@ -19,11 +18,6 @@ public class hCustomGraph : Graph
     public void Parse()
     {
         ParsedScript = ParsedScript.Create(AssetDatabase.GetAssetPath(Script));
-    }
-    [Button("Open Node Editor")]
-    public void OpenNodeEditor()
-    {
-        GraphEditorWindow.OpenGraphEditorWindow(this);
     }
 #endif
 }
