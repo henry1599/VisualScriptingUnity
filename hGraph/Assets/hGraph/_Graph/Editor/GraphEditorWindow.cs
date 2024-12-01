@@ -82,7 +82,7 @@ namespace BlueGraph.Editor
             var firstGraph = this.ActiveGraph.ParsedScript.Classes.Values.First();
             this.currentSelection = new GraphSelection() 
             {
-                Type = firstGraph.ParsedDataType, 
+                Type = firstGraph.Category, 
                 Name = firstGraph.Name
             };
         
@@ -97,7 +97,6 @@ namespace BlueGraph.Editor
         
         public void SelectItem(GraphSelection selection)
         {
-            Debug.Log($"Selected {selection.Name}");
             if (this.selectionStack.Count == 0)
             {
                 this.selectionStack.Push(this.currentSelection);
@@ -133,11 +132,11 @@ namespace BlueGraph.Editor
         {
             if (childTest.Type == eParsedDataType.Method && parentTest.Type == eParsedDataType.Class)
             {
-                return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Methods.Any(m => m.Name == childTest.Name && m.ClassName == parentTest.Name);
+                return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Methods.Any(m => m.Name == childTest.Name && m.Parent.Name == parentTest.Name);
             }
             if (childTest.Type == eParsedDataType.Field && parentTest.Type == eParsedDataType.Class)
             {
-                return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Fields.Any(f => f.Name == childTest.Name && f.ClassName == parentTest.Name);
+                return this.ActiveGraph.ParsedScript.Classes[parentTest.Name].Fields.Any(f => f.Name == childTest.Name && f.Parent.Name == parentTest.Name);
             }
             // * Check if a field is a child (local var) of a method
             // * Check if a field is a child (parameter) of a method
@@ -151,6 +150,7 @@ namespace BlueGraph.Editor
 
         public virtual void Load(hCustomGraph graph)
         {
+            graph.BuildGraph(this.currentSelection.Type, this.currentSelection.Name);
             Canvas = new CanvasView(this);
             Canvas.Load(graph);
             this.graphViewContainer.Add(Canvas);
@@ -159,7 +159,6 @@ namespace BlueGraph.Editor
         }
         public void ReadCurrentGraph(hCustomGraph graph)
         {
-            graph.BuildGraph(this.currentSelection.Type, this.currentSelection.Name);
             // * Namespaces
             namespaceListView.headerTitle = "Namespaces";
             namespaceListView.itemsSource = graph.ParsedScript.AllNamespaces;

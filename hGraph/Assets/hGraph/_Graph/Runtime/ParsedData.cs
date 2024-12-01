@@ -10,44 +10,47 @@ using Sirenix.OdinInspector;
 
 public enum eParsedDataType
 {
+    Unknown = 0,
     Class,
     Method,
     Field
 }
 [Serializable]
-public class ParsedField
+public abstract class ParsedObject
 {
-    [ShowInInspector] public eParsedDataType ParsedDataType => eParsedDataType.Field;
-    public string ClassName;
+    public abstract eParsedDataType Category {get;}
+    public ParsedObject Parent;
     public string Name;
     public string RootNamespace;
     public string Type;
+}
+[Serializable]
+public class ParsedField : ParsedObject
+{
+    [ShowInInspector] public override eParsedDataType Category => eParsedDataType.Field;
     public override string ToString()
     {
-        return $"{RootNamespace} <- {ClassName} <- {Type} <- {Name}";
+        string parentName = Parent == null ? "Global" : $"{Parent.Type} {Parent.Name}";
+        return $"{RootNamespace} <- {parentName} <- {Type} <- {Name}";
     }
 }
 [Serializable]
-public class ParsedMethod
+public class ParsedMethod : ParsedObject
 {
-    [ShowInInspector] public eParsedDataType ParsedDataType => eParsedDataType.Method;
-    public string ClassName;
-    public string Name;
-    public string ReturnType;
-    public string RootNamespace;
+    [ShowInInspector] public override eParsedDataType Category => eParsedDataType.Method;
+    public string ReturnType => Type;
     public List<ParsedField> Params;
-    [FoldoutGroup("Content"), TextArea(10, 20)] public string Content; // Makes the string field bigger and scrollable
+    [FoldoutGroup("Content"), TextArea(10, 20), ReadOnly] public string Content; // Makes the string field bigger and scrollable
     public override string ToString()
     {
-        return $"{RootNamespace} <- {ClassName} <- {ReturnType} <- {Name}({string.Join(", ", Params.Select(p => $"{p.Type} {p.Name}"))})";
+        string parentName = Parent == null ? "Global" : $"{Parent.Type} {Parent.Name}";
+        return $"{RootNamespace} <- {parentName} <- {ReturnType} <- {Name}({string.Join(", ", Params.Select(p => $"{p.Type} {p.Name}"))})";
     }
 }
 [Serializable]
-public class ParsedClass
+public class ParsedClass : ParsedObject
 {
-    [ShowInInspector] public eParsedDataType ParsedDataType => eParsedDataType.Class;
-    public string Name;
-    public string RootNamespace;
+    [ShowInInspector] public override eParsedDataType Category => eParsedDataType.Class;
     public List<ParsedMethod> Methods;
     public List<ParsedField> Fields;
     public ParsedClass()
@@ -68,7 +71,7 @@ public class ParsedScript
 {
     public string Name;
     public string Path;
-    public string Content;
+    [FoldoutGroup("Content"), TextArea(10, 20), ReadOnly] public string Content;
     [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)] 
     public ClassDict Classes = new ();
     public List<string> Namespaces = new List<string>();
@@ -112,6 +115,7 @@ public class ParsedScript
             parsedScript.Classes.TryAdd(className, new ParsedClass()
             {
                 Name = className,
+                Type = "<class>",
                 RootNamespace = classNode.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault()?.Name.ToString()
             });
 
@@ -122,9 +126,9 @@ public class ParsedScript
                 string rootNamespaceMethod = methodNode.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault()?.Name.ToString();
                 ParsedMethod parsedMethod = new ParsedMethod
                 {
-                    ClassName = className,
+                    Parent = parsedScript.Classes[className],
                     Name = methodName,
-                    ReturnType = methodNode.ReturnType.ToString(),
+                    Type = methodNode.ReturnType.ToString(),
                     RootNamespace = rootNamespaceMethod,
                     Params = new List<ParsedField>(),
                     Content = methodNode.ToString()
@@ -135,7 +139,7 @@ public class ParsedScript
                     string paramName = paramNode.Identifier.Text;
                     ParsedField paramField = new ParsedField
                     {
-                        ClassName = className,
+                        Parent = parsedMethod,
                         Name = paramName,
                         RootNamespace = rootNamespaceMethod,
                         Type = paramNode.Type.ToString()
@@ -156,7 +160,7 @@ public class ParsedScript
                 {
                     ParsedField parsedField = new ParsedField
                     {
-                        ClassName = className,
+                        Parent = parsedScript.Classes[className],
                         Name = variable.Identifier.Text,
                         RootNamespace = rootNamespaceField,
                         Type = fieldNode.Declaration.Type.ToString()

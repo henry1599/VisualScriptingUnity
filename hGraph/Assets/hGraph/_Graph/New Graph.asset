@@ -22,8 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   nodes:
-  - rid: 6957871857988272179
-  - rid: 6957871857988272180
+  - rid: 6957871857988272195
+  - rid: 6957871857988272196
   comments: []
   assetVersion: 1
   Script: {fileID: 11500000, guid: eceb55a861c0cd849a64136ffaca86ed, type: 3}
@@ -31,26 +31,25 @@ MonoBehaviour:
     Name: hBehaviour
     Path: Assets/hGraph/Runtime/hBehaviour.cs
     Content: "using System.Collections.Generic;\r\nusing Sirenix.OdinInspector;\r\nusing
-      UnityEngine;\r\n\r\n[Icon(\"d_Skybox Icon\")]\r\npublic class hBehaviour :
-      MonoBehaviour\r\n{\r\n    void Start()\r\n    {\r\n        \r\n    }\r\n   
-      void Update()\r\n    {\r\n        \r\n    }\r\n}\r\n"
+      UnityEngine;\n\r\n[Icon(\"d_Skybox Icon\")]\r\npublic class hBehaviour : MonoBehaviour\r\n{\r\n   
+      void Start()\r\n    {\r\n        \r\n    }\r\n    void Update()\r\n    {\r\n       
+      \r\n    }\r\n}\r\n"
     Classes:
       keyValueData:
       - Key: hBehaviour
         Value:
           Name: hBehaviour
           RootNamespace: 
+          Type: <class>
           Methods:
-          - ClassName: hBehaviour
-            Name: Start
-            ReturnType: void
+          - Name: Start
             RootNamespace: 
+            Type: void
             Params: []
             Content: "void Start()\r\n    {\r\n        \r\n    }"
-          - ClassName: hBehaviour
-            Name: Update
-            ReturnType: void
+          - Name: Update
             RootNamespace: 
+            Type: void
             Params: []
             Content: "void Update()\r\n    {\r\n        \r\n    }"
           Fields: []
@@ -62,12 +61,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6957871857988272179
+    - rid: 6957871857988272195
       type: {class: hNode, ns: , asm: BlueGraph.Runtime}
       data:
         HasEntry: 0
         HasExit: 1
-        id: 157fa6c3-d55a-46db-9cad-252549b54fad
+        id: 8843c3ac-345d-4d00-9052-4350bd9ae42c
         name: Start
         graph: {fileID: 11400000}
         position: {x: 100, y: 100}
@@ -77,14 +76,14 @@ MonoBehaviour:
           capacity: 0
           direction: 1
           connections:
-          - nodeId: 76f07b71-318b-4ea8-b0a4-dbb63fcf3632
+          - nodeId: b7d037bd-cbdc-4614-ba73-5d0a0b6f10d6
             portName: entry
-    - rid: 6957871857988272180
+    - rid: 6957871857988272196
       type: {class: hNode, ns: , asm: BlueGraph.Runtime}
       data:
         HasEntry: 1
         HasExit: 1
-        id: 76f07b71-318b-4ea8-b0a4-dbb63fcf3632
+        id: b7d037bd-cbdc-4614-ba73-5d0a0b6f10d6
         name: Update
         graph: {fileID: 11400000}
         position: {x: 250, y: 100}
@@ -94,7 +93,7 @@ MonoBehaviour:
           capacity: 0
           direction: 0
           connections:
-          - nodeId: 157fa6c3-d55a-46db-9cad-252549b54fad
+          - nodeId: 8843c3ac-345d-4d00-9052-4350bd9ae42c
             portName: exit
         - name: exit
           type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

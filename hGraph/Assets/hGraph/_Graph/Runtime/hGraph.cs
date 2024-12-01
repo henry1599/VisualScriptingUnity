@@ -13,13 +13,24 @@ public class hCustomGraph : Graph
 {
     public Object Script;
     public ParsedScript ParsedScript;
+    [Button]
     public void ClearGraph()
     {
+#if UNITY_EDITOR
+        Undo.RecordObject(this, "Clear Graph");
+#endif
+        // Clear the nodes and edges in the graph
         RemoveAllNodes();
+
+        // Reset other properties if needed
+        this.ParsedScript = null;
+
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(this);
+#endif
     }
     public void BuildGraph(eParsedDataType perspective, string name)
     {
-        ClearGraph();
         switch (perspective)
         {
             case eParsedDataType.Class:
