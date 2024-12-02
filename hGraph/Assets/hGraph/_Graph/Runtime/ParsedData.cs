@@ -51,7 +51,9 @@ public class ParsedMethod : ParsedObject
 public class ParsedClass : ParsedObject
 {
     [ShowInInspector] public override eParsedDataType Category => eParsedDataType.Class;
+    [TabGroup("ParsedClass", "Methods")]
     public List<ParsedMethod> Methods;
+    [TabGroup("ParsedClass", "Fields")]
     public List<ParsedField> Fields;
     public ParsedClass()
     {
@@ -72,9 +74,14 @@ public class ParsedScript
     public string Name;
     public string Path;
     [FoldoutGroup("Content"), TextArea(10, 20), ReadOnly] public string Content;
-    [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)] 
+    
+    [SerializeField] 
+    [TabGroup("ParsedScript", "Classes")]
+    [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)] 
     public ClassDict Classes = new ();
+    [TabGroup("ParsedScript", "Namespaces")]
     public List<string> Namespaces = new List<string>();
+    [TabGroup("ParsedScript", "Namespaces")]
     public List<string> UsingDirectives = new List<string>();
     public List<string> AllNamespaces => Namespaces.Concat(UsingDirectives).ToList();
     public ParsedScript()

@@ -34,4 +34,8 @@ public class EditorGraphOpenner : EditorWindow
             GraphEditorWindow.OpenGraphEditorWindow((hCustomGraph)hCustomGraph);
         }
     }
+    public static void OpenEditGraph(hCustomGraph graph)
+    {
+        GraphEditorWindow.OpenGraphEditorWindow(graph);
+    }
 }

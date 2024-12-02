@@ -99,5 +99,31 @@ public class hCustomGraph : Graph
     {
         ParsedScript = ParsedScript.Create(AssetDatabase.GetAssetPath(Script));
     }
+    [Button]
+    public void OpenInEditor()
+    {
+#if UNITY_EDITOR
+        EditorApplication.delayCall += () =>
+        {
+            var editorUtilityType = System.Type.GetType("EditorGraphOpenner, BlueGraph.Editor");
+            if (editorUtilityType != null)
+            {
+                var method = editorUtilityType.GetMethod("OpenEditGraph", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+                if (method != null)
+                {
+                    method.Invoke(null, new object[] { this });
+                }
+                else
+                {
+                    Debug.LogError("Method OpenEditGraph not found in GraphEditorUtility.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Type EditorGraphOpenner not found.");
+            }
+        };
+#endif
+    }
 #endif
 }

@@ -24,6 +24,12 @@ MonoBehaviour:
   nodes:
   - rid: 6957871857988272195
   - rid: 6957871857988272196
+  - rid: 81888374861332480
+  - rid: 81888374861332481
+  - rid: 81888374861332482
+  - rid: 81888374861332483
+  - rid: 81888374861332484
+  - rid: 81888374861332485
   comments: []
   assetVersion: 1
   Script: {fileID: 11500000, guid: eceb55a861c0cd849a64136ffaca86ed, type: 3}
@@ -61,6 +67,123 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 81888374861332480
+      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: ff026f79-8c63-4f58-8005-1f4cd20ce064
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: 100, y: 100}
+        ports:
+        - name: exit
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 1
+          connections:
+          - nodeId: 610e6904-ebe2-40d0-bd90-dc540069e7ac
+            portName: entry
+    - rid: 81888374861332481
+      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
+      data:
+        HasEntry: 1
+        HasExit: 1
+        id: 610e6904-ebe2-40d0-bd90-dc540069e7ac
+        name: Update
+        graph: {fileID: 11400000}
+        position: {x: 250, y: 100}
+        ports:
+        - name: entry
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections:
+          - nodeId: ff026f79-8c63-4f58-8005-1f4cd20ce064
+            portName: exit
+        - name: exit
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 1
+          connections: []
+    - rid: 81888374861332482
+      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: 3ef6c250-3122-4a83-bfee-81919b01ea6b
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: 100, y: 100}
+        ports:
+        - name: exit
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 1
+          connections:
+          - nodeId: 84021255-38f8-43ee-a733-492b57030c64
+            portName: entry
+    - rid: 81888374861332483
+      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
+      data:
+        HasEntry: 1
+        HasExit: 1
+        id: 84021255-38f8-43ee-a733-492b57030c64
+        name: Update
+        graph: {fileID: 11400000}
+        position: {x: 250, y: 100}
+        ports:
+        - name: entry
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections:
+          - nodeId: 3ef6c250-3122-4a83-bfee-81919b01ea6b
+            portName: exit
+        - name: exit
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 1
+          connections: []
+    - rid: 81888374861332484
+      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
+      data:
+        HasEntry: 0
+        HasExit: 1
+        id: 279d1cd8-4ec6-4e55-b89d-6a948911e679
+        name: Start
+        graph: {fileID: 11400000}
+        position: {x: 100, y: 100}
+        ports:
+        - name: exit
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 1
+          connections:
+          - nodeId: 0f8b1279-1743-4727-9b1e-e51d8aaee757
+            portName: entry
+    - rid: 81888374861332485
+      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
+      data:
+        HasEntry: 1
+        HasExit: 1
+        id: 0f8b1279-1743-4727-9b1e-e51d8aaee757
+        name: Update
+        graph: {fileID: 11400000}
+        position: {x: 250, y: 100}
+        ports:
+        - name: entry
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 0
+          connections:
+          - nodeId: 279d1cd8-4ec6-4e55-b89d-6a948911e679
+            portName: exit
+        - name: exit
+          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          capacity: 0
+          direction: 1
+          connections: []
     - rid: 6957871857988272195
       type: {class: hNode, ns: , asm: BlueGraph.Runtime}
       data:
