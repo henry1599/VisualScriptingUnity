@@ -35,7 +35,21 @@ namespace BlueGraph.Editor
         public hCustomGraph ActiveGraph { get; protected set; }
         public static GraphEditorWindow window;
         string filterText;
-        GraphSelection currentSelection;
+        GraphSelection currentSelection
+        {
+            get => this._currentSelection;
+            set
+            {
+                if (this._currentSelection != value)
+                {
+                    this.ActiveGraph.BuildGraph(value.Type, value.Name);
+                    this._currentSelection = value;
+                    Load(this.ActiveGraph);
+                    return;
+                }
+                this._currentSelection = value;
+            }
+        } private GraphSelection _currentSelection = null;
         Stack<GraphSelection> selectionStack = new Stack<GraphSelection>();
 
         // * Visual Elements
@@ -80,25 +94,25 @@ namespace BlueGraph.Editor
 
             // * Get first class
             var firstGraph = this.ActiveGraph.ParsedScript.Classes.Values.First();
-            this.currentSelection = new GraphSelection() 
-            {
-                Type = firstGraph.Category, 
-                Name = firstGraph.Name
-            };
         
             // this.toolbarBreadcrumbs.Clear();
 
             this.selectionStack ??= new Stack<GraphSelection>();
             this.selectionStack.Clear();
-            SelectItem(this.currentSelection);
+            SelectItem(new GraphSelection() 
+            {
+                Type = firstGraph.Category, 
+                Name = firstGraph.Name
+            });
 
-            Load(this.ActiveGraph);
+            // Load(this.ActiveGraph);
         }
         
         public void SelectItem(GraphSelection selection)
         {
             if (this.selectionStack.Count == 0)
             {
+                this.currentSelection = selection;
                 this.selectionStack.Push(this.currentSelection);
                 this.toolbarBreadcrumbs.PushItem(this.currentSelection.Name, () => SelectItem(this.currentSelection));
                 return;
@@ -150,9 +164,10 @@ namespace BlueGraph.Editor
 
         public virtual void Load(hCustomGraph graph)
         {
-            graph.BuildGraph(this.currentSelection.Type, this.currentSelection.Name);
+            // graph.BuildGraph(this.currentSelection.Type, this.currentSelection.Name);
             Canvas = new CanvasView(this);
             Canvas.Load(graph);
+            this.graphViewContainer.Clear();
             this.graphViewContainer.Add(Canvas);
             Canvas.StretchToParentSize();
             ReadCurrentGraph(graph);

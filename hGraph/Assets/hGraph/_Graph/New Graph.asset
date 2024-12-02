@@ -21,9 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  nodes:
-  - rid: 81888374861332488
-  - rid: 81888374861332489
+  nodes: []
   comments: []
   assetVersion: 1
   Script: {fileID: 11500000, guid: eceb55a861c0cd849a64136ffaca86ed, type: 3}
@@ -60,43 +58,4 @@ MonoBehaviour:
     - UnityEngine
   references:
     version: 2
-    RefIds:
-    - rid: 81888374861332488
-      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
-      data:
-        HasEntry: 0
-        HasExit: 1
-        id: adb25107-3fd0-4396-8671-3faa6210e5c7
-        name: Start
-        graph: {fileID: 11400000}
-        position: {x: 100, y: 100}
-        ports:
-        - name: exit
-          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-          capacity: 0
-          direction: 1
-          connections:
-          - nodeId: 3520a0c7-965d-45cf-953f-deda16670f3f
-            portName: entry
-    - rid: 81888374861332489
-      type: {class: hNode, ns: , asm: BlueGraph.Runtime}
-      data:
-        HasEntry: 1
-        HasExit: 1
-        id: 3520a0c7-965d-45cf-953f-deda16670f3f
-        name: Update
-        graph: {fileID: 11400000}
-        position: {x: 250, y: 100}
-        ports:
-        - name: entry
-          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-          capacity: 0
-          direction: 0
-          connections:
-          - nodeId: adb25107-3fd0-4396-8671-3faa6210e5c7
-            portName: exit
-        - name: exit
-          type: hNode, BlueGraph.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-          capacity: 0
-          direction: 1
-          connections: []
+    RefIds: []

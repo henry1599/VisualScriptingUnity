@@ -19,18 +19,16 @@ public class hCustomGraph : Graph
 #if UNITY_EDITOR
         Undo.RecordObject(this, "Clear Graph");
 #endif
-        // Clear the nodes and edges in the graph
         RemoveAllNodes();
-
-        // Reset other properties if needed
         this.ParsedScript = null;
-
 #if UNITY_EDITOR
         EditorUtility.SetDirty(this);
 #endif
     }
+    public override float ZoomMinScale => 0.05f;
     public void BuildGraph(eParsedDataType perspective, string name)
     {
+        RemoveAllNodes();
         switch (perspective)
         {
             case eParsedDataType.Class:
@@ -91,7 +89,48 @@ public class hCustomGraph : Graph
     }
     void BuildGraphFromMethod(string className)
     {
+        // * Default
+        // * A method node has to have an entry and an exit
+        Node entryNode = new hNode()
+        {
+            Name = "Entry",
+            Position = new Vector2(100, 100),
+            HasEntry = false
+        };
+        entryNode.AddPort(new Port()
+        {
+            Name = "exit",
+            Direction = PortDirection.Output,
+            Type = typeof(hNode)
+        });
+        Node exitNode = new hNode()
+        {
+            Name = "Exit",
+            Position = new Vector2(250, 100),
+            HasExit = false
+        };
+        exitNode.AddPort(new Port()
+        {
+            Name = "entry",
+            Direction = PortDirection.Input,
+            Type = typeof(hNode)
+        });
+        Node exampleNode = new hNode()
+        {
+            Name = "Example",
+            Position = new Vector2(400, 100)
+        };
 
+        AddNode(entryNode);
+        AddNode(exitNode);
+        AddNode(exampleNode);
+
+        AddEdge(entryNode.GetPort("exit"), exitNode.GetPort("entry"));
+
+
+        // TODO: Read content of method and create corresponding nodes
+        // ParsedMethod method = ParsedScript.Classes[className].Methods[0];
+        
     }
 #if UNITY_EDITOR
     [Button]
