@@ -24,7 +24,10 @@ namespace BlueGraph.Editor
             }
             public override bool Equals(object obj)
             {
-                return Item.Equals(obj);
+                GraphSelection selection = obj as GraphSelection;
+                if (selection == null)
+                    return false;
+                return Item.Equals(selection.Item);
             }
             public override int GetHashCode()
             {
