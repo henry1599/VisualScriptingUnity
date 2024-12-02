@@ -23,6 +23,17 @@ public abstract class ParsedObject
     public string Name;
     public string RootNamespace;
     public string Type;
+    public override bool Equals(object obj)
+    {
+        return obj is ParsedObject @object &&
+               Name == @object.Name &&
+               RootNamespace == @object.RootNamespace &&
+               Type == @object.Type;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, RootNamespace, Type);
+    }
 }
 [Serializable]
 public class ParsedField : ParsedObject

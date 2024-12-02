@@ -26,16 +26,16 @@ public class hCustomGraph : Graph
 #endif
     }
     public override float ZoomMinScale => 0.05f;
-    public void BuildGraph(eParsedDataType perspective, string name)
+    public void BuildGraph(ParsedObject item)
     {
         RemoveAllNodes();
-        switch (perspective)
+        switch (item.Category)
         {
             case eParsedDataType.Class:
-                BuildGraphFromClass(name);
+                BuildGraphFromClass(item.Name);
                 break;
             case eParsedDataType.Method:
-                BuildGraphFromMethod(name);
+                BuildGraphFromMethod(item.Name);
                 break;
         }
     }
@@ -118,8 +118,20 @@ public class hCustomGraph : Graph
         Node exampleNode = new hNode()
         {
             Name = "Example",
-            Position = new Vector2(400, 100)
+            Position = new Vector2(400, 100),
         };
+        exampleNode.AddPort(new Port()
+        {
+            Name = "entry",
+            Direction = PortDirection.Input,
+            Type = typeof(hNode)
+        });
+        exampleNode.AddPort(new Port()
+        {
+            Name = "exit",
+            Direction = PortDirection.Output,
+            Type = typeof(hNode)
+        });
 
         AddNode(entryNode);
         AddNode(exitNode);
