@@ -101,9 +101,12 @@ namespace BlueGraph
             // Ports are enabled first to ensure they're fully loaded
             // prior to enabling the node itself, in case the node needs
             // to query port data during OnEnable.
-            foreach (var port in ports)
+            if (ports != null)
             {
-                port.OnEnable();
+                foreach (var port in ports)
+                {
+                    port.OnEnable();
+                }
             }
 
             OnEnable();
