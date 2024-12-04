@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace BlueGraph
@@ -9,10 +8,6 @@ namespace BlueGraph
     [Serializable]
     public abstract class Node
     {
-        [Input] public Node entry;
-        [Output] public Node exit;
-        public bool HasEntry = true;
-        public bool HasExit = true;
         public event Action OnValidateEvent;
         public event Action OnErrorEvent;
 
@@ -32,7 +27,7 @@ namespace BlueGraph
 
         [SerializeField] private string name;
 
-        [ShowInInspector] public string Name
+        public string Name
         {
             get { return name; }
             set { name = value; }
@@ -101,12 +96,9 @@ namespace BlueGraph
             // Ports are enabled first to ensure they're fully loaded
             // prior to enabling the node itself, in case the node needs
             // to query port data during OnEnable.
-            if (ports != null)
+            foreach (var port in ports)
             {
-                foreach (var port in ports)
-                {
-                    port.OnEnable();
-                }
+                port.OnEnable();
             }
 
             OnEnable();
@@ -242,16 +234,8 @@ namespace BlueGraph
         /// </summary>
         public void DisconnectAllPorts()
         {
-            if (portMap == null)
-            {
-                return;
-            }
             foreach (var port in portMap.Values)
             {
-                if (port == null)
-                {
-                    continue;
-                }
                 port.DisconnectAll();
             }
         }

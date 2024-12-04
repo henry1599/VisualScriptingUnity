@@ -26,9 +26,9 @@ public abstract class ParsedObject
     public override bool Equals(object obj)
     {
         return obj is ParsedObject @object &&
-               Name == @object.Name &&
-               RootNamespace == @object.RootNamespace &&
-               Type == @object.Type;
+               string.Equals(Name, @object.Name, StringComparison.Ordinal) &&
+               string.Equals(RootNamespace, @object.RootNamespace, StringComparison.Ordinal) &&
+               string.Equals(Type, @object.Type, StringComparison.Ordinal);
     }
     public override int GetHashCode()
     {

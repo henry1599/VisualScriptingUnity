@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace BlueGraph
@@ -21,7 +20,7 @@ namespace BlueGraph
         void RemoveEdge(Port output, Port input);
     }
 
-    public abstract class Graph : SerializedScriptableObject , IGraph
+    public abstract class Graph : ScriptableObject, IGraph
     {
         /// <summary>
         /// Retrieve the title of the graph displayed in the editor.
@@ -31,7 +30,7 @@ namespace BlueGraph
         /// </summary>
         public virtual string Title 
         {
-            get { return ""; }
+            get { return "BLUEGRAPH"; }
         }
 
         /// <summary>
@@ -74,7 +73,7 @@ namespace BlueGraph
             get { return nodes.AsReadOnly(); }
         }
 
-        [SerializeReference, ShowInInspector] 
+        [SerializeReference, HideInInspector] 
         private List<Node> nodes = new List<Node>();
         
         /// <summary>
@@ -207,7 +206,6 @@ namespace BlueGraph
             nodes.Add(node);
 
             node.OnAddedToGraph();
-
             node.Enable();
         }
 
@@ -255,21 +253,6 @@ namespace BlueGraph
             node.DisconnectAllPorts();
             nodes.Remove(node);
             node.Graph = null;
-        }
-        public void RemoveAllNodes()
-        {
-            if (nodes == null)
-                return;
-            foreach (var node in nodes)
-            {
-                if (node == null)
-                    continue;
-                node.Disable();
-                node.OnRemovedFromGraph();
-                node.DisconnectAllPorts();
-                node.Graph = null;
-            }
-            nodes?.Clear();
         }
 
         /// <summary>

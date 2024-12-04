@@ -21,7 +21,7 @@ namespace BlueGraph.Editor
 
         public Graph Graph { get; private set; }
 
-        // private readonly Label title;
+        private readonly Label title;
         private readonly List<CommentView> commentViews = new List<CommentView>();
         private readonly SearchWindow searchWindow;
         private readonly EdgeConnectorListener edgeConnectorListener;
@@ -68,6 +68,10 @@ namespace BlueGraph.Editor
             unserializeAndPaste = OnUnserializeAndPaste;
 
             RegisterCallback<GeometryChangedEvent>(OnFirstResize);
+
+            title = new Label("BLUEGRAPH");
+            title.AddToClassList("canvasViewTitle");
+            Add(title);
 
             // Add a grid renderer *behind* content containers
             Insert(0, new GridBackground());
@@ -221,6 +225,7 @@ namespace BlueGraph.Editor
         {
             Graph = graph;
             serializedGraph = new SerializedObject(Graph);
+            title.text = graph.Title;
             SetupZoom(graph.ZoomMinScale, graph.ZoomMaxScale);
 
             AddNodeViews(graph.Nodes);

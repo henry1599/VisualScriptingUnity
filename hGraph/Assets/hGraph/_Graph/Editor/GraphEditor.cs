@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
 namespace BlueGraph.Editor
 {
@@ -8,7 +9,7 @@ namespace BlueGraph.Editor
     /// Typically, you should build your own inspectors that
     /// open an instance of GraphEditorWindow for the asset.
     /// </summary>
-    // [CustomEditor(typeof(Graph), true)]
+    [CustomEditor(typeof(Graph), true)]
     public class GraphEditor : UnityEditor.Editor
     {
         /// <summary>
@@ -21,7 +22,7 @@ namespace BlueGraph.Editor
             var windows = Resources.FindObjectsOfTypeAll<GraphEditorWindow>();
             foreach (var window in windows)
             {
-                if (window.ActiveGraph == graph)
+                if (window.Graph == graph)
                 {
                     return window;
                 }
@@ -37,7 +38,7 @@ namespace BlueGraph.Editor
         {
             var window = CreateInstance<GraphEditorWindow>();
             window.Show();
-            // window.Load(target as Graph);
+            window.Load(target as Graph);
             return window;
         }
         

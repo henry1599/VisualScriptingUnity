@@ -12,8 +12,8 @@ namespace BlueGraph.Editor
 {
     public class NodeView : GraphViewNode, ICanDirty
     {
-        public static readonly Color DefaultEditorColor = new Color(56f / 255f, 56f / 255f, 56f / 255f);
         public Node Target { get; private set; }
+
         public List<PortView> Inputs { get; set; } = new List<PortView>();
 
         public List<PortView> Outputs { get; set; } = new List<PortView>();
@@ -27,14 +27,12 @@ namespace BlueGraph.Editor
         protected CanvasView Canvas { get; set; }
 
         private Label errorMessage;
-        private Texture2D FlowTexture;
 
         internal void Initialize(Node node, CanvasView canvas, EdgeConnectorListener connectorListener)
         {
             viewDataKey = node.ID;
             Target = node;
             Canvas = canvas;
-            var nodeType = node.GetType();
             ReflectionData = NodeReflection.GetNodeType(node.GetType());
             ConnectorListener = connectorListener;
 
@@ -56,11 +54,11 @@ namespace BlueGraph.Editor
             SetPosition(new Rect(node.Position, Vector2.one));
             title = node.Name;
 
-            if (ReflectionData != null && !ReflectionData.Deletable)
+            if (!ReflectionData.Deletable)
             {
                 capabilities &= ~Capabilities.Deletable;
             }
-            if (ReflectionData != null && !ReflectionData.Moveable)
+            if (!ReflectionData.Moveable)
             {
                 capabilities &= ~Capabilities.Movable;
             }
@@ -78,6 +76,7 @@ namespace BlueGraph.Editor
 
             OnInitialize();
         }
+
         /// <summary>
         /// Executed after receiving a node target and initial configuration
         /// but before being added to the graph.
@@ -127,16 +126,8 @@ namespace BlueGraph.Editor
         /// </summary>
         protected void ReloadPorts()
         {
-            foreach (var (name, port) in Target.Ports)
+            foreach (var port in Target.Ports.Values)
             {
-                if (!Target.HasEntry && string.Equals(name, "entry", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-                if (!Target.HasExit && string.Equals(name, "exit", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
                 if (port.Direction == PortDirection.Input)
                 {
                     AddInputPort(port);
@@ -178,7 +169,7 @@ namespace BlueGraph.Editor
 
             // If we're exposing a control element via reflection: include it in the view
             var reflection = NodeReflection.GetNodeType(Target.GetType());
-            var element = reflection?.GetPortByName(port.Name)?.GetControlElement(this);
+            var element = reflection.GetPortByName(port.Name)?.GetControlElement(this);
 
             if (element != null)
             {
@@ -189,43 +180,14 @@ namespace BlueGraph.Editor
                 view.SetEditorField(container);
             }
 
-            if (IsEntryPort(port))
-            {
-                Inputs.Insert(0, view);
-                inputContainer.Insert(0, view);
-                return;
-            }
             Inputs.Add(view);
             inputContainer.Add(view);
         }
-        private bool IsEntryPort(Port port)
-        {
-            return port.Name.Equals("entry", System.StringComparison.OrdinalIgnoreCase);
-        }
-        private bool IsExitPort(Port port)
-        {
-            return port.Name.Equals("exit", System.StringComparison.OrdinalIgnoreCase);
-        }
-        private void UpdatePortVisualElement(PortView view, Port port)
-        {
-            Label label = view.Q<Label>("type");
-            if (this.FlowTexture == null)
-            {
-                this.FlowTexture = Resources.Load("Icon/RightArrow") as Texture2D;
-            }
-            label.style.backgroundImage = new StyleBackground(this.FlowTexture);
-            label.style.color = DefaultEditorColor;
-        }
+
         protected virtual void AddOutputPort(Port port)
         {
             var view = PortView.Create(port, ConnectorListener);
 
-            if (IsExitPort(port))
-            {
-                Outputs.Insert(0, view);
-                outputContainer.Insert(0, view);
-                return;
-            }
             Outputs.Add(view);
             outputContainer.Add(view);
         }
@@ -315,12 +277,8 @@ namespace BlueGraph.Editor
             evt.menu.AppendAction("Edit/Node View Script", (e) => EditNodeViewScript(), GetNodeViewScriptStatus);
 
             //Add ContextMethods by Attributes from node
-            var contextMethods = ReflectionData?.ContextMethods;
+            var contextMethods = ReflectionData.ContextMethods;
 
-            if (contextMethods == null)
-            {
-                return;
-            }
             foreach (var attr in contextMethods.Keys)
             {
                 string title = string.IsNullOrEmpty(attr.menuItem) ? contextMethods[attr].Name : attr.menuItem;
