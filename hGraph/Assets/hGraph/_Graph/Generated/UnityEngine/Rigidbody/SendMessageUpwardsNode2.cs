@@ -6,7 +6,7 @@ using System;
     namespace CustomNode.UnityEngine.Rigidbody_Generated
     {
         [Node(
-            Name = "SendMessageUpwards (String methodName, Object value)",
+            Name = "SendMessageUpwards (String methodName, object value)",
             Path = "UnityEngine/Rigidbody/Methods/SendMessageUpwards",
             Deletable = true,
             Help = "SendMessageUpwards overload 2 of Rigidbody"
@@ -16,7 +16,7 @@ using System;
             [Input] public Node entry;
             [Input(Name = "Rigidbody")] public Rigidbody rigidbody;
             [Input(Name = "methodName", Editable = true)] public String methodName;
-    [Input(Name = "value", Editable = true)] public Object value;
+    [Input(Name = "value", Editable = true)] public object value;
 
             [Output] public Node exit;
 

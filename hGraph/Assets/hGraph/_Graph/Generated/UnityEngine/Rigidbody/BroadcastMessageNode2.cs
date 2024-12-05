@@ -6,7 +6,7 @@ using System;
     namespace CustomNode.UnityEngine.Rigidbody_Generated
     {
         [Node(
-            Name = "BroadcastMessage (String methodName, Object parameter)",
+            Name = "BroadcastMessage (String methodName, object parameter)",
             Path = "UnityEngine/Rigidbody/Methods/BroadcastMessage",
             Deletable = true,
             Help = "BroadcastMessage overload 2 of Rigidbody"
@@ -16,7 +16,7 @@ using System;
             [Input] public Node entry;
             [Input(Name = "Rigidbody")] public Rigidbody rigidbody;
             [Input(Name = "methodName", Editable = true)] public String methodName;
-    [Input(Name = "parameter", Editable = true)] public Object parameter;
+    [Input(Name = "parameter", Editable = true)] public object parameter;
 
             [Output] public Node exit;
 

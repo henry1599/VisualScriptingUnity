@@ -4,9 +4,36 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
+public class TypeFetcher
+{
+    public static Type GetTypeFromAssemblies(string typeName)
+    {
+        // Try to get the type directly
+        Type type = Type.GetType(typeName);
+        if (type != null)
+        {
+            return type;
+        }
+
+        // If the type is not found, search in all loaded assemblies
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            type = assembly.GetTypes().FirstOrDefault(t => t.FullName == typeName);
+            if (type != null)
+            {
+                return type;
+            }
+        }
+
+        // Type not found
+        return null;
+    }
+}
 public class EditorNodeDatabase : EditorWindow
 {
     static EditorNodeDatabase window;
@@ -54,18 +81,13 @@ public class EditorNodeDatabase : EditorWindow
 
         try
         {
-            Type targetType = Type.GetType($"{namespaceName}.{className}, UnityEngine");
+            Type targetType = TypeFetcher.GetTypeFromAssemblies($"{namespaceName}.{className}");
             if (targetType == null)
             {
                 Debug.LogError("Class not found. Ensure the namespace and class name are correct.");
                 return;
             }
 
-            // Create a folder to store the generated nodes
-            //string path = EditorUtility.OpenFolderPanel("Choose Save Location", "Assets", "");
-            //if (string.IsNullOrEmpty(path))
-            //    return;
-            // Create the folder path to store the generated nodes
             string path = Path.Combine(GENERATED_PATH, namespaceName.Replace('.', '/'), className);
             if (!Directory.Exists(path))
             {
@@ -85,12 +107,16 @@ public class EditorNodeDatabase : EditorWindow
             Debug.LogError($"Error generating nodes: {ex.Message}");
         }
     }
-
+    #region Properties
     private void GeneratePropertyNodes(Type targetType, string path)
     {
         var properties = targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                                    .Where(p => (p.CanRead || p.CanWrite) && !p.IsDefined(typeof(ObsoleteAttribute), false));
-
+        var defaultMemberAttr = targetType.GetCustomAttribute<DefaultMemberAttribute>();
+        if (defaultMemberAttr != null)
+        {
+            properties = properties.Where(f => f.Name != defaultMemberAttr.MemberName);
+        }
         // A HashSet to store namespaces to avoid duplicates
         HashSet<string> namespaces = new HashSet<string>
         {
@@ -172,6 +198,8 @@ public class EditorNodeDatabase : EditorWindow
             }
         }
     }
+    #endregion
+    #region Static Methods
     private void GenerateStaticMethodNodes(Type targetType, string path)
     {
         var methods = targetType.GetMethods(BindingFlags.Public | BindingFlags.Static)
@@ -275,6 +303,8 @@ public class EditorNodeDatabase : EditorWindow
             }
         }
     }
+    #endregion
+    #region Methods
     private void GenerateMethodNodes(Type targetType, string path)
     {
         var methods = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -380,18 +410,41 @@ public class EditorNodeDatabase : EditorWindow
             }
         }
     }
+    #endregion
+    #region Params
     private string GetMethodCallParams(ParameterInfo[] parameters)
     {
         return string.Join(", ", parameters.Select(p =>
         {
-            //if (p.IsDefined(typeof(OutAttribute), true)) return $"{p.Name}";
-            //if (p.IsOut) return $"out {p.Name}";
-            if (p.ParameterType.IsByRef && !p.IsOut) return $"ref {p.Name}";
-            if (!p.ParameterType.IsByRef && p.IsOut) return $"{p.Name}";
-            if (p.IsOut) return $"out {p.Name}";
-            return p.Name;
+            string paramName = p.Name;
+            Type paramType = p.ParameterType;
+
+            // Check if the parameter type is a readonly ref struct and needs conversion
+            if (paramType.IsGenericType)
+            {
+                var genericTypeDefinition = paramType.GetGenericTypeDefinition();
+                var genericArguments = paramType.GetGenericArguments();
+                if (genericTypeDefinition == typeof(ReadOnlySpan<>) || genericTypeDefinition == typeof(Span<>) || genericTypeDefinition == typeof(ReadOnlyMemory<>))
+                {
+                    if (genericArguments[0] == typeof(char))
+                    {
+                        return $"{paramName}.ToCharArray()";
+                    }
+                    else
+                    {
+                        return paramName;
+                    }
+                }
+            }
+
+            if (paramType.IsByRef && !p.IsOut) return $"ref {paramName}";
+            if (!paramType.IsByRef && p.IsOut) return $"{paramName}";
+            if (p.IsOut) return $"out {paramName}";
+            return paramName;
         }));
     }
+    #endregion  
+    #region FriendlyTypeName
     private string GetFriendlyTypeName(Type type, bool isOut = false)
     {
         if (type.IsByRef)
@@ -399,12 +452,71 @@ public class EditorNodeDatabase : EditorWindow
             type = type.GetElementType();
             return isOut ? $"{type.Name}" : $"{type.Name}";
         }
+        if (type.IsPointer)
+        {
+            type = type.GetElementType();
+            return $"{type.Name}";
+        }
+        
+        if (type.IsValueType && type.IsByRefLike && type.IsDefined(typeof(IsReadOnlyAttribute), false))
+        {
+            // Determine the replacement type based on the characteristics of the readonly ref struct
+            if (type.IsGenericType)
+            {
+                var genericTypeDefinition = type.GetGenericTypeDefinition();
+                var genericArguments = type.GetGenericArguments();
+
+                if (genericTypeDefinition == typeof(ReadOnlySpan<>))
+                {
+                    if (genericArguments[0] == typeof(char))
+                    {
+                        return typeof(string).Name;
+                    }
+                    else
+                    {
+                        return genericArguments[0].MakeArrayType().Name;
+                    }
+                }
+                else if (genericTypeDefinition == typeof(ReadOnlyMemory<>))
+                {
+                    if (genericArguments[0] == typeof(char))
+                    {
+                        return typeof(string).Name;
+                    }
+                    else
+                    {
+                        return genericArguments[0].MakeArrayType().Name;
+                    }
+                }
+                else if (genericTypeDefinition == typeof(Span<>))
+                {
+                    if (genericArguments[0] == typeof(char))
+                    {
+                        return typeof(string).Name;
+                    }
+                    else
+                    {
+                        return genericArguments[0].MakeArrayType().Name;
+                    }
+                }
+            }
+        }
 
         if (type.IsGenericType)
         {
             string genericTypeName = type.GetGenericTypeDefinition().Name;
             genericTypeName = genericTypeName.Substring(0, genericTypeName.IndexOf('`'));
-            string genericArgs = string.Join(", ", type.GetGenericArguments().Select(t => GetFriendlyTypeName(t)));
+            List<string> genericArgsList = type.GetGenericArguments().Select(t => GetFriendlyTypeName(t)).ToList();
+            for (int i = 0; i < genericArgsList.Count; i++)
+            {
+                string t = genericArgsList[i];
+                if (string.Equals(t, "T", StringComparison.OrdinalIgnoreCase))
+                {
+                    genericArgsList[i] = "object";
+                }
+            }
+            string genericArgs = string.Join(", ", genericArgsList);
+
             return $"{genericTypeName}<{genericArgs}>";
         }
 
@@ -413,13 +525,21 @@ public class EditorNodeDatabase : EditorWindow
             return $"{GetFriendlyTypeName(type.GetElementType())}[]";
         }
 
-        return type.Name;
+        return type.Name == "Object" ? "object" : type.Name;
     }
+    #endregion
+    #region Fields
     private void GenerateFieldNodes(Type targetType, string path)
     {
         var fields = targetType.GetFields(BindingFlags.Public | BindingFlags.Instance)
                                .Where(f => !f.IsDefined(typeof(ObsoleteAttribute), false));
 
+        // Check for DefaultMemberAttribute and filter out non-existent members
+        var defaultMemberAttr = targetType.GetCustomAttribute<DefaultMemberAttribute>();
+        if (defaultMemberAttr != null)
+        {
+            fields = fields.Where(f => f.Name != defaultMemberAttr.MemberName);
+        }
         // A HashSet to store namespaces to avoid duplicates
         HashSet<string> namespaces = new HashSet<string>
         {
@@ -502,4 +622,5 @@ public class EditorNodeDatabase : EditorWindow
             }
         }
     }
+    #endregion
 }

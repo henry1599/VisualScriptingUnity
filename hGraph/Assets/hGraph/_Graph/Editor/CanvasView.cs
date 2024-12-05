@@ -220,7 +220,8 @@ namespace BlueGraph.Editor
         {
             searchWindow.AddSearchProvider(provider);
         }
-
+        private List<ISearchProvider> cachedSearchProviders;
+        private List<string> cachedTags;
         public void Load(Graph graph)
         {
             Graph = graph;
@@ -235,16 +236,45 @@ namespace BlueGraph.Editor
             searchWindow.ClearSearchProviders();
             searchWindow.ClearTags();
 
-            foreach (var provider in NodeReflection.SearchProviders)
+            // Cache search providers and tags
+            if (cachedSearchProviders == null)
             {
-                if (provider.IsSupported(graph))
+                cachedSearchProviders = new List<ISearchProvider>();
+                foreach (var provider in NodeReflection.SearchProviders)
                 {
-                    searchWindow.AddSearchProvider(provider);
+                    if (provider.IsSupported(graph))
+                    {
+                        cachedSearchProviders.Add(provider);
+                    }
                 }
             }
 
+            object[] attrs = graph.GetType().GetCustomAttributes(true);
+            if (cachedTags == null)
+            {
+                cachedTags = new List<string>();
+                foreach (var attr in attrs)
+                {
+                    if (attr is IncludeTagsAttribute include)
+                    {
+                        cachedTags.AddRange(include.Tags);
+                    }
+                }
+            }
+
+            // Reset the search to a new set of tags and providers
+            searchWindow.ClearSearchProviders();
+            searchWindow.ClearTags();
+
+            foreach (var provider in cachedSearchProviders)
+            {
+                searchWindow.AddSearchProvider(provider);
+            }
+
+            searchWindow.IncludeTags.AddRange(cachedTags);
+
             // TODO: Move into reflection
-            var attrs = graph.GetType().GetCustomAttributes(true);
+            // var attrs = graph.GetType().GetCustomAttributes(true);
 
 
             foreach (var attr in attrs)

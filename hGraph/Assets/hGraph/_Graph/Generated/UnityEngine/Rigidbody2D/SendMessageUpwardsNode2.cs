@@ -7,7 +7,7 @@ using System.Collections.Generic;
     namespace CustomNode.UnityEngine.Rigidbody2D_Generated
     {
         [Node(
-            Name = "SendMessageUpwards (String methodName, Object value)",
+            Name = "SendMessageUpwards (String methodName, object value)",
             Path = "UnityEngine/Rigidbody2D/Methods/SendMessageUpwards",
             Deletable = true,
             Help = "SendMessageUpwards overload 2 of Rigidbody2D"
@@ -17,7 +17,7 @@ using System.Collections.Generic;
             [Input] public Node entry;
             [Input(Name = "Rigidbody2D")] public Rigidbody2D rigidbody2d;
             [Input(Name = "methodName", Editable = true)] public String methodName;
-    [Input(Name = "value", Editable = true)] public Object value;
+    [Input(Name = "value", Editable = true)] public object value;
 
             [Output] public Node exit;
 
