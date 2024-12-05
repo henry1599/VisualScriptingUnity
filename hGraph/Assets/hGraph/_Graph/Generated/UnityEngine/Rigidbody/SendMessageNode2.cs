@@ -1,26 +1,28 @@
 
-using BlueGraph;
+    using BlueGraph;
 using Object = UnityEngine.Object;
 using UnityEngine;
 using System;
-
-[Node(
-    Name = "SendMessage Overload 2",
-    Path = "UnityEngine/Rigidbody/SendMessage",
-    Deletable = true,
-    Help = "SendMessage overload 2 of Rigidbody"
-)]
-public class SendMessageNode2 : Node
-{
-    [Input] public Node entry;
-    [Input(Name = "Rigidbody")] public Rigidbody rigidbody;
-    [Input(Name = "methodName", Editable = true)] public String methodName;
-
-    [Output] public Node exit;
-
-    public override object OnRequestValue(Port port)
+    namespace CustomNode.UnityEngine.Rigidbody_Generated
     {
-        rigidbody.SendMessage(methodName);
-        return exit;
+        [Node(
+            Name = "SendMessage (String methodName)",
+            Path = "UnityEngine/Rigidbody/Methods/SendMessage",
+            Deletable = true,
+            Help = "SendMessage overload 2 of Rigidbody"
+        )]
+        public class SendMessageNode2 : Node
+        {
+            [Input] public Node entry;
+            [Input(Name = "Rigidbody")] public Rigidbody rigidbody;
+            [Input(Name = "methodName", Editable = true)] public String methodName;
+
+            [Output] public Node exit;
+
+            public override object OnRequestValue(Port port)
+            {
+                rigidbody.SendMessage(methodName);
+                return exit;
+            }
+        }
     }
-}

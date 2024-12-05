@@ -1,26 +1,28 @@
 
-using BlueGraph;
+    using BlueGraph;
 using Object = UnityEngine.Object;
 using UnityEngine;
 using System;
-
-[Node(
-    Name = "GetAccumulatedTorque Overload 1",
-    Path = "UnityEngine/Rigidbody/GetAccumulatedTorque",
-    Deletable = true,
-    Help = "GetAccumulatedTorque overload 1 of Rigidbody"
-)]
-public class GetAccumulatedTorqueNode1 : Node
-{
-    [Input] public Node entry;
-    [Input(Name = "Rigidbody")] public Rigidbody rigidbody;
-    [Input(Name = "step", Editable = true)] public Single step;
-
-    [Output(Name = "result")] public Vector3 result;
-
-    public override object OnRequestValue(Port port)
+    namespace CustomNode.UnityEngine.Rigidbody_Generated
     {
-        Vector3 result = rigidbody.GetAccumulatedTorque(step);
-        return result;
+        [Node(
+            Name = "GetAccumulatedTorque (Single step)",
+            Path = "UnityEngine/Rigidbody/Methods/GetAccumulatedTorque",
+            Deletable = true,
+            Help = "GetAccumulatedTorque overload 1 of Rigidbody"
+        )]
+        public class GetAccumulatedTorqueNode1 : Node
+        {
+            [Input] public Node entry;
+            [Input(Name = "Rigidbody")] public Rigidbody rigidbody;
+            [Input(Name = "step", Editable = true)] public Single step;
+
+            [Output(Name = "result")] public Vector3 result;
+
+            public override object OnRequestValue(Port port)
+            {
+                Vector3 result = rigidbody.GetAccumulatedTorque(step);
+                return result;
+            }
+        }
     }
-}
