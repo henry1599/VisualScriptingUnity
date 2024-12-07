@@ -1,0 +1,703 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12da7ebe0242f184eb0684937a749012, type: 3}
+  m_Name: PipeSpawner
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  m_serializedGraph:
+    serializedData:
+      format: 2
+      references:
+      - {fileID: 11400000, guid: f0ee77575c40a7e4baf694bdb8372fb7, type: 2}
+      data: 
+      serializationNodes:
+      - Name: 
+        Entry: 7
+        Data: 1|MaxyGames.UNode.Graph, uNode3.Core
+      - Name: _name
+        Entry: 1
+        Data: PipeSpawner
+      - Name: _id
+        Entry: 3
+        Data: 0
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 6
+        Data: 
+      - Name: childs
+        Entry: 7
+        Data: 2|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 3
+      - Name: 
+        Entry: 7
+        Data: 3|MaxyGames.UNode.FunctionContainer, uNode3.Core
+      - Name: _name
+        Entry: 6
+        Data: 
+      - Name: _id
+        Entry: 3
+        Data: 1
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 1
+      - Name: childs
+        Entry: 7
+        Data: 4|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 3
+      - Name: 
+        Entry: 7
+        Data: 5|MaxyGames.UNode.MainGraphContainer, uNode3.Core
+      - Name: _name
+        Entry: 6
+        Data: 
+      - Name: _id
+        Entry: 3
+        Data: 4
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 3
+      - Name: childs
+        Entry: 7
+        Data: 6|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 7
+        Data: 7|MaxyGames.UNode.Function, uNode3.Core
+      - Name: _name
+        Entry: 1
+        Data: Start
+      - Name: _id
+        Entry: 3
+        Data: 2
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 3
+      - Name: childs
+        Entry: 7
+        Data: 8|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: entryObject
+        Entry: 6
+        Data: 
+      - Name: parameters
+        Entry: 7
+        Data: 9|System.Collections.Generic.List`1[[MaxyGames.UNode.ParameterData,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: modifier
+        Entry: 7
+        Data: 10|MaxyGames.UNode.FunctionModifier, uNode3.Core
+      - Name: Public
+        Entry: 5
+        Data: false
+      - Name: Private
+        Entry: 5
+        Data: true
+      - Name: Protected
+        Entry: 5
+        Data: false
+      - Name: Internal
+        Entry: 5
+        Data: false
+      - Name: Static
+        Entry: 5
+        Data: false
+      - Name: Unsafe
+        Entry: 5
+        Data: false
+      - Name: Virtual
+        Entry: 5
+        Data: false
+      - Name: Abstract
+        Entry: 5
+        Data: false
+      - Name: Extern
+        Entry: 5
+        Data: false
+      - Name: New
+        Entry: 5
+        Data: false
+      - Name: Override
+        Entry: 5
+        Data: false
+      - Name: Partial
+        Entry: 5
+        Data: false
+      - Name: Sealed
+        Entry: 5
+        Data: false
+      - Name: Async
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: returnType
+        Entry: 7
+        Data: 11|MaxyGames.UNode.SerializedType, uNode3.Core
+      - Name: kind
+        Entry: 3
+        Data: 1
+      - Name: serializedString
+        Entry: 1
+        Data: System.Void
+      - Name: serializedBytes
+        Entry: 7
+        Data: 12|System.Byte[], mscorlib
+      - Name: 
+        Entry: 14
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: references
+        Entry: 6
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: attributes
+        Entry: 7
+        Data: 13|System.Collections.Generic.List`1[[MaxyGames.UNode.AttributeData,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: genericParameters
+        Entry: 7
+        Data: 14|MaxyGames.UNode.GenericParameterData[], uNode3.Core
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 7
+        Data: 15|MaxyGames.UNode.Function, uNode3.Core
+      - Name: _name
+        Entry: 1
+        Data: Update
+      - Name: _id
+        Entry: 3
+        Data: 3
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 3
+      - Name: childs
+        Entry: 7
+        Data: 16|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: entryObject
+        Entry: 6
+        Data: 
+      - Name: parameters
+        Entry: 7
+        Data: 17|System.Collections.Generic.List`1[[MaxyGames.UNode.ParameterData,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: modifier
+        Entry: 7
+        Data: 18|MaxyGames.UNode.FunctionModifier, uNode3.Core
+      - Name: Public
+        Entry: 5
+        Data: false
+      - Name: Private
+        Entry: 5
+        Data: true
+      - Name: Protected
+        Entry: 5
+        Data: false
+      - Name: Internal
+        Entry: 5
+        Data: false
+      - Name: Static
+        Entry: 5
+        Data: false
+      - Name: Unsafe
+        Entry: 5
+        Data: false
+      - Name: Virtual
+        Entry: 5
+        Data: false
+      - Name: Abstract
+        Entry: 5
+        Data: false
+      - Name: Extern
+        Entry: 5
+        Data: false
+      - Name: New
+        Entry: 5
+        Data: false
+      - Name: Override
+        Entry: 5
+        Data: false
+      - Name: Partial
+        Entry: 5
+        Data: false
+      - Name: Sealed
+        Entry: 5
+        Data: false
+      - Name: Async
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: returnType
+        Entry: 7
+        Data: 19|MaxyGames.UNode.SerializedType, uNode3.Core
+      - Name: kind
+        Entry: 3
+        Data: 1
+      - Name: serializedString
+        Entry: 1
+        Data: System.Void
+      - Name: serializedBytes
+        Entry: 7
+        Data: 20|System.Byte[], mscorlib
+      - Name: 
+        Entry: 14
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: references
+        Entry: 6
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: attributes
+        Entry: 7
+        Data: 21|System.Collections.Generic.List`1[[MaxyGames.UNode.AttributeData,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: genericParameters
+        Entry: 7
+        Data: 22|MaxyGames.UNode.GenericParameterData[], uNode3.Core
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 7
+        Data: 23|MaxyGames.UNode.VariableContainer, uNode3.Core
+      - Name: _name
+        Entry: 6
+        Data: 
+      - Name: _id
+        Entry: 3
+        Data: 5
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 1
+      - Name: childs
+        Entry: 7
+        Data: 24|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 1
+      - Name: 
+        Entry: 7
+        Data: 25|MaxyGames.UNode.Variable, uNode3.Core
+      - Name: _name
+        Entry: 1
+        Data: pipePrefab
+      - Name: _id
+        Entry: 3
+        Data: 7
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 23
+      - Name: childs
+        Entry: 7
+        Data: 26|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: serializedValue
+        Entry: 7
+        Data: 27|MaxyGames.UNode.SerializedValue, uNode3.Core
+      - Name: serializedData
+        Entry: 7
+        Data: 28|MaxyGames.UNode.OdinSerializedData, uNode3.Core
+      - Name: format
+        Entry: 3
+        Data: 0
+      - Name: references
+        Entry: 7
+        Data: 29|System.Collections.Generic.List`1[[UnityEngine.Object, UnityEngine.CoreModule]],
+          mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: data
+        Entry: 7
+        Data: 30|System.Byte[], mscorlib
+      - Name: 
+        Entry: 14
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: serializationNodes
+        Entry: 6
+        Data: 
+      - Name: serializedType
+        Entry: 6
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: serializedType
+        Entry: 7
+        Data: 31|MaxyGames.UNode.SerializedType, uNode3.Core
+      - Name: kind
+        Entry: 3
+        Data: 2
+      - Name: serializedString
+        Entry: 1
+        Data: 
+      - Name: serializedBytes
+        Entry: 7
+        Data: 32|System.Byte[], mscorlib
+      - Name: 
+        Entry: 14
+        Data: 022f0000000001250000004d00610078007900470061006d00650073002e0055004e006f00640065002e00540079007000650044006100740061002c00200075004e006f006400650033002e0043006f0072006500000000002701040000006e0061006d00650001090000005b00720075006e00740069006d0065005d000101090000007200650066006500720065006e00630065002f0100000001250000004d00610078007900470061006d00650073002e0055004e006f00640065002e00470072006100700068005200650066002c00200075004e006f006400650033002e0043006f0072006500010000001701030000005f0069006400000000002701050000005f006e0061006d00650001090000005000690070006500470072006100700068000b010b00000075006e006900740079004f0062006a0065006300740000000000052d010a00000070006100720061006d006500740065007200730005
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: references
+        Entry: 7
+        Data: 33|System.Collections.Generic.List`1[[UnityEngine.Object, UnityEngine.CoreModule]],
+          mscorlib
+      - Name: 
+        Entry: 12
+        Data: 1
+      - Name: 
+        Entry: 10
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: resetOnEnter
+        Entry: 5
+        Data: false
+      - Name: attributes
+        Entry: 7
+        Data: 34|System.Collections.Generic.List`1[[MaxyGames.UNode.AttributeData,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: modifier
+        Entry: 7
+        Data: 35|MaxyGames.UNode.FieldModifier, uNode3.Core
+      - Name: Public
+        Entry: 5
+        Data: true
+      - Name: Private
+        Entry: 5
+        Data: false
+      - Name: Protected
+        Entry: 5
+        Data: false
+      - Name: Internal
+        Entry: 5
+        Data: false
+      - Name: Static
+        Entry: 5
+        Data: false
+      - Name: Event
+        Entry: 5
+        Data: false
+      - Name: ReadOnly
+        Entry: 5
+        Data: false
+      - Name: Const
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 7
+        Data: 36|MaxyGames.UNode.PropertyContainer, uNode3.Core
+      - Name: _name
+        Entry: 6
+        Data: 
+      - Name: _id
+        Entry: 3
+        Data: 6
+      - Name: _comment
+        Entry: 6
+        Data: 
+      - Name: _parent
+        Entry: 9
+        Data: 1
+      - Name: childs
+        Entry: 7
+        Data: 37|System.Collections.Generic.List`1[[MaxyGames.UNode.UGraphElement,
+          uNode3.Core]], mscorlib
+      - Name: 
+        Entry: 12
+        Data: 0
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: 
+        Entry: 13
+        Data: 
+      - Name: 
+        Entry: 8
+        Data: 
+      - Name: expanded
+        Entry: 5
+        Data: true
+      - Name: <isDestroyed>k__BackingField
+        Entry: 5
+        Data: false
+      - Name: graphLayout
+        Entry: 3
+        Data: 0
+      - Name: attributes
+        Entry: 6
+        Data: 
+      - Name: m_UniqueID
+        Entry: 3
+        Data: 7
+      - Name: 
+        Entry: 8
+        Data: 
+      serializedType: 
+  namespace: 
+  usingNamespaces:
+  - UnityEngine
+  - System.Collections.Generic
+  model:
+    rid: 4288060337491017730
+  interfaces: []
+  scriptData:
+    fileName: PipeSpawner
+    selfTypeData:
+      typeName: 
+      reference: {fileID: 0}
+    typeDatas: []
+    debug: 0
+    debugValueNode: 1
+    compileToScript: 1
+    unityObjects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4288060337491017730
+      type: {class: ClassComponentModel, ns: MaxyGames.UNode, asm: uNode3.Core}
+      data: 
