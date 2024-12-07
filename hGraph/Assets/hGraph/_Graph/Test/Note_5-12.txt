@@ -1,3 +1,0 @@
-- Fix method path for each overload
-- Implement get and set logic for properties
-- Implement for fields
