@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+  m_Name: PipesGraph_Function_Setup
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"Kind":"Flow","collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[{"key":"Execute","label":null,"summary":null,"hideLabel":true}],"controlOutputDefinitions":[{"key":"Finish","label":null,"summary":null,"hideLabel":false}],"valueInputDefinitions":[{"hasDefaultValue":false,"defaultValue":{"$content":0.0,"$type":"System.Single"},"_type":"System.Single","key":"pipeSpeed","label":null,"summary":null,"hideLabel":false},{"hasDefaultValue":false,"defaultValue":{"$content":0.0,"$type":"System.Single"},"_type":"System.Single","key":"endX","label":null,"summary":null,"hideLabel":false}],"valueOutputDefinitions":[],"title":"Setup","summary":null,"pan":{"x":82.0,"y":19.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":-217.0,"y":-44.0},"guid":"7c2bfbc7-b0f5-4001-ad72-81bb9a9bcbc9","$version":"A","$type":"Unity.VisualScripting.GraphInput","$id":"13"},{"defaultValues":{},"position":{"x":229.0,"y":-40.0},"guid":"a7c1ea44-dfc4-4acb-b9fc-706a67c73677","$version":"A","$type":"Unity.VisualScripting.GraphOutput","$id":"15"},{"sourceUnit":{"$ref":"13"},"sourceKey":"Execute","destinationUnit":{"$ref":"15"},"destinationKey":"Finish","guid":"3faa9b02-0620-485d-a797-d8aa2288acaf","$type":"Unity.VisualScripting.ControlConnection"}],"$version":"A"}}'
+    _objectReferences: []
