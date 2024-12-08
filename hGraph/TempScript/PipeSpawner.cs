@@ -4,15 +4,16 @@
 #pragma warning disable
 using UnityEngine;
 using System.Collections.Generic;
+using MaxyGames.UNode;
 
-public class PipeSpawner : MaxyGames.UNode.RuntimeBehaviour {	
+public class PipeSpawner : RuntimeBehaviour {	
 	public float spawnInterval;
 	public float spawnCounter;
 	public float pipeSpeed;
 	public float endX;
 	public float startX;
 	public Vector2 boundY;
-	public PipeGraph pipePrefab;
+	public GameObject pipePrefab;
 	
 	private void Start() {
 		spawnCounter = spawnInterval;
@@ -34,7 +35,8 @@ public class PipeSpawner : MaxyGames.UNode.RuntimeBehaviour {
 		GameObject pipeObjectInstance = default(GameObject);
 		GameObject pipeInstance = default(GameObject);
 		spawnPos = GetSpawnPos();
-		(Object.Instantiate(pipePrefab, spawnPos, new Quaternion(), this.transform) as PipeGraph).Setup(pipeSpeed, endX);
+		pipeInstance = Object.Instantiate<UnityEngine.GameObject>(pipePrefab, spawnPos, new Quaternion(), this.transform);
+		pipeInstance.GetGeneratedComponent<PipeGraph>().Setup(pipeSpeed, endX);
 	}
 	
 	public Vector2 GetSpawnPos() {

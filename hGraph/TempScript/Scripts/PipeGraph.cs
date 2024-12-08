@@ -4,40 +4,33 @@
 #pragma warning disable
 using UnityEngine;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 
 public class PipeGraph : MaxyGames.UNode.RuntimeBehaviour {	
-	[SerializeField]
-	[ReadOnly]
-	private float speed;
+	public float speed;
+	public float endX;
 	public Rigidbody2D rb;
-	[SerializeField]
-	[ReadOnly]
-	private Vector2 startPos;
-	[SerializeField]
-	[ReadOnly]
-	private float endX;
-	[SerializeField]
-	[ReadOnly]
-	private bool isSetup;
+	public bool isSetup;
 	
 	private void Start() {
 	}
 	
 	private void Update() {
 		if(isSetup) {
-			if((this.transform.position.x <= endX)) {
-				Object.Destroy(base.gameObject);
-			}
+			CheckLifeTime();
 		}
 	}
 	
-	public void Setup(Vector2 startPos, float endX, float pipeSpeed) {
-		pipeSpeed = speed;
-		endX = endX;
-		startPos = startPos;
-		rb.velocity = new Vector2((0F - speed), 0F);
+	public void Setup(float pipeSpeed, float pipeEndX) {
+		speed = pipeSpeed;
+		endX = pipeEndX;
 		isSetup = true;
+		rb.velocity = new Vector2((0F - speed), 0F);
+	}
+	
+	public void CheckLifeTime() {
+		if((this.transform.position.x < endX)) {
+			Object.Destroy(this.gameObject);
+		}
 	}
 }
 

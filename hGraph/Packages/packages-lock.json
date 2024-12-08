@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.maxygames.unode": {
+      "version": "https://github.com/wahidrachmawan/uNode.git?path=Assets/uNode3",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "64ce87e746416dfc783a8c320df130d5e8be6086"
+    },
     "com.unity.2d.animation": {
       "version": "9.1.1",
       "depth": 1,

@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 435809514}
-  - component: {fileID: 435809513}
+  - component: {fileID: 435809515}
   m_Layer: 0
   m_Name: PipeSpawner
   m_TagString: Untagged
@@ -139,7 +139,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &435809513
+--- !u!4 &435809514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435809512}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &435809515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,74 +168,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 11400000, guid: 417f561fc1ce8374291be39013f425d3, type: 2}
   variables:
-  - name: pipePrefab
-    serializedValue:
-      serializedData:
-        format: 0
-        references:
-        - {fileID: 1840874756924363308, guid: 99b1e73f034fa1747bc45a21b40b5f31, type: 3}
-        data: 0c00000000
-        serializationNodes: []
-        serializedType: 
-      serializedType:
-        kind: 2
-        serializedString: 
-        serializedBytes: 022f0000000001250000004d00610078007900470061006d00650073002e0055004e006f00640065002e00540079007000650044006100740061002c00200075004e006f006400650033002e0043006f0072006500000000002701040000006e0061006d00650001090000005b00720075006e00740069006d0065005d000101090000007200650066006500720065006e00630065002f0100000001250000004d00610078007900470061006d00650073002e0055004e006f00640065002e00470072006100700068005200650066002c00200075004e006f006400650033002e0043006f0072006500010000001701030000005f0069006400000000002701050000005f006e0061006d00650001090000005000690070006500470072006100700068000b010b00000075006e006900740079004f0062006a0065006300740000000000052d010a00000070006100720061006d006500740065007200730005
-        references:
-        - {fileID: 11400000, guid: f0ee77575c40a7e4baf694bdb8372fb7, type: 2}
-    attributes: []
-    resetOnEnter: 1
   - name: spawnInterval
     serializedValue:
       serializedData:
         format: 0
         references: []
         data: 022f000000000117000000530079007300740065006d002e00530069006e0067006c0065002c0020006d00730063006f0072006c006900620000000000200000004005
-        serializationNodes: []
-        serializedType: System.Object
-      serializedType:
-        kind: 1
-        serializedString: System.Single
-        serializedBytes: 
-        references: []
-    attributes: []
-    resetOnEnter: 1
-  - name: spawnStartX
-    serializedValue:
-      serializedData:
-        format: 0
-        references: []
-        data: 022f000000000117000000530079007300740065006d002e00530069006e0067006c0065002c0020006d00730063006f0072006c006900620000000000200000204105
-        serializationNodes: []
-        serializedType: System.Object
-      serializedType:
-        kind: 1
-        serializedString: System.Single
-        serializedBytes: 
-        references: []
-    attributes: []
-    resetOnEnter: 1
-  - name: spawnBoundY
-    serializedValue:
-      serializedData:
-        format: 0
-        references: []
-        data: 022f00000000012b00000055006e0069007400790045006e00670069006e0065002e0056006500630074006f00720032002c00200055006e0069007400790045006e00670069006e0065002e0043006f00720065004d006f00640075006c0065000000000020000010c0200000104005
-        serializationNodes: []
-        serializedType: 
-      serializedType:
-        kind: 1
-        serializedString: UnityEngine.Vector2
-        serializedBytes: 
-        references: []
-    attributes: []
-    resetOnEnter: 1
-  - name: endX
-    serializedValue:
-      serializedData:
-        format: 0
-        references: []
-        data: 022f000000000117000000530079007300740065006d002e00530069006e0067006c0065002c0020006d00730063006f0072006c00690062000000000020000020c105
         serializationNodes: []
         serializedType: System.Object
       serializedType:
@@ -245,21 +198,51 @@ MonoBehaviour:
         references: []
     attributes: []
     resetOnEnter: 1
---- !u!4 &435809514
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435809512}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  - name: endX
+    serializedValue:
+      serializedData:
+        format: 0
+        references: []
+        data: 022f000000000117000000530079007300740065006d002e00530069006e0067006c0065002c0020006d00730063006f0072006c00690062000000000020000020c105
+        serializationNodes: []
+        serializedType: System.Object
+      serializedType:
+        kind: 1
+        serializedString: System.Single
+        serializedBytes: 
+        references: []
+    attributes: []
+    resetOnEnter: 1
+  - name: startX
+    serializedValue:
+      serializedData:
+        format: 0
+        references: []
+        data: 022f000000000117000000530079007300740065006d002e00530069006e0067006c0065002c0020006d00730063006f0072006c006900620000000000200000204105
+        serializationNodes: []
+        serializedType: System.Object
+      serializedType:
+        kind: 1
+        serializedString: System.Single
+        serializedBytes: 
+        references: []
+    attributes: []
+    resetOnEnter: 1
+  - name: boundY
+    serializedValue:
+      serializedData:
+        format: 0
+        references: []
+        data: 022f00000000012b00000055006e0069007400790045006e00670069006e0065002e0056006500630074006f00720032002c00200055006e0069007400790045006e00670069006e0065002e0043006f00720065004d006f00640075006c00650000000000200000204020000020c005
+        serializationNodes: []
+        serializedType: 
+      serializedType:
+        kind: 1
+        serializedString: UnityEngine.Vector2
+        serializedBytes: 
+        references: []
+    attributes: []
+    resetOnEnter: 1
 --- !u!1 &998493689
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +347,7 @@ GameObject:
   - component: {fileID: 1867371603}
   - component: {fileID: 1867371602}
   - component: {fileID: 1867371605}
-  - component: {fileID: 1867371604}
+  - component: {fileID: 1867371606}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -474,7 +457,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1867371604
+--- !u!50 &1867371605
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867371600}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 2
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!114 &1867371606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -519,33 +529,6 @@ MonoBehaviour:
         references: []
     attributes: []
     resetOnEnter: 1
---- !u!50 &1867371605
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1867371600}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 2
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
