@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.github.mcmanning.bluegraph": {
+      "version": "https://github.com/McManning/BlueGraph.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f1de7f5fb6db58a73865e866eae1c76ca463af38"
+    },
     "com.maxygames.unode": {
       "version": "https://github.com/wahidrachmawan/uNode.git?path=Assets/uNode3",
       "depth": 0,

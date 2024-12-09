@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.github.mcmanning.bluegraph": "https://github.com/McManning/BlueGraph.git",
     "com.maxygames.unode": "https://github.com/wahidrachmawan/uNode.git?path=Assets/uNode3",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.2d": "2.0.1",
