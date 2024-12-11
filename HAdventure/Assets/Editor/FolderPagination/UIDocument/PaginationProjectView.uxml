@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="_topContainer" style="flex-grow: 1; height: 20px; flex-direction: row;">
+        <ui:VisualElement name="_leftTopPanel" style="flex-grow: 1; flex-direction: row; width: 30%;">
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="_addFolderButton" style="background-image: url(&apos;project://database/Packages/com.unity.render-pipelines.core/Editor/LookDev/Icons/d_Add.png?fileID=2800000&amp;guid=160b197aba549514286b94426ceae589&amp;type=3#d_Add&apos;); -unity-background-scale-mode: scale-to-fit; width: 20px; height: 20px; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-slice-left: 0; -unity-slice-top: 0; -unity-slice-right: 0; -unity-slice-bottom: 0; -unity-slice-scale: 1px;" />
+            <ui:Label tabindex="-1" text="Add folder" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: middle-left; -unity-font-style: bold;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="_rightTopPanel" style="flex-grow: 1; width: 70%; flex-direction: row;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="_mainContainer" style="flex-grow: 1; height: 95%; flex-direction: row;">
+        <ui:VisualElement name="_menuView" style="flex-grow: 1; width: 30%; margin-bottom: 10px;">
+            <ui:TreeView focusable="true" name="_treeView" show-border="true" show-alternating-row-backgrounds="All" />
+            <ui:Slider picking-mode="Ignore" value="40" high-value="150" name="_itemSizeSlider" low-value="30" show-input-field="true" label="Item Size" page-size="0" style="-unity-text-align: upper-left; white-space: normal;" />
+            <ui:Slider picking-mode="Ignore" value="10" high-value="100" name="_itemPerPageSlider" low-value="5" show-input-field="true" label="Page Size" page-size="0" style="-unity-text-align: upper-left; white-space: normal;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="_contentGroupView" style="flex-grow: 1; width: 70%; margin-bottom: 10px;">
+            <uie:ToolbarBreadcrumbs name="_pathBreadcrumbs" style="height: 25px;" />
+            <ui:ScrollView name="_contentView" style="flex-direction: row; flex-wrap: wrap; overflow: hidden; width: 100%; height: 100%; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); background-color: rgb(50, 50, 50);" />
+            <ui:GroupBox style="height: 20px; flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: upper-left; justify-content: space-around; align-self: center;">
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="_firstPageButton" style="background-image: url(&apos;project://database/Packages/com.unity.render-pipelines.core/Editor/LookDev/Icons/d_LeftArrow@2x.png?fileID=2800000&amp;guid=90335e5423c010749a50f906b965fa54&amp;type=3#d_LeftArrow@2x&apos;); -unity-background-scale-mode: scale-to-fit; width: 30px;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="_prevPageButton" style="width: 30px; background-image: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-2236324273849735119&amp;guid=1a94fb38532bd2b4a9287352940d831e&amp;type=3#arrow-left@2x&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Label tabindex="-1" text="0/100" parse-escape-sequences="true" display-tooltip-when-elided="true" name="_pageInfo" style="-unity-text-align: middle-left;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="_nextPageButton" style="width: 30px; background-image: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1087164816274819069&amp;guid=1a94fb38532bd2b4a9287352940d831e&amp;type=3#arrow-right@2x&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Button text="&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="_lastPageButton" style="width: 30px; background-image: url(&apos;project://database/Packages/com.unity.render-pipelines.core/Editor/LookDev/Icons/d_RightArrow@2x.png?fileID=2800000&amp;guid=28d47cbaafc98254f8d4f6184dff22cd&amp;type=3#d_RightArrow@2x&apos;); -unity-background-scale-mode: scale-to-fit;" />
+            </ui:GroupBox>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
