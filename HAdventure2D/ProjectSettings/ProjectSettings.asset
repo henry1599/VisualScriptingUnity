@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: bf3dd5bf1ed278d408209c74f7e36522
+  productGUID: eba7d7b63dfa77c4a843893ece1b9c95
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -866,7 +866,7 @@ PlayerSettings:
   cloudProjectId: 37cee14b-dc44-4a4d-a5aa-056afb546d1c
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: HAdventure2D
   organizationId: lthieu1599
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
