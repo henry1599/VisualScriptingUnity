@@ -10,13 +10,6 @@ namespace CharacterStudio
     public class MapDatabase : ScriptableObject
     {
         [SerializedDictionary("Part", "Data")]
-        public SerializedDictionary<eCharacterPart, MapData> Data;
-    }
-
-    [Serializable]
-    public class MapData
-    {
-        [SerializedDictionary("Type", "Texture")]
-        public SerializedDictionary<eTextureMapType, Texture2D> TextureMaps;
+        public SerializedDictionary<eCharacterPart, Texture2D> Data;
     }
 }

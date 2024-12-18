@@ -24,9 +24,4 @@ namespace CharacterStudio
         Die = 6,
         Hit = 7,
     }
-    public enum eTextureMapType
-    {
-        Base,
-        Mask
-    }
 }
