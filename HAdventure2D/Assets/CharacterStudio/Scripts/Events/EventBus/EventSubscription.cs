@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityDV.Bootstrap.EventSystem
+namespace CharacterStudio
 {
     /// <summary>
     /// Represents a subscription to a generic event.

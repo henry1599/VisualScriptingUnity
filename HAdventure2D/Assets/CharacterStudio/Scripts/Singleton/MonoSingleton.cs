@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Baram.Game
+namespace CharacterStudio
 {
     /// <summary>
     /// Allow mono behavior to become singleton class

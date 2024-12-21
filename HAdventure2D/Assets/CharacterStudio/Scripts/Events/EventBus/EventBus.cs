@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Baram.Game;
 
-namespace UnityDV.Bootstrap.EventSystem
+namespace CharacterStudio
 {
     /// <summary>
     /// The EventBus class manages subscriptions and event publications.

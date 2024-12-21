@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityDV.Bootstrap.EventSystem
+namespace CharacterStudio
 {
     /// <summary>
     /// Interface for methods to mute and unmute the subscriber

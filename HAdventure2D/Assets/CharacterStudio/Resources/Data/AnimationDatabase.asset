@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: AnimationDatabase
   m_EditorClassIdentifier: 
   Paths:
-  - /CharacterStudio/Sprites/Legacy/Animations/
+  - /CharacterStudio/Base/AnimationMap/
+  AnimationInterval: 0.15
   Data:
     _serializedList:
     - Key: 1
@@ -23,27 +24,27 @@ MonoBehaviour:
           - Key: 2
             Value:
               Textures:
-              - {fileID: 2800000, guid: 269c914e83143574c87938f9281b4e36, type: 3}
-              - {fileID: 2800000, guid: 8213b5a0f34201f45820faa55a9eca29, type: 3}
-              - {fileID: 2800000, guid: 8f98171f4a088c74e9cdfc779131c917, type: 3}
-              - {fileID: 2800000, guid: 570df700bf30b974aabbadd5dbffdb0c, type: 3}
-              - {fileID: 2800000, guid: f22aa5a88273cbf4ab903b8c173fe3bb, type: 3}
+              - {fileID: 2800000, guid: 5e0bd7aac2817fb45808c52a2f77d5c6, type: 3}
+              - {fileID: 2800000, guid: 743de74053296b841aa83d6e93afef1f, type: 3}
+              - {fileID: 2800000, guid: 89f40e35ab33b2741b9f31043962678c, type: 3}
+              - {fileID: 2800000, guid: 36d214becb172c84cb0ece7754a2de01, type: 3}
+              - {fileID: 2800000, guid: 1ebb49ebad911d245b54c736aceeaa5c, type: 3}
           - Key: 6
             Value:
               Textures:
-              - {fileID: 2800000, guid: daa31f962c7d1ec449879b0ba9f649de, type: 3}
-              - {fileID: 2800000, guid: f39cec7904ec53943b336233a35d4620, type: 3}
-              - {fileID: 2800000, guid: 4bf250ce5fa2ffc40bf5ef0e8b12f3e0, type: 3}
-              - {fileID: 2800000, guid: f9df70b7029fab645b4e9f1bbe3a838d, type: 3}
-              - {fileID: 2800000, guid: 7fe459f4eefac124f919c7ac462d7de3, type: 3}
+              - {fileID: 2800000, guid: 6b9c8bac523a4bb428b831c5bfcbfe58, type: 3}
+              - {fileID: 2800000, guid: 3bee1362c238f2d45a9cf1714418efa5, type: 3}
+              - {fileID: 2800000, guid: ec2d2217b63c33d469705bd5e7c76cc8, type: 3}
+              - {fileID: 2800000, guid: 7516b8135f4528f4693805a8566e336e, type: 3}
+              - {fileID: 2800000, guid: 3e03d1ee692f36a4aaf7fd22cafbd1d3, type: 3}
           - Key: 7
             Value:
               Textures:
-              - {fileID: 2800000, guid: 2f5450a2033306947aa8fe7f39682899, type: 3}
-              - {fileID: 2800000, guid: b3c7541bbf34f1041946789fc2c1836d, type: 3}
-              - {fileID: 2800000, guid: f07c45d19d3598a40a0226337c16d067, type: 3}
-              - {fileID: 2800000, guid: 1a667ff46bae3634487ed9c17a4638c9, type: 3}
-              - {fileID: 2800000, guid: 17a3623286aa8214699a1bc25e5ceea8, type: 3}
+              - {fileID: 2800000, guid: 58393c72eda91bf489fa0840b79147d9, type: 3}
+              - {fileID: 2800000, guid: 1a0cdca36b3a7df439422f673506feeb, type: 3}
+              - {fileID: 2800000, guid: a3bbd0872484d104880147ddd9709298, type: 3}
+              - {fileID: 2800000, guid: 6a69ffb02e95a7e41938247af005f9b4, type: 3}
+              - {fileID: 2800000, guid: 3101ea89258664549b67443323fb713e, type: 3}
     - Key: 2
       Value:
         AnimationsByPart:
@@ -51,36 +52,36 @@ MonoBehaviour:
           - Key: 2
             Value:
               Textures:
-              - {fileID: 2800000, guid: 4426ab485c3ed094eb8c1a262c3108d1, type: 3}
-              - {fileID: 2800000, guid: 16f0991a8f06bff42b87a1d6ee48bf82, type: 3}
-              - {fileID: 2800000, guid: 79b9ef4c9e68f9644943690485d12731, type: 3}
-              - {fileID: 2800000, guid: 0653a26efbdba4848817b3af477d1ed6, type: 3}
-              - {fileID: 2800000, guid: 58d1412905b65184193f86cd683a0f87, type: 3}
-              - {fileID: 2800000, guid: 10500b3d31296734a81e6c1ae7cf7faf, type: 3}
-              - {fileID: 2800000, guid: 4405d701b8828774d92d5a3476c5491f, type: 3}
-              - {fileID: 2800000, guid: 3431c036e626e9b4c97377af5224c68d, type: 3}
+              - {fileID: 2800000, guid: 4835ba1731519684f8d67f5bc4b17c92, type: 3}
+              - {fileID: 2800000, guid: 9831532506ccd5a4f93310bd2b749116, type: 3}
+              - {fileID: 2800000, guid: 9800620d39a5ff3489c254b8b0d138c6, type: 3}
+              - {fileID: 2800000, guid: 5cc0b7f4f1b5d674582cbafe8c805635, type: 3}
+              - {fileID: 2800000, guid: 5de48b45e5a6015409b4817e6c86fea9, type: 3}
+              - {fileID: 2800000, guid: 1b73b8c3f25bc5042be095cf3d700b14, type: 3}
+              - {fileID: 2800000, guid: 6cca83d0eed09e6418a5551a63722982, type: 3}
+              - {fileID: 2800000, guid: d72f99b1e2bd9b94da8650e50d34c5d7, type: 3}
           - Key: 6
             Value:
               Textures:
-              - {fileID: 2800000, guid: fae2c12b6e7499047a6400c4bade6317, type: 3}
-              - {fileID: 2800000, guid: 4cd0678417570674b93bcf0a3f784395, type: 3}
-              - {fileID: 2800000, guid: 5d536349eec997a4f8a56006bcd9d70b, type: 3}
-              - {fileID: 2800000, guid: 24006384f1265994ab13abee07cd7400, type: 3}
-              - {fileID: 2800000, guid: 2c24ea1b0e40445488aa41359f8d6e5b, type: 3}
-              - {fileID: 2800000, guid: 3eb60fef37c38cf4bb91d7e09b0f3e59, type: 3}
-              - {fileID: 2800000, guid: 0e07fecf1599f5a43a144459b09f6745, type: 3}
-              - {fileID: 2800000, guid: e8f63ae542c6e4e418ee79130743cdc3, type: 3}
+              - {fileID: 2800000, guid: 5805e7a341b7a314abb8e77840cdb971, type: 3}
+              - {fileID: 2800000, guid: 38e4fca2b5f49b640b5d455315d661a7, type: 3}
+              - {fileID: 2800000, guid: ba358b36dff785243adcc620c50056a1, type: 3}
+              - {fileID: 2800000, guid: f4817d3e44dfda64bac3d9b1ff0344bd, type: 3}
+              - {fileID: 2800000, guid: 87d1cb577e93f97429269093ce779901, type: 3}
+              - {fileID: 2800000, guid: fc6e76eeffed5ac49875dd6adcd1f375, type: 3}
+              - {fileID: 2800000, guid: d332ed99858ef3e4184a09bd54084de2, type: 3}
+              - {fileID: 2800000, guid: 2ae11031c6ca339488948a0a6278db5c, type: 3}
           - Key: 7
             Value:
               Textures:
-              - {fileID: 2800000, guid: d67a83074fcb74e49abb6d4ea9c32be4, type: 3}
-              - {fileID: 2800000, guid: 1699a67e8e58c914c8c292bc76ae6154, type: 3}
-              - {fileID: 2800000, guid: f7c4e7cd09b66a9438059fad2396647a, type: 3}
-              - {fileID: 2800000, guid: 9b44915324a2ae54aa74b001cf7dd0e4, type: 3}
-              - {fileID: 2800000, guid: 0bd34d6f3dd07d345bae2fc943428187, type: 3}
-              - {fileID: 2800000, guid: 8d3e4d1f8c8b081478673e6a2015b2e2, type: 3}
-              - {fileID: 2800000, guid: 79de1868a9850b249bbf963f9c813f3b, type: 3}
-              - {fileID: 2800000, guid: 60f349c6bdf72d44d933f99d56f73368, type: 3}
+              - {fileID: 2800000, guid: 23cdc9d0c2d3c2a47bab6c0e887e0194, type: 3}
+              - {fileID: 2800000, guid: b0750209823b1db42a97c7b294d7c04d, type: 3}
+              - {fileID: 2800000, guid: 2c9becae971fb31479824ca49e6ec40e, type: 3}
+              - {fileID: 2800000, guid: 756ce98518fac2f45a047f90cbb73af5, type: 3}
+              - {fileID: 2800000, guid: cef10fab88635cc409992789db7640bd, type: 3}
+              - {fileID: 2800000, guid: dbfd1e3e8a1061d4b9a91f45e734c2ea, type: 3}
+              - {fileID: 2800000, guid: e6d17b3937779894196aec0c830e9528, type: 3}
+              - {fileID: 2800000, guid: bb3c95fe6b3dce84e8d67b3d0d3c986b, type: 3}
     - Key: 3
       Value:
         AnimationsByPart:
@@ -88,36 +89,36 @@ MonoBehaviour:
           - Key: 2
             Value:
               Textures:
-              - {fileID: 2800000, guid: 051cda688b75e724281da7938f7e915c, type: 3}
-              - {fileID: 2800000, guid: f4e502d7ddbb13f469193460a0d7c39b, type: 3}
-              - {fileID: 2800000, guid: 1170c698e0f22354ab889970de64799c, type: 3}
-              - {fileID: 2800000, guid: 4468cbcd07d188541a1a97530f2fd0ca, type: 3}
-              - {fileID: 2800000, guid: fdba8d822e295f74dbd2cba5e2d2bcf3, type: 3}
-              - {fileID: 2800000, guid: 26a57b5783851b04e985cee6f28c091d, type: 3}
-              - {fileID: 2800000, guid: c4ec2ad886924174d86520061f6ae439, type: 3}
-              - {fileID: 2800000, guid: a4f19f2d174781245b34164c57c29467, type: 3}
+              - {fileID: 2800000, guid: ce8967f817601d94d9cb239a65538d91, type: 3}
+              - {fileID: 2800000, guid: b3e13991f4ad69f419200f3848c6ec51, type: 3}
+              - {fileID: 2800000, guid: a111bae943bd33b499ca46f7c7f5676e, type: 3}
+              - {fileID: 2800000, guid: 305999cb02e9c2845a7cc099a41210cd, type: 3}
+              - {fileID: 2800000, guid: 54a63ece5c5ba204dbb9bd84e82fbbdb, type: 3}
+              - {fileID: 2800000, guid: 69388ed9b108a4a4393aa3ffd3dca676, type: 3}
+              - {fileID: 2800000, guid: 15de3c914e6b59b4cb7e07cf935b5acf, type: 3}
+              - {fileID: 2800000, guid: 7e173d08155e91345a2bda8b30018b31, type: 3}
           - Key: 6
             Value:
               Textures:
-              - {fileID: 2800000, guid: 26c1482395639344391b2b65516cd3a1, type: 3}
-              - {fileID: 2800000, guid: c0dade082544d6d4b8f5532b6221fa9e, type: 3}
-              - {fileID: 2800000, guid: 0e0767e4aedfb114e8bf7d2c5567d292, type: 3}
-              - {fileID: 2800000, guid: 629db7e930a6ab54986d384d17f50737, type: 3}
-              - {fileID: 2800000, guid: 588989c7b4018b647b0f7273593d267c, type: 3}
-              - {fileID: 2800000, guid: bd60f53753349e14b871cf3d5bf74945, type: 3}
-              - {fileID: 2800000, guid: f9a69d6bdefd05e449ec018a328a3d0f, type: 3}
-              - {fileID: 2800000, guid: 02c0b127f7ca4a144bbef3d4ac10aa50, type: 3}
+              - {fileID: 2800000, guid: 3b9012cccad30804b8a16ed5f80f1d80, type: 3}
+              - {fileID: 2800000, guid: d32bd4d7570cf124f94b7ca97e2475c5, type: 3}
+              - {fileID: 2800000, guid: 0a495b26b7433014d8b4e3aed96c0bf8, type: 3}
+              - {fileID: 2800000, guid: 57b2c050df09d47409e397dce6d23bf1, type: 3}
+              - {fileID: 2800000, guid: a6cacd71fbff7fe4f9608fb5cb808ecf, type: 3}
+              - {fileID: 2800000, guid: 4c85fbc44c0945840938e5589b116c21, type: 3}
+              - {fileID: 2800000, guid: 54be4b0eaafcbbf46a6812484c6cecb0, type: 3}
+              - {fileID: 2800000, guid: 12151080fcbd4104b9107f8bb41b9df0, type: 3}
           - Key: 7
             Value:
               Textures:
-              - {fileID: 2800000, guid: dd980c531eeff284a9370976dc0cba1d, type: 3}
-              - {fileID: 2800000, guid: f088399be2069c64ea28b1550bffd275, type: 3}
-              - {fileID: 2800000, guid: 87edc50f3821a7c419bc46a51f031735, type: 3}
-              - {fileID: 2800000, guid: 58f963f6f4a4fb74aadda7deed0e4d37, type: 3}
-              - {fileID: 2800000, guid: 642eb1fd26ab08e419346ea9a0f702a3, type: 3}
-              - {fileID: 2800000, guid: 96ffef906b3982c4187e7b0ce92fdefc, type: 3}
-              - {fileID: 2800000, guid: ab59cc1033a0c0a47ba4b19abe675699, type: 3}
-              - {fileID: 2800000, guid: 2227a94c2160b704a8d08907867aa9f3, type: 3}
+              - {fileID: 2800000, guid: 695908efac9b90547982758dad15680c, type: 3}
+              - {fileID: 2800000, guid: b614934ff7c51cf40b027cd2aef1e8f5, type: 3}
+              - {fileID: 2800000, guid: 77d9b1e1245387146b2ad12120ac3c6a, type: 3}
+              - {fileID: 2800000, guid: e6c93c445204cff4e8a0ff451cc391b7, type: 3}
+              - {fileID: 2800000, guid: 5129b3a1c1e6b3242b7fbe7517dc8b3e, type: 3}
+              - {fileID: 2800000, guid: 36e7020b9d5241746a2dc8bb3eda3a30, type: 3}
+              - {fileID: 2800000, guid: e6ec9beeaa303d84ca733db92b5899a9, type: 3}
+              - {fileID: 2800000, guid: fbea8a55e93afd74aa038fa9e199d69c, type: 3}
     - Key: 6
       Value:
         AnimationsByPart:
@@ -125,30 +126,30 @@ MonoBehaviour:
           - Key: 2
             Value:
               Textures:
-              - {fileID: 2800000, guid: e937301e3e1513946874dbe8f329b2bd, type: 3}
-              - {fileID: 2800000, guid: a044eb506dbd85e4dbdf2d20f35256cf, type: 3}
-              - {fileID: 2800000, guid: 815659e7683a37e47a727bd77a6011eb, type: 3}
-              - {fileID: 2800000, guid: dc02719bd6868624abf1dbec877a8979, type: 3}
-              - {fileID: 2800000, guid: 5b03e362f4b9af14c9a6c2e26fceafd6, type: 3}
-              - {fileID: 2800000, guid: 3c0f0b0392a12d647bbd54622e98fb25, type: 3}
+              - {fileID: 2800000, guid: 548bdee96293ee3498cdcc2cb83d7a6b, type: 3}
+              - {fileID: 2800000, guid: ba0ab36e7deb6b64c85ba401c94cfdea, type: 3}
+              - {fileID: 2800000, guid: 5eea063766c192f43ae5053dbc0a459f, type: 3}
+              - {fileID: 2800000, guid: 66eb41d75c6c7364f8bb752be1d5b9e3, type: 3}
+              - {fileID: 2800000, guid: 5a5062435190ddb4c8688cc38f5e183e, type: 3}
+              - {fileID: 2800000, guid: e59f92bc4bc026041b0b1672e950360d, type: 3}
           - Key: 6
             Value:
               Textures:
-              - {fileID: 2800000, guid: c1222dcb1cb53894b9cf8779059cdb66, type: 3}
-              - {fileID: 2800000, guid: 086d6e5f607dc8743bcab5a4df4e1c3b, type: 3}
-              - {fileID: 2800000, guid: f1423cb9e1ff8e444ae73422058b244d, type: 3}
-              - {fileID: 2800000, guid: b78354c588051364b88021fad1824d28, type: 3}
-              - {fileID: 2800000, guid: fd5cdfba4e352594288b1cadd5bf6b47, type: 3}
-              - {fileID: 2800000, guid: daed3380000612b49abd258bcaa1f48c, type: 3}
+              - {fileID: 2800000, guid: 402ce40f4f4df84409dbfbd07995aeb7, type: 3}
+              - {fileID: 2800000, guid: 4e96eb8d8b3485042a2dc78a5d6ae7da, type: 3}
+              - {fileID: 2800000, guid: d2a600d2aa59e0246aa08943584f9226, type: 3}
+              - {fileID: 2800000, guid: 8e5e3b679f383744aa1c1a6b32e5364f, type: 3}
+              - {fileID: 2800000, guid: ea1eb6850557c8645a674677bd59ad60, type: 3}
+              - {fileID: 2800000, guid: 7bfdf990c9505a141814ab63564c806c, type: 3}
           - Key: 7
             Value:
               Textures:
-              - {fileID: 2800000, guid: 68dbfa1fb2cbe36449f2d336b72ec064, type: 3}
-              - {fileID: 2800000, guid: 3ba394f2f45fc794ead2f5f7379bd0db, type: 3}
-              - {fileID: 2800000, guid: 633a33575986b8e4b9fddcf31377ecf8, type: 3}
-              - {fileID: 2800000, guid: 9edd0e83b8be19749844ad4081743975, type: 3}
-              - {fileID: 2800000, guid: 54ec8b1f21b2ae14483b231e5fa4082a, type: 3}
-              - {fileID: 2800000, guid: 30c7e96ad6b99d740947c610723ba5ee, type: 3}
+              - {fileID: 2800000, guid: a8f50b391924c9942b3aefe908700cb6, type: 3}
+              - {fileID: 2800000, guid: a2e98ef1a36b77542bab76ff99aa5f3f, type: 3}
+              - {fileID: 2800000, guid: ec94a59d57319af4fb000cc01c58a1cf, type: 3}
+              - {fileID: 2800000, guid: ffa636c234a87a143bf2ecac79732acf, type: 3}
+              - {fileID: 2800000, guid: 6e5f3a3db3e3a4c40a8f24ab861b2b7c, type: 3}
+              - {fileID: 2800000, guid: d98d0b91e6e5177468eff9a2c11991aa, type: 3}
     - Key: 7
       Value:
         AnimationsByPart:
@@ -156,21 +157,21 @@ MonoBehaviour:
           - Key: 2
             Value:
               Textures:
-              - {fileID: 2800000, guid: 8f280196203e56f46bfb233badd8fe88, type: 3}
-              - {fileID: 2800000, guid: ccc13ecd5b6f8054a8f332e80bc27e65, type: 3}
-              - {fileID: 2800000, guid: 79b72ae3dd09db64983f17dc4d64c527, type: 3}
-              - {fileID: 2800000, guid: 3f308378a4a402b448ae522c808dc9c9, type: 3}
+              - {fileID: 2800000, guid: 0736bb7b7863ee040a48ba51785d6b6d, type: 3}
+              - {fileID: 2800000, guid: ea582b9f7f7ebcd4692283743e4f0f94, type: 3}
+              - {fileID: 2800000, guid: 3206dc9fbffef644c848500b54dd3c67, type: 3}
+              - {fileID: 2800000, guid: c40d31fb477e3d0409b2ae2ce1720d62, type: 3}
           - Key: 6
             Value:
               Textures:
-              - {fileID: 2800000, guid: d917190566e5782469d2d304f7ba9616, type: 3}
-              - {fileID: 2800000, guid: ba72bc07a208c0b40b215bea5f08dcc2, type: 3}
-              - {fileID: 2800000, guid: e43d6fb67acbccc40bfb8a5dcdb63146, type: 3}
-              - {fileID: 2800000, guid: ae98848e417841344900afea8e4d87c2, type: 3}
+              - {fileID: 2800000, guid: dc2bc836b92cc274281026f376af9c04, type: 3}
+              - {fileID: 2800000, guid: d0d8ce06456daa141bd640f1cef99f2c, type: 3}
+              - {fileID: 2800000, guid: 39f522d6a0630d94c93bfdbfe34f0fb5, type: 3}
+              - {fileID: 2800000, guid: 1978a4a2779bfd149ab6f9ad6cf72443, type: 3}
           - Key: 7
             Value:
               Textures:
-              - {fileID: 2800000, guid: 588ccdcec4e5cff499bca16117e1b61b, type: 3}
-              - {fileID: 2800000, guid: c3c41764386929b4091576130a0257d2, type: 3}
-              - {fileID: 2800000, guid: 45aa593987a8b7f4c8543eb8a04beaca, type: 3}
-              - {fileID: 2800000, guid: 29fd09e497ab4d741888e66133adfa26, type: 3}
+              - {fileID: 2800000, guid: 2de8b41a98beaeb4fa5114ad8a364084, type: 3}
+              - {fileID: 2800000, guid: a943e737f88316548964c7e78a10bf04, type: 3}
+              - {fileID: 2800000, guid: a99539d592fc8254d97e836047b0a646, type: 3}
+              - {fileID: 2800000, guid: ed97eae99b928294e89bc95b7c2633b2, type: 3}

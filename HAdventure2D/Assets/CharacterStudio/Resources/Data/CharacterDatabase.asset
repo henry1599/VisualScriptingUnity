@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071330d85f023e547ae98ef1ec93386e, type: 3}
+  m_Name: CharacterDatabase
+  m_EditorClassIdentifier: 
+  CatgoryIconPath: /CharacterStudio/Base/Categories/
+  Paths:
+  - /CharacterStudio/Base/BaseTextures/
+  Data:
+    _serializedList:
+    - Key: 2
+      Value:
+        CategoryIcon: {fileID: 2800000, guid: a96659f0620be6f4baa4120c8d90e3ac, type: 3}
+        TextureDict:
+          _serializedList:
+          - Key: Body_01
+            Value: {fileID: 2800000, guid: 354ba6823fe79a64b95ba17f52a4b3a1, type: 3}
+          - Key: Body_02
+            Value: {fileID: 2800000, guid: 888150f699cc4374791b7cda51b8b09d, type: 3}
+          - Key: Body_03
+            Value: {fileID: 2800000, guid: 09ce9cf8786b3ea4db742f0767b0eebb, type: 3}
+          - Key: Body_04
+            Value: {fileID: 2800000, guid: c70b905f0c0263347b6f3d105562dd55, type: 3}
+    - Key: 6
+      Value:
+        CategoryIcon: {fileID: 2800000, guid: 17e8cf03959b5f642bcb0b385cfc9d50, type: 3}
+        TextureDict:
+          _serializedList:
+          - Key: RHand_01
+            Value: {fileID: 2800000, guid: e9c5cbb7e1765c14dba0d97a434aad7c, type: 3}
+          - Key: RHand_02
+            Value: {fileID: 2800000, guid: bc90d6fab1e74b04f88c2f8e8d490b4a, type: 3}
+          - Key: RHand_03
+            Value: {fileID: 2800000, guid: 52a4c602914dfff4aa978dad708c97d8, type: 3}
+    - Key: 7
+      Value:
+        CategoryIcon: {fileID: 2800000, guid: c1b5800ae79ddbd4f938c7ebbe1aaa9f, type: 3}
+        TextureDict:
+          _serializedList:
+          - Key: LHand_01
+            Value: {fileID: 2800000, guid: 60ac706140982e44c961bb219f652e70, type: 3}
+          - Key: LHand_02
+            Value: {fileID: 2800000, guid: 2950def37c014924b80ae61c7d218e28, type: 3}
+          - Key: LHand_3
+            Value: {fileID: 2800000, guid: 947b3bcb367f7524fae56df65fca89b1, type: 3}

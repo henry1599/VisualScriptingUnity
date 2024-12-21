@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace UnityDV.Bootstrap.EventSystem
+namespace CharacterStudio
 {
     /// <summary>
     /// Interface for the EventBus, which handles event subscriptions, unsubscriptions, and publications.

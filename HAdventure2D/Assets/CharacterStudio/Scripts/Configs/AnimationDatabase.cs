@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using NaughtyAttributes;
-using UnityEditor.VersionControl;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace CharacterStudio
 {
@@ -15,13 +17,24 @@ namespace CharacterStudio
     public class AnimationDatabase : ScriptableObject
     {
         public List<string> Paths;
+        public float AnimationInterval = 0.15f;
         [SerializedDictionary("Animation", "Data")]
         public SerializedDictionary<eCharacterAnimation, AnimationData> Data;
+        public List<Texture2D> GetAnimations(eCharacterAnimation animation, eCharacterPart part)
+        {
+            if (Data.ContainsKey(animation))
+            {
+                if (Data[animation].AnimationsByPart.ContainsKey(part))
+                {
+                    return Data[animation].AnimationsByPart[part].Textures;
+                }
+            }
+            return null;
+        }
+#if UNITY_EDITOR
         [Button("Load Animations")]
         public void LoadAnimations()
         {
-            // Load all folder in path, the path is from Assets, so must use AssetDatabase, each folder has name as the Animation Name (E.g Idle, Walk, Run, Jump, Attack, Die, Hurt), then load all textures in that folder, After that, save all textures to AnimationData
-            // The path has the following format: path/Idle/Body/Body1.png, Body2.png
             Data = new SerializedDictionary<eCharacterAnimation, AnimationData>();
             List<eCharacterAnimation> allAnimations = Enum.GetValues(typeof(eCharacterAnimation)).Cast<eCharacterAnimation>().ToList();
             List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
@@ -60,8 +73,8 @@ namespace CharacterStudio
                     }
                 }
             }
-            
         }
+#endif
     }
     [Serializable]
     public class AnimationData

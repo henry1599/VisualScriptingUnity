@@ -1,6 +1,6 @@
 using System;
 
-namespace Baram.Game
+namespace CharacterStudio
 {
     /// <summary>
     /// Support method for create pure C# singleton class
