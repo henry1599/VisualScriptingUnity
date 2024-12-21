@@ -21,7 +21,7 @@ namespace CharacterStudio
         Run = 3,
         Jump = 4,
         Attack = 5,
-        Die = 6,
-        Hit = 7,
+        Death = 6,
+        Hurt = 7,
     }
 }

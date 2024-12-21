@@ -6,67 +6,72 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using NaughtyAttributes;
+using UnityEditor.VersionControl;
 
 namespace CharacterStudio
 {
     [CreateAssetMenu(fileName = "AnimationDatabase", menuName = "CharacterStudio/Animation Database")]
     public class AnimationDatabase : ScriptableObject
     {
-        public string AnimationRootPath = "Assets/CharacterStudio/Sprites/Legacy/Animations";
+        public List<string> Paths;
         [SerializedDictionary("Animation", "Data")]
         public SerializedDictionary<eCharacterAnimation, AnimationData> Data;
-        public List<Texture2D> GetAnimations(eCharacterAnimation animationType, eCharacterPart part, string id)
+        [Button("Load Animations")]
+        public void LoadAnimations()
         {
-            if (!Data.ContainsKey(animationType))
+            // Load all folder in path, the path is from Assets, so must use AssetDatabase, each folder has name as the Animation Name (E.g Idle, Walk, Run, Jump, Attack, Die, Hurt), then load all textures in that folder, After that, save all textures to AnimationData
+            // The path has the following format: path/Idle/Body/Body1.png, Body2.png
+            Data = new SerializedDictionary<eCharacterAnimation, AnimationData>();
+            List<eCharacterAnimation> allAnimations = Enum.GetValues(typeof(eCharacterAnimation)).Cast<eCharacterAnimation>().ToList();
+            List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
+            foreach (var path in Paths)
             {
-                return null;
-            }
-            if (!Data[animationType].Animation.ContainsKey(part))
-            {
-                return null;
-            }
-            if (!Data[animationType].Animation[part].Ids.ContainsKey(id))
-            {
-                return null;
-            }
-            if (!TryGetPath(animationType, part, id, out string path))
-            {
-                return null;
-            }
-            List<Texture2D> textures = new List<Texture2D>();
-            AssetDatabase.LoadAllAssetsAtPath(path).ToList().ForEach(asset =>
-            {
-                if (asset is Texture2D)
+                foreach (var anim in allAnimations)
                 {
-                    textures.Add(asset as Texture2D);
+                    AnimationData data = new AnimationData();
+                    data.AnimationsByPart = new SerializedDictionary<eCharacterPart, AnimationDataList>();
+                    foreach (var part in allParts)
+                    {
+                        string rootPathFolder = Application.dataPath + path + anim.ToString() + "/" + part.ToString() + "/";
+                        if (Directory.Exists(rootPathFolder))
+                        {
+                            data.AnimationsByPart[part] = new AnimationDataList();
+                            data.AnimationsByPart[part].Textures = new List<Texture2D>();
+                            string[] files = Directory.GetFiles(rootPathFolder);
+                            foreach (var file in files)
+                            {
+                                if (file.EndsWith(".png"))
+                                {
+                                    string pathFromAssets = "Assets" + file.Substring(Application.dataPath.Length);
+                                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
+                                    data.AnimationsByPart[part].Textures.Add(tex);
+                                }
+                            }
+                            if (Data.ContainsKey(anim))
+                            {
+                                Data[anim] = data;
+                            }
+                            else
+                            {
+                                Data.Add(anim, data);
+                            }
+                        }
+                    }
                 }
-            });
-            return textures;
-        }
-        public string GeneratePath(eCharacterAnimation animationType, eCharacterPart part, string id)
-        {
-            return Path.Combine(AnimationRootPath, animationType.ToString(), part.ToString(), Data[animationType].Animation[part].Ids[id]);
-        }
-        public bool PathExists(eCharacterAnimation animationType, eCharacterPart part, string id)
-        {
-            return Directory.Exists(GeneratePath(animationType, part, id));
-        }
-        public bool TryGetPath(eCharacterAnimation animationType, eCharacterPart part, string id, out string path)
-        {
-            path = GeneratePath(animationType, part, id);
-            return PathExists(animationType, part, id);
+            }
+            
         }
     }
     [Serializable]
     public class AnimationData
     {
-        [SerializedDictionary("Part", "Animation Folder")]
-        public SerializedDictionary<eCharacterPart, IDs> Animation;
+        [SerializedDictionary("Part", "Data")]
+        public SerializedDictionary<eCharacterPart, AnimationDataList> AnimationsByPart;
     }
     [Serializable]
-    public class IDs
+    public class AnimationDataList
     {
-        [SerializedDictionary("ID", "Folder")]
-        public SerializedDictionary<string, string> Ids;
+        public List<Texture2D> Textures;
     }
 }
