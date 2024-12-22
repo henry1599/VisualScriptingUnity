@@ -25,12 +25,12 @@ MonoBehaviour:
     - Key: 6
       Value:
         Part: 6
-        DisplayName: RHand
+        DisplayName: Right Hand
         Icon: {fileID: 2800000, guid: 17e8cf03959b5f642bcb0b385cfc9d50, type: 3}
     - Key: 7
       Value:
         Part: 7
-        DisplayName: LHand
+        DisplayName: Left Hand
         Icon: {fileID: 2800000, guid: c1b5800ae79ddbd4f938c7ebbe1aaa9f, type: 3}
   Data:
     _serializedList:
