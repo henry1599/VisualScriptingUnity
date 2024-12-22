@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,15 +71,30 @@ namespace CharacterStudio
             for (int i = 0; i < textures.Count; i++)
             {
                 Texture2D generatedTexture = CSUtils.GenerateTexture(textures[i], baseTexture, map);
-                _currentAnimationTextures[_currentAnimation].TryAdd(part, new List<Texture2D>());
-                _currentAnimationTextures[_currentAnimation][part].Add(generatedTexture);
+                _currentAnimationTextures[_currentAnimation].TryAdd(part, new List<Texture2D>(textures.Count));
+                if (i >= 0 && i < _currentAnimationTextures[_currentAnimation][part].Count)
+                {
+                    _currentAnimationTextures[_currentAnimation][part][i] = generatedTexture;
+                }
+                else
+                {
+                    _currentAnimationTextures[_currentAnimation][part].Add(generatedTexture);
+                }
             }
         }
         void Start()
         {
+            EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
+
             SetAnimation(_currentAnimation);   
             UpdateDefault();
         }
+
+        private void OnChangePart(ChangePartArg arg)
+        {
+            UpdateTexture(arg.Part, arg.Id);
+        }
+
         void UpdateDefault()
         {
             UpdateTexture(eCharacterPart.Body, "Body_01");

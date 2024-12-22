@@ -78,7 +78,7 @@ namespace CharacterStudio
                     UpdateState(eStudioState.Item);
                     break;
                 case eStudioState.Item:
-                    // * Load and apply texture to character
+                    EventBus.Instance.Publish(new ChangePartArg(arg.Part, arg.Id));
                     break;
             }
         }
