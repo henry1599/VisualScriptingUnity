@@ -18,27 +18,51 @@ namespace CharacterStudio
     {
         public string CatgoryIconPath;
         public List<string> Paths;
-        [SerializedDictionary("Part", "Data")]
+        [SerializedDictionary("Part", "Category Data")]
+        public SerializedDictionary<eCharacterPart, CategoryData> Categories;
+        [SerializedDictionary("Part", "Character Data")]
         public SerializedDictionary<eCharacterPart, CharacterData> Data;
+        [SerializedDictionary("Part", "Sorted Data")]
+        public SerializedDictionary<eCharacterPart, int> SortedData;
+        public List<eCharacterPart> GetSortedPart(List<eCharacterPart> parts)
+        {
+            return parts.OrderBy(x => SortedData[x]).ToList();
+        }
 #if UNITY_EDITOR
         [Button("Load Data")]
         public void LoadData()
         {
             Data = new SerializedDictionary<eCharacterPart, CharacterData>();
+            Categories = new SerializedDictionary<eCharacterPart, CategoryData>();
             List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
             foreach (var path in Paths)
             {
                 foreach (var part in allParts)
                 {
                     CharacterData characterData = new CharacterData();
+                    CategoryData categoryData = new CategoryData();
                     characterData.TextureDict = new SerializedDictionary<string, Texture2D>();
                     string categoryFilePath = Application.dataPath + CatgoryIconPath + part.ToString() + ".png";
                     if (File.Exists(categoryFilePath))
                     {
                         string pathFromAssets = "Assets" + categoryFilePath.Substring(Application.dataPath.Length);
                         Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
-                        characterData.CategoryIcon = tex;
+                        categoryData.Icon = tex;
+                        categoryData.Part = part;
+                        categoryData.DisplayName = part.ToString();
+                        if (Categories.ContainsKey(part))
+                        {
+                            Categories[part].Part = part;
+                            Categories[part].Icon = categoryData.Icon;
+                        }
+                        else
+                        {
+                            Categories.TryAdd(part, categoryData);
+                        }
                     }
+
+
+
                     string rootPathFolder = Application.dataPath + path + part.ToString() + "/Data/";
                     if (Directory.Exists(rootPathFolder))
                     {
@@ -61,9 +85,15 @@ namespace CharacterStudio
 #endif
     }
     [Serializable]
+    public class CategoryData
+    {
+        [HideInInspector] public eCharacterPart Part;
+        public string DisplayName;
+        public Texture2D Icon;
+    }
+    [Serializable]
     public class CharacterData
     {
-        public Texture2D CategoryIcon;
         [SerializedDictionary("Id", "Texture")]
         public SerializedDictionary<string, Texture2D> TextureDict;
     }

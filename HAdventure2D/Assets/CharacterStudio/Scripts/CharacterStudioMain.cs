@@ -104,13 +104,13 @@ namespace CharacterStudio
             foreach (var category in _actualCategories)
             {
                 UIItem item = Instantiate(_itemPrefab, _itemContainer);
-                item.SetupCategory(_characterDatabase.Data[category].CategoryIcon, category);
+                item.SetupCategory(_characterDatabase.Categories[category].Icon, category);
             }
         }
         public void ReloadItems(eCharacterPart category)
         {
             // * Set title
-            _titleText.text = category.ToString();
+            _titleText.text = _characterDatabase.Categories[category].DisplayName;
 
             // * Clear items object
             int count = _itemContainer.childCount;

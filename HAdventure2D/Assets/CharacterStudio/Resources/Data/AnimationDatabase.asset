@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Paths:
   - /CharacterStudio/Base/AnimationMap/
-  AnimationInterval: 0.15
+  AnimationInterval: 0.1
   Data:
     _serializedList:
     - Key: 1
@@ -29,6 +29,7 @@ MonoBehaviour:
               - {fileID: 2800000, guid: 89f40e35ab33b2741b9f31043962678c, type: 3}
               - {fileID: 2800000, guid: 36d214becb172c84cb0ece7754a2de01, type: 3}
               - {fileID: 2800000, guid: 1ebb49ebad911d245b54c736aceeaa5c, type: 3}
+              - {fileID: 2800000, guid: b963f9174456bd54a823df1eccc68c2e, type: 3}
           - Key: 6
             Value:
               Textures:
@@ -37,6 +38,7 @@ MonoBehaviour:
               - {fileID: 2800000, guid: ec2d2217b63c33d469705bd5e7c76cc8, type: 3}
               - {fileID: 2800000, guid: 7516b8135f4528f4693805a8566e336e, type: 3}
               - {fileID: 2800000, guid: 3e03d1ee692f36a4aaf7fd22cafbd1d3, type: 3}
+              - {fileID: 2800000, guid: 56792fa22cb37c74a8bf98df5fdc129f, type: 3}
           - Key: 7
             Value:
               Textures:
@@ -45,6 +47,7 @@ MonoBehaviour:
               - {fileID: 2800000, guid: a3bbd0872484d104880147ddd9709298, type: 3}
               - {fileID: 2800000, guid: 6a69ffb02e95a7e41938247af005f9b4, type: 3}
               - {fileID: 2800000, guid: 3101ea89258664549b67443323fb713e, type: 3}
+              - {fileID: 2800000, guid: 6574d415ca9b01e44921bdb18442cc67, type: 3}
     - Key: 2
       Value:
         AnimationsByPart:

@@ -15,11 +15,27 @@ MonoBehaviour:
   CatgoryIconPath: /CharacterStudio/Base/Categories/
   Paths:
   - /CharacterStudio/Base/BaseTextures/
+  Categories:
+    _serializedList:
+    - Key: 2
+      Value:
+        Part: 2
+        DisplayName: Body
+        Icon: {fileID: 2800000, guid: a96659f0620be6f4baa4120c8d90e3ac, type: 3}
+    - Key: 6
+      Value:
+        Part: 6
+        DisplayName: RHand
+        Icon: {fileID: 2800000, guid: 17e8cf03959b5f642bcb0b385cfc9d50, type: 3}
+    - Key: 7
+      Value:
+        Part: 7
+        DisplayName: LHand
+        Icon: {fileID: 2800000, guid: c1b5800ae79ddbd4f938c7ebbe1aaa9f, type: 3}
   Data:
     _serializedList:
     - Key: 2
       Value:
-        CategoryIcon: {fileID: 2800000, guid: a96659f0620be6f4baa4120c8d90e3ac, type: 3}
         TextureDict:
           _serializedList:
           - Key: Body_01
@@ -32,7 +48,6 @@ MonoBehaviour:
             Value: {fileID: 2800000, guid: c70b905f0c0263347b6f3d105562dd55, type: 3}
     - Key: 6
       Value:
-        CategoryIcon: {fileID: 2800000, guid: 17e8cf03959b5f642bcb0b385cfc9d50, type: 3}
         TextureDict:
           _serializedList:
           - Key: RHand_01
@@ -43,12 +58,33 @@ MonoBehaviour:
             Value: {fileID: 2800000, guid: 52a4c602914dfff4aa978dad708c97d8, type: 3}
     - Key: 7
       Value:
-        CategoryIcon: {fileID: 2800000, guid: c1b5800ae79ddbd4f938c7ebbe1aaa9f, type: 3}
         TextureDict:
           _serializedList:
           - Key: LHand_01
             Value: {fileID: 2800000, guid: 60ac706140982e44c961bb219f652e70, type: 3}
           - Key: LHand_02
             Value: {fileID: 2800000, guid: 2950def37c014924b80ae61c7d218e28, type: 3}
-          - Key: LHand_3
+          - Key: LHand_03
             Value: {fileID: 2800000, guid: 947b3bcb367f7524fae56df65fca89b1, type: 3}
+  SortedData:
+    _serializedList:
+    - Key: 0
+      Value: -999
+    - Key: 1
+      Value: -999
+    - Key: 2
+      Value: 10
+    - Key: 3
+      Value: -999
+    - Key: 4
+      Value: -999
+    - Key: 5
+      Value: -999
+    - Key: 6
+      Value: 15
+    - Key: 7
+      Value: 5
+    - Key: 8
+      Value: -999
+    - Key: 9
+      Value: -999
