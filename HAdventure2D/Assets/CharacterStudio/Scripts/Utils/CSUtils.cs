@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,6 +63,12 @@ namespace CharacterStudio
             newTexture.name = baseMap.name;
             newTexture.Apply();
             return newTexture;
+        }
+
+        internal static void SaveTexture(Texture2D generatedTexture, string path, string fileName)
+        {
+            byte[] bytes = generatedTexture.EncodeToPNG();
+            System.IO.File.WriteAllBytes(path + "/" + fileName + ".png", bytes);
         }
     }
 }

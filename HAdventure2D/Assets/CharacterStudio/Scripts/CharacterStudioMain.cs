@@ -82,9 +82,7 @@ namespace CharacterStudio
                     break;
             }
         }
-
-        [Button("Reload Categories")]
-        public void ReloadCategories()
+        void ReloadCategories()
         {
             // * Get categories
             var characterDatabaseKeys = _characterDatabase.Data.Keys;

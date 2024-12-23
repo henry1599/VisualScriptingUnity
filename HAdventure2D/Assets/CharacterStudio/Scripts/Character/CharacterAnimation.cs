@@ -26,6 +26,7 @@ namespace CharacterStudio
 
         private EventSubscription<ChangePartArg> _changePartSubscription;
         private EventSubscription<ChangeAnimationArg> _changeAnimationSubscription;
+        private EventSubscription<ExportArg> _exportSubscription;
 
 
 
@@ -98,10 +99,91 @@ namespace CharacterStudio
         {
             _changePartSubscription = EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
             _changeAnimationSubscription = EventBus.Instance.Subscribe<ChangeAnimationArg>(OnChangeAnimation);
+            _exportSubscription = EventBus.Instance.Subscribe<ExportArg>(OnExport);
 
             SetAnimation(_currentAnimation);   
             SelectDefault();
             ApplySelection();
+        }
+
+        private void OnExport(ExportArg arg)
+        {
+            switch (arg.ExportType)
+            {
+                case eExportType.SpriteSheet:
+                    ExportSpriteSheet();
+                    break;
+                case eExportType.SeparatedSprites:
+                    ExportSeparatedSprites();
+                    break;
+                case eExportType.SpriteLibrary:
+                    ExportSpriteLibrary();
+                    break;
+                case eExportType.All:
+                    ExportSeparatedSprites();
+                    ExportSpriteLibrary();
+                    ExportSpriteSheet();
+                    break;
+            }
+        }
+
+        private void ExportSpriteLibrary()
+        {
+        }
+
+        private void ExportSeparatedSprites()
+        {
+            Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
+            List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.ToList();
+            Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
+
+            // * Load mapped colors for each parts
+            foreach (var (part, data) in _characterDatabase.Data)
+            {
+                Texture2D baseTexture = data.TextureDict[_characterSelection[part]];
+                sBaseTexture.TryAdd(part, baseTexture);
+                map.TryAdd(part, CSUtils.LoadMappedColors(_mapDatabase.Data[part], baseTexture));
+            }
+
+            // * Generate textures for each animation
+            foreach (var animation in allAnimations)
+            {
+                if (!_animationDatabase.Data.TryGetValue(animation, out AnimationData animationData))
+                {
+                    Debug.LogError("Animation not found in database: " + animation);
+                    return;
+                }
+                foreach (var (part, data) in animationData.AnimationsByPart)
+                {
+                    if (!map.TryGetValue(part, out Dictionary<Color32, Color32> partMap))
+                    {
+                        Debug.LogError("Map not found for part: " + part);
+                        return;
+                    }
+                    foreach (var texture in data.Textures)
+                    {
+                        Texture2D generatedTexture = CSUtils.GenerateTexture(texture, sBaseTexture[part], partMap);
+                        string path = "Assets/CharacterStudio/Exports/" + part.ToString() + "/" + animation.ToString() + "/";
+                        if (!System.IO.Directory.Exists(path))
+                        {
+                            System.IO.Directory.CreateDirectory(path);
+                        }
+                        string fileName = part.ToString() + "_" + animation.ToString() + "_" + data.Textures.IndexOf(texture) + ".png";
+                        CSUtils.SaveTexture(generatedTexture, path, fileName);
+                    }
+                }
+            }
+        }
+
+        private void ExportSpriteSheet()
+        {
+        }
+
+        private void OnDestroy()
+        {
+            EventBus.Instance.Unsubscribe(_changePartSubscription);
+            EventBus.Instance.Unsubscribe(_changeAnimationSubscription);
+            EventBus.Instance.Unsubscribe(_exportSubscription);
         }
         public void Select(eCharacterPart part, string id)
         {
