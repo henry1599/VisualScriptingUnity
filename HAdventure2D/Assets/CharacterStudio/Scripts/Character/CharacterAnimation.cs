@@ -111,27 +111,27 @@ namespace CharacterStudio
             switch (arg.ExportType)
             {
                 case eExportType.SpriteSheet:
-                    ExportSpriteSheet();
+                    ExportSpriteSheet(arg);
                     break;
                 case eExportType.SeparatedSprites:
-                    ExportSeparatedSprites();
+                    ExportSeparatedSprites(arg);
                     break;
                 case eExportType.SpriteLibrary:
-                    ExportSpriteLibrary();
+                    ExportSpriteLibrary(arg);
                     break;
                 case eExportType.All:
-                    ExportSeparatedSprites();
-                    ExportSpriteLibrary();
-                    ExportSpriteSheet();
+                    ExportSeparatedSprites(arg);
+                    ExportSpriteLibrary(arg);
+                    ExportSpriteSheet(arg);
                     break;
             }
         }
 
-        private void ExportSpriteLibrary()
+        private void ExportSpriteLibrary(ExportArg arg)
         {
         }
 
-        private void ExportSeparatedSprites()
+        private void ExportSeparatedSprites(ExportArg arg)
         {
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
             List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.ToList();
@@ -163,7 +163,7 @@ namespace CharacterStudio
                     foreach (var texture in data.Textures)
                     {
                         Texture2D generatedTexture = CSUtils.GenerateTexture(texture, sBaseTexture[part], partMap);
-                        string path = "Assets/CharacterStudio/Exports/" + part.ToString() + "/" + animation.ToString() + "/";
+                        string path = arg.FolderPath + "/" + part.ToString() + "/" + animation.ToString();
                         if (!System.IO.Directory.Exists(path))
                         {
                             System.IO.Directory.CreateDirectory(path);
@@ -175,7 +175,7 @@ namespace CharacterStudio
             }
         }
 
-        private void ExportSpriteSheet()
+        private void ExportSpriteSheet(ExportArg arg)
         {
         }
 

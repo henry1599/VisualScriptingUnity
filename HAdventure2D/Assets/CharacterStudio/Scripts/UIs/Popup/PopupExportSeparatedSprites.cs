@@ -28,11 +28,11 @@ namespace CharacterStudio
 
         private void OnExportButtonClicked()
         {
-            if (FileBrowser.IsOpen)
-            {
+            if (!_pathSelected)
                 return;
-            }
-            _pathSelected = FileBrowser.ShowSaveDialog(OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: "C:\\", title: "Choose save folder");
+            if (!Directory.Exists(_pathText.text))
+                return;
+            EventBus.Instance.Publish(new ExportArg(eExportType.SeparatedSprites, _pathText.text));
         }
 
         private void OnBrowseCancel()
@@ -47,11 +47,12 @@ namespace CharacterStudio
 
         private void OnExplorerButtonClicked()
         {
-            if (!_pathSelected)
+            if (FileBrowser.IsOpen)
+            {
                 return;
-            if (!Directory.Exists(_pathText.text))
-                return;
-            EventBus.Instance.Publish(new ExportArg(eExportType.SeparatedSprites, _pathText.text));
+            }
+            string initialPath = string.IsNullOrEmpty(_pathText.text) ? Application.dataPath + "/CharacterStudio/" : _pathText.text;
+            _pathSelected = FileBrowser.ShowSaveDialog(OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: initialPath, title: "Choose save folder");
         }
     }
 }
