@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CharacterStudio
 {
@@ -153,30 +154,73 @@ namespace CharacterStudio
                     Debug.LogError("Animation not found in database: " + animation);
                     return;
                 }
-                foreach (var (part, data) in animationData.AnimationsByPart)
+                int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
+                for (int i = 0; i < frameCount; i++)
                 {
-                    if (!map.TryGetValue(part, out Dictionary<Color32, Color32> partMap))
+                    List<(int sortingLayer, Texture2D texture)> sortedPart = new List<(int sortingLayer, Texture2D texture)>();
+                    foreach (var (part, data) in animationData.AnimationsByPart)
                     {
-                        Debug.LogError("Map not found for part: " + part);
-                        return;
-                    }
-                    foreach (var texture in data.Textures)
-                    {
-                        Texture2D generatedTexture = CSUtils.GenerateTexture(texture, sBaseTexture[part], partMap);
-                        string path = arg.FolderPath + "/" + part.ToString() + "/" + animation.ToString();
-                        if (!System.IO.Directory.Exists(path))
+                        if (!map.TryGetValue(part, out Dictionary<Color32, Color32> partMap))
                         {
-                            System.IO.Directory.CreateDirectory(path);
+                            Debug.LogError("Map not found for part: " + part);
+                            return;
                         }
-                        string fileName = part.ToString() + "_" + animation.ToString() + "_" + data.Textures.IndexOf(texture) + ".png";
-                        CSUtils.SaveTexture(generatedTexture, path, fileName);
+                        Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[i], sBaseTexture[part], partMap);
+                        sortedPart.Add((_characterDatabase.SortedData[part], generatedTexture));
                     }
+                    sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
+                    Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
+                    string path = arg.FolderPath + "/" + animation.ToString();
+                    if (!System.IO.Directory.Exists(path))
+                    {
+                        System.IO.Directory.CreateDirectory(path);
+                    }
+                    string fileName = animation.ToString() + "_" + i + ".png";
+                    Debug.Log("Exporting: " + path + "/" + fileName);
+                    CSUtils.SaveTexture(assembledTexture, path, fileName);
                 }
             }
         }
 
         private void ExportSpriteSheet(ExportArg arg)
         {
+        }
+        private Texture2D AssembleTextures(List<Texture2D> textures)
+        {
+            int width = 0;
+            int height = 0;
+            foreach (var texture in textures)
+            {
+                width = Mathf.Max(width, texture.width);
+                height = Mathf.Max(height, texture.height);
+            }
+            Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+            };
+
+            for (int x = 0 ; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Color32 color = new Color32(0, 0, 0, 0);
+                    foreach (var texture in textures)
+                    {
+                        if (x < texture.width && y < texture.height)
+                        {
+                            color = texture.GetPixel(x, y);
+                            if (color.a > 0)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    result.SetPixel(x, y, color);
+                }
+            }
+            result.Apply();
+            return result;
         }
 
         private void OnDestroy()
