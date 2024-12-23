@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,17 @@ namespace CharacterStudio
         private float _counter = 0;
         private float _animationInterval = 0.15f;
         private bool _isSetup = false;
+
+        [SerializeField] private SerializedDictionary<eCharacterPart, string> _characterSelection = new SerializedDictionary<eCharacterPart, string>();
+
+
+
+
+        private EventSubscription<ChangePartArg> _changePartSubscription;
+        private EventSubscription<ChangeAnimationArg> _changeAnimationSubscription;
+
+
+
         private Dictionary<eCharacterPart, SpriteRenderer> _spriteRenderers = new Dictionary<eCharacterPart, SpriteRenderer>();
         private Dictionary<eCharacterAnimation, Dictionary<eCharacterPart, List<Texture2D>>> _currentAnimationTexturesMap = new Dictionary<eCharacterAnimation, Dictionary<eCharacterPart, List<Texture2D>>>();
         private Dictionary<eCharacterAnimation, Dictionary<eCharacterPart, List<Texture2D>>> _currentAnimationTextures = new Dictionary<eCharacterAnimation, Dictionary<eCharacterPart, List<Texture2D>>>();
@@ -84,22 +96,48 @@ namespace CharacterStudio
         }
         void Start()
         {
-            EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
+            _changePartSubscription = EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
+            _changeAnimationSubscription = EventBus.Instance.Subscribe<ChangeAnimationArg>(OnChangeAnimation);
 
             SetAnimation(_currentAnimation);   
-            UpdateDefault();
+            SelectDefault();
+            ApplySelection();
+        }
+        public void Select(eCharacterPart part, string id)
+        {
+            if (_characterSelection.ContainsKey(part))
+            {
+                _characterSelection[part] = id;
+            }
+            else
+            {
+                _characterSelection.Add(part, id);
+            }
+        }
+
+        void ApplySelection()
+        {
+            foreach (var (part, id) in _characterSelection)
+            {
+                UpdateTexture(part, id);
+            }
+        }
+        private void OnChangeAnimation(ChangeAnimationArg arg)
+        {
+            SetAnimation(arg.Animation);
+            ApplySelection();
         }
 
         private void OnChangePart(ChangePartArg arg)
         {
-            UpdateTexture(arg.Part, arg.Id);
+            Select(arg.Part, arg.Id);
+            ApplySelection();
         }
-
-        void UpdateDefault()
+        void SelectDefault()
         {
-            UpdateTexture(eCharacterPart.Body, "Body_01");
-            UpdateTexture(eCharacterPart.LHand, "LHand_01");
-            UpdateTexture(eCharacterPart.RHand, "RHand_01");
+            Select(eCharacterPart.Body, "Body_01");
+            Select(eCharacterPart.LHand, "LHand_01");
+            Select(eCharacterPart.RHand, "RHand_01");
         }
         void Update()
         {
@@ -130,7 +168,6 @@ namespace CharacterStudio
                     {
                         continue;
                     }
-                    // Rect rect = CSUtils.GetIconRect(textures[_frameIndex], 32);
                     Rect rect = new Rect(0, 0, texture.width, texture.height);
                     spriteRenderer.sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
                 }
