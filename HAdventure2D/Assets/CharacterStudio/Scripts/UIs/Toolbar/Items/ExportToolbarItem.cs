@@ -8,7 +8,7 @@ namespace CharacterStudio
     {
         public void OnSpriteSheetButtonClicked()
         {
-
+            PopupManager.Instance?.PushPopup( new ShowPopupArg( ePopupType.ExportSpriteSheet ) );
         }
         public void OnSpritesButtonClicked()
         {

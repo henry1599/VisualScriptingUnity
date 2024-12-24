@@ -1,48 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using System;
-using UnityEditor;
-using SimpleFileBrowser;
-using NaughtyAttributes;
 using System.IO;
+using NaughtyAttributes;
+using SimpleFileBrowser;
+using TMPro;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace CharacterStudio
 {
-    public class PopupExportSeparatedSprites : PopupBase
+    public class PopupExportSpriteSheet : PopupBase
     {
         [SerializeField] Button _explorerButton;
         [SerializeField] TMP_Text _pathText;
         [SerializeField] Button _exportButton;
-        [ShowNativeProperty] override public ePopupType PopupType => ePopupType.ExportSeparatedSprites;
+        [ShowNativeProperty] override public ePopupType PopupType => ePopupType.ExportSpriteSheet;
         bool _pathSelected = false;
         public override void Show()
         {
             base.Show();
 
-            _exportButton.onClick.AddListener(OnExportButtonClicked);
-            _explorerButton.onClick.AddListener(OnExplorerButtonClicked);
+            _exportButton.onClick.AddListener( OnExportButtonClicked );
+            _explorerButton.onClick.AddListener( OnExplorerButtonClicked );
         }
 
         private void OnExportButtonClicked()
         {
-            if (!_pathSelected)
+            if ( !_pathSelected )
                 return;
-            if (!Directory.Exists(_pathText.text))
+            if ( !Directory.Exists( _pathText.text ) )
                 return;
-            EventBus.Instance.Publish(new ExportArg(eExportType.SeparatedSprites, _pathText.text));
+            EventBus.Instance.Publish( new ExportArg( eExportType.SpriteSheet, _pathText.text ) );
         }
 
         private void OnBrowseCancel()
         {
         }
 
-        private void OnBrowseSuccess(string[] paths)
+        private void OnBrowseSuccess( string[] paths )
         {
-            if (paths.Length > 0)
-                _pathText.text = paths[0];
+            if ( paths.Length > 0 )
+                _pathText.text = paths[ 0 ];
         }
 
         private void OnExplorerButtonClicked()
@@ -64,7 +63,7 @@ namespace CharacterStudio
                 _pathSelected = false;
             }
 #else
-            _pathSelected = FileBrowser.ShowSaveDialog(OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: initialPath, title: "Choose save folder");
+            _pathSelected = FileBrowser.ShowSaveDialog( OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: initialPath, title: "Choose save folder" );
 #endif
         }
     }

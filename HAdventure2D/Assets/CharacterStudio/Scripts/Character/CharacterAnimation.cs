@@ -6,6 +6,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace CharacterStudio
 {
     public class CharacterAnimation : MonoBehaviour
@@ -131,7 +135,60 @@ namespace CharacterStudio
         private void ExportSpriteLibrary(ExportArg arg)
         {
         }
+        private void FormatSprite( string path )
+        {
+            // path is full path, just get the part from Assets/
+            if ( string.IsNullOrEmpty( path ) || !path.Contains( "Assets" ) )
+                return;
+            string assetPath = path.Substring( path.IndexOf( "Assets" ) );
 
+#if UNITY_EDITOR
+            // Load the texture at the specified path
+            TextureImporter textureImporter = AssetImporter.GetAtPath( assetPath ) as TextureImporter;
+            if ( textureImporter != null )
+            {
+                // Apply texture import settings
+                textureImporter.spritePixelsPerUnit = 32;
+                textureImporter.textureType = TextureImporterType.Sprite;
+                textureImporter.spriteImportMode = SpriteImportMode.Single;
+                textureImporter.filterMode = FilterMode.Point;
+                textureImporter.textureCompression = TextureImporterCompression.Uncompressed;
+                textureImporter.isReadable = true;
+
+                // Save the changes
+                textureImporter.SaveAndReimport();
+            }
+            AssetDatabase.Refresh();
+#endif
+        }
+        private void FormatSpritesheet(string path)
+        {
+            // path is full path, just get the part from Assets/
+            if ( string.IsNullOrEmpty( path ) || !path.Contains( "Assets" ) )
+                return;
+            string assetPath = path.Substring( path.IndexOf( "Assets" ) );
+
+#if UNITY_EDITOR
+            // Load the texture at the specified path
+            TextureImporter textureImporter = AssetImporter.GetAtPath( assetPath ) as TextureImporter;
+            if ( textureImporter != null )
+            {
+                // Apply texture import settings
+                textureImporter.spritePixelsPerUnit = 32;
+                textureImporter.textureType = TextureImporterType.Sprite;
+                textureImporter.spriteImportMode = SpriteImportMode.Single;
+                textureImporter.filterMode = FilterMode.Point;
+                textureImporter.textureCompression = TextureImporterCompression.Uncompressed;
+                textureImporter.isReadable = true;
+                textureImporter.spriteImportMode = SpriteImportMode.Multiple;
+
+
+                // Save the changes
+                textureImporter.SaveAndReimport();
+            }
+            AssetDatabase.Refresh();
+#endif
+        }
         private void ExportSeparatedSprites(ExportArg arg)
         {
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
@@ -170,20 +227,123 @@ namespace CharacterStudio
                     }
                     sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
+                    assembledTexture = CropTexture( assembledTexture, 32f / 48f );
                     string path = arg.FolderPath + "/" + animation.ToString();
                     if (!System.IO.Directory.Exists(path))
                     {
                         System.IO.Directory.CreateDirectory(path);
                     }
-                    string fileName = animation.ToString() + "_" + i + ".png";
+                    string fileName = animation.ToString() + "_" + i;
                     Debug.Log("Exporting: " + path + "/" + fileName);
                     CSUtils.SaveTexture(assembledTexture, path, fileName);
+                    AssetDatabase.Refresh();
+#if UNITY_EDITOR
+                    FormatSprite( path + "/" + fileName + ".png");
+#endif
                 }
             }
         }
 
-        private void ExportSpriteSheet(ExportArg arg)
+        private void ExportSpriteSheet( ExportArg arg )
         {
+            Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
+            List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.ToList();
+            Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
+
+            // Load mapped colors for each part
+            foreach ( var (part, data) in _characterDatabase.Data )
+            {
+                Texture2D baseTexture = data.TextureDict[ _characterSelection[ part ] ];
+                sBaseTexture.TryAdd( part, baseTexture );
+                map.TryAdd( part, CSUtils.LoadMappedColors( _mapDatabase.Data[ part ], baseTexture ) );
+            }
+
+            // Calculate the dimensions of the sprite sheet
+            int maxFrameCount = allAnimations.Max( animation => _animationDatabase.Data[ animation ].AnimationsByPart.First().Value.Textures.Count );
+            int maxWidth = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.width ) );
+            int maxHeight = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.height ) );
+            int sheetWidth = maxWidth * maxFrameCount;
+            int sheetHeight = maxHeight * allAnimations.Count;
+
+            Texture2D spriteSheet = new Texture2D( sheetWidth, sheetHeight, TextureFormat.RGBA32, false ) { filterMode = FilterMode.Point };
+            var colors = spriteSheet.GetPixels32();
+            for ( int i = 0; i < colors.Length; i++ )
+            {
+                colors[ i ] = new Color32( 0, 0, 0, 0 );
+            }
+            spriteSheet.SetPixels32( colors );
+
+            // Generate textures for each animation and assemble them into the sprite sheet
+            for ( int animIndex = 0; animIndex < allAnimations.Count; animIndex++ )
+            {
+                var animation = allAnimations[ animIndex ];
+                if ( !_animationDatabase.Data.TryGetValue( animation, out AnimationData animationData ) )
+                {
+                    Debug.LogError( "Animation not found in database: " + animation );
+                    return;
+                }
+                int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
+                for ( int frameIndex = 0; frameIndex < frameCount; frameIndex++ )
+                {
+                    List<(int sortingLayer, Texture2D texture)> sortedPart = new List<(int sortingLayer, Texture2D texture)>();
+                    foreach ( var (part, data) in animationData.AnimationsByPart )
+                    {
+                        if ( !map.TryGetValue( part, out Dictionary<Color32, Color32> partMap ) )
+                        {
+                            Debug.LogError( "Map not found for part: " + part );
+                            return;
+                        }
+                        Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], sBaseTexture[ part ], partMap );
+                        sortedPart.Add( (_characterDatabase.SortedData[ part ], generatedTexture) );
+                    }
+                    sortedPart = sortedPart.OrderBy( x => x.sortingLayer ).Reverse().ToList();
+                    Texture2D assembledTexture = AssembleTextures( sortedPart.Select( x => x.texture ).ToList() );
+
+                    // Copy the assembled texture to the sprite sheet
+                    int xOffset = frameIndex * maxWidth;
+                    int yOffset = animIndex * maxHeight;
+                    for ( int x = 0; x < assembledTexture.width; x++ )
+                    {
+                        for ( int y = 0; y < assembledTexture.height; y++ )
+                        {
+                            spriteSheet.SetPixel( x + xOffset, y + yOffset, assembledTexture.GetPixel( x, y ) );
+                        }
+                    }
+                }
+            }
+            spriteSheet.Apply();
+
+            // Save the sprite sheet to a file
+            string path = arg.FolderPath;
+            string fileName = "SpriteSheet";
+            Debug.Log( "Exporting: " + path );
+            CSUtils.SaveTexture( spriteSheet, path, fileName );
+            AssetDatabase.Refresh();
+#if UNITY_EDITOR
+            FormatSpritesheet( path + "/" + fileName + ".png");
+#endif
+        }
+        private Texture2D CropTexture( Texture2D texture, float percentage )
+        {
+            if ( texture == null || percentage <= 0 || percentage > 1 )
+            {
+                throw new ArgumentException( "Invalid texture or percentage" );
+            }
+
+            int newWidth = Mathf.RoundToInt( texture.width * percentage );
+            int newHeight = Mathf.RoundToInt( texture.height * percentage );
+
+            Texture2D croppedTexture = new Texture2D( newWidth, newHeight, texture.format, false )
+            {
+                filterMode = texture.filterMode,
+                wrapMode = texture.wrapMode
+            };
+
+            Color[] pixels = texture.GetPixels( (texture.width - newWidth) / 2, (texture.height - newHeight) / 2, newWidth, newHeight );
+            croppedTexture.SetPixels( pixels );
+            croppedTexture.Apply();
+
+            return croppedTexture;
         }
         private Texture2D AssembleTextures(List<Texture2D> textures)
         {
@@ -194,11 +354,7 @@ namespace CharacterStudio
                 width = Mathf.Max(width, texture.width);
                 height = Mathf.Max(height, texture.height);
             }
-            Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp,
-            };
+            Texture2D result = new Texture2D( width, height, TextureFormat.RGBA32, false );
 
             for (int x = 0 ; x < width; x++)
             {
