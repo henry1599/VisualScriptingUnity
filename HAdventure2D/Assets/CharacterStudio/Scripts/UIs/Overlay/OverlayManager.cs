@@ -103,6 +103,7 @@ namespace CharacterStudio
         {
             // * Reset camera
             _characterCamera.orthographicSize = _defaultZoom;
+            EventBus.Instance.Publish(new ResetPartArg() );
         }
         private void OnHFlipButtonClicked()
         {
@@ -114,7 +115,7 @@ namespace CharacterStudio
         }
         private void OnRandomButtonClicked()
         {
-
+            EventBus.Instance.Publish( new ChangePartRandomlyArg() );
         }
         private void OnToggleBackgroundButtonClicked( bool value )
         {

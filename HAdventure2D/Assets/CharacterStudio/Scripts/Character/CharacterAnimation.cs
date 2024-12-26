@@ -32,6 +32,8 @@ namespace CharacterStudio
         private EventSubscription<ChangePartArg> _changePartSubscription;
         private EventSubscription<ChangeAnimationArg> _changeAnimationSubscription;
         private EventSubscription<ExportArg> _exportSubscription;
+        private EventSubscription<ChangePartRandomlyArg> _changepartRandomlySubscription;
+        private EventSubscription<ResetPartArg> _resetPartSubscription;
 
 
 
@@ -105,9 +107,30 @@ namespace CharacterStudio
             _changePartSubscription = EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
             _changeAnimationSubscription = EventBus.Instance.Subscribe<ChangeAnimationArg>(OnChangeAnimation);
             _exportSubscription = EventBus.Instance.Subscribe<ExportArg>(OnExport);
+            _changepartRandomlySubscription = EventBus.Instance.Subscribe<ChangePartRandomlyArg>( OnChangePartRandomly );
+            _resetPartSubscription = EventBus.Instance.Subscribe<ResetPartArg>( OnResetPart );
 
             SetAnimation(_currentAnimation);   
             SelectDefault();
+            ApplySelection();
+        }
+
+        private void OnResetPart( ResetPartArg arg )
+        {
+            foreach (var (part, id) in _characterDatabase.DefaultParts )
+            {
+                Select( part, id );
+            }
+            ApplySelection();
+        }
+
+        private void OnChangePartRandomly( ChangePartRandomlyArg arg )
+        {
+            List<(string id, eCharacterPart part)> randomParts = _characterDatabase.GetRandomAll();
+            foreach ( var (id, part) in randomParts )
+            {
+                Select( part, id );
+            }
             ApplySelection();
         }
 
@@ -384,9 +407,19 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe(_changePartSubscription);
             EventBus.Instance.Unsubscribe(_changeAnimationSubscription);
             EventBus.Instance.Unsubscribe(_exportSubscription);
+            EventBus.Instance.Unsubscribe( _changepartRandomlySubscription );
+            EventBus.Instance.Unsubscribe( _resetPartSubscription );
         }
         public void Select(eCharacterPart part, string id)
         {
+            if (string.IsNullOrEmpty( id ) )
+            {
+                return;
+            }
+            if ( !_characterDatabase.IsValid( part, id ) )
+            {
+                return;
+            }
             if (_characterSelection.ContainsKey(part))
             {
                 _characterSelection[part] = id;

@@ -88,3 +88,11 @@ MonoBehaviour:
       Value: -999
     - Key: 9
       Value: -999
+  DefaultParts:
+    _serializedList:
+    - Key: 2
+      Value: Body_01
+    - Key: 6
+      Value: RHand_01
+    - Key: 7
+      Value: LHand_01

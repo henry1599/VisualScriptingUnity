@@ -24,9 +24,38 @@ namespace CharacterStudio
         public SerializedDictionary<eCharacterPart, CharacterData> Data;
         [SerializedDictionary("Part", "Sorted Data")]
         public SerializedDictionary<eCharacterPart, int> SortedData;
+        [SerializedDictionary( "Part", "Default Part" )]
+        public SerializedDictionary<eCharacterPart, string> DefaultParts;
         public List<eCharacterPart> GetSortedPart(List<eCharacterPart> parts)
         {
             return parts.OrderBy(x => SortedData[x]).ToList();
+        }
+        public string GetRandomId( eCharacterPart part )
+        {
+            if ( Data.ContainsKey( part ) )
+            {
+                var keys = Data[ part ].TextureDict.Keys.ToList();
+                return keys[ UnityEngine.Random.Range( 0, keys.Count ) ];
+            }
+            return string.Empty;
+        }
+        public List<(string id, eCharacterPart part)> GetRandomAll()
+        {
+            List<(string id, eCharacterPart part)> result = new List<(string id, eCharacterPart part)>();
+            foreach ( var part in Data.Keys )
+            {
+                var keys = Data[ part ].TextureDict.Keys.ToList();
+                result.Add( (keys[ UnityEngine.Random.Range( 0, keys.Count ) ], part) );
+            }
+            return result;
+        }
+        public bool IsValid( eCharacterPart part, string id )
+        {
+            if ( Data.ContainsKey( part ) )
+            {
+                return Data[ part ].TextureDict.ContainsKey( id );
+            }
+            return false;
         }
 #if UNITY_EDITOR
         [Button("Load Data")]
