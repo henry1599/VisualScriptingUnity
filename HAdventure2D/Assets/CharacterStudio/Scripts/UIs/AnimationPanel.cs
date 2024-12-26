@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 
 namespace CharacterStudio
 {
@@ -11,7 +12,29 @@ namespace CharacterStudio
     {
         [SerializeField] TMP_Dropdown _animationDropdown;
         [SerializeField] AnimationDatabase _animationDatabase;
+
+        [Header("CONTROL")]
+        [SerializeField] Button _playButton;
+        [SerializeField] Image _playButtonImage;
+        [SerializeField] Sprite _playSprite;
+        [SerializeField] Sprite _pauseSprite;
+        [SerializeField] Button _nextFrameButton;
+        [SerializeField] Button _prevFrameButton;
+
+        [Header("SLIDER")]
+        [SerializeField] RectTransform _sliderParentRect;
+        [SerializeField] RectTransform _sliderRect;
+        [SerializeField] Slider _animationSlider;
+        [SerializeField] Transform _keyFrameBackContainer;
+        [SerializeField] Transform _keyFrameFrontContainer;
+        [SerializeField] GameObject _keyFrameBack;
+        [SerializeField] GameObject _keyFrameFront;
+
+
         List<eCharacterAnimation> _animationList;
+
+        EventSubscription<FrameIndexUpdateArg> _frameIndexUpdateSubscription;
+        EventSubscription<AnimationUpdateArg> _animationUpdateSubscription;
         public void SetupAnimationData()
         {
             _animationList = new List<eCharacterAnimation>(_animationDatabase.Data.Keys);
@@ -31,6 +54,54 @@ namespace CharacterStudio
         void Awake()
         {
             SetupAnimationData();
+
+            _frameIndexUpdateSubscription = EventBus.Instance.Subscribe<FrameIndexUpdateArg>(OnFrameIndexUpdate);
+            _animationUpdateSubscription = EventBus.Instance.Subscribe<AnimationUpdateArg>(OnAnimationUpdate);
+        }
+        void OnDestroy()
+        {
+            EventBus.Instance.Unsubscribe(_frameIndexUpdateSubscription);
+            EventBus.Instance.Unsubscribe(_animationUpdateSubscription);
+        }
+
+        private void OnAnimationUpdate(AnimationUpdateArg arg)
+        {
+            // * Clear children
+            int childCount = _keyFrameBackContainer.childCount;
+            for (int i = childCount - 1; i >= 1; i--)
+            {
+                Destroy(_keyFrameBackContainer.GetChild(i).gameObject);
+            }
+            childCount = _keyFrameFrontContainer.childCount;
+            for (int i = childCount - 1; i >= 1; i--)
+            {
+                Destroy(_keyFrameFrontContainer.GetChild(i).gameObject);
+            }
+
+            int frameCount = _animationDatabase.GetAnimationFrameCount(arg.AnimationType);
+            // * Minus to left and right of _sliderRect
+            
+
+            float totalWidth = _sliderParentRect.rect.width - Mathf.Abs(_sliderRect.offsetMax.x) - Mathf.Abs(_sliderRect.offsetMin.x); 
+            float fragmentWidth = totalWidth / frameCount;
+            for (int i = 0; i < frameCount - 1; i++)
+            {
+                GameObject keyFrameBack = Instantiate(_keyFrameBack, _keyFrameBackContainer);
+                GameObject keyFrameFront = Instantiate(_keyFrameFront, _keyFrameFrontContainer);
+
+                keyFrameBack.GetComponent<RectTransform>().anchoredPosition = new Vector2(fragmentWidth * (i + 1), 0);
+                keyFrameFront.GetComponent<RectTransform>().anchoredPosition = new Vector2(fragmentWidth * (i + 1), 0);
+
+                keyFrameBack.SetActive(true);
+                keyFrameFront.SetActive(true);
+            }
+
+            _animationSlider.maxValue = frameCount;
+        }
+
+        private void OnFrameIndexUpdate(FrameIndexUpdateArg arg)
+        {
+            _animationSlider.value = arg.FrameIndex;
         }
     }
 }

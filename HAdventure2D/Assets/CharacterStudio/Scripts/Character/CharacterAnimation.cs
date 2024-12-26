@@ -19,7 +19,16 @@ namespace CharacterStudio
         [SerializeField] CharacterDatabase _characterDatabase;
         [SerializeField] MapDatabase _mapDatabase;
         [SerializeField] eCharacterAnimation _currentAnimation;
-        private int _frameIndex = 0;
+
+        private int frameIndex
+        {
+            get => _frameIndex;
+            set
+            {
+                _frameIndex = value;
+                EventBus.Instance.Publish(new FrameIndexUpdateArg(_frameIndex));
+            }
+        } private int _frameIndex = 0;
         private float _counter = 0;
         private float _animationInterval = 0.15f;
         private bool _isSetup = false;
@@ -52,13 +61,14 @@ namespace CharacterStudio
 
 
             _currentAnimation = newAnimation;
-            _frameIndex = 0;
+            frameIndex = 0;
 
             if (!_animationDatabase.Data.TryGetValue(newAnimation, out AnimationData animationData))
             {
                 Debug.LogError("Animation not found in database: " + newAnimation);
                 return;
             }
+            EventBus.Instance.Publish(new AnimationUpdateArg(newAnimation));
             foreach (var (part, data) in animationData.AnimationsByPart)
             {
                 GameObject spriteObject = new GameObject(part.ToString());
@@ -478,7 +488,7 @@ namespace CharacterStudio
                     {
                         continue;
                     }
-                    Texture2D texture = textures[_frameIndex];
+                    Texture2D texture = textures[frameIndex];
                     if (texture == null)
                     {
                         continue;
@@ -487,10 +497,10 @@ namespace CharacterStudio
                     spriteRenderer.sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
                 }
             }
-            _frameIndex++;
-            if (_frameIndex >= _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count)
+            frameIndex++;
+            if (frameIndex >= _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count)
             {
-                _frameIndex = 0;
+                frameIndex = 0;
             }
         }
     }

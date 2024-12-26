@@ -31,6 +31,14 @@ namespace CharacterStudio
             }
             return null;
         }
+        public int GetAnimationFrameCount(eCharacterAnimation animation)
+        {
+            if (Data.ContainsKey(animation))
+            {
+                return Data[animation].AnimationsByPart.FirstOrDefault().Value.Textures.Count;
+            }
+            return 0;
+        }
 #if UNITY_EDITOR
         [Button("Load Animations")]
         public void LoadAnimations()
