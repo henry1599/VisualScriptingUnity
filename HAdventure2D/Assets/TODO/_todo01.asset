@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df3c3e4177f7014dafc9e0dd05d2609, type: 3}
+  m_Name: _todo01
+  m_EditorClassIdentifier: 
+  content: "- Update Functionality for Random button\n- Add naming option for export
+    popup \n- Add functionality for Sprite Library export\n- Add functionality for
+    export all (Sprites, spritesheet and library), each type is a checkbox option\n-
+    Add option for spritesheet to include instructions (the title for each row indicate
+    which animation is that), and add watermark to the sprite. And another option
+    for auto slice spritesheet by 32x32 size."
