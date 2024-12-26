@@ -70,5 +70,13 @@ namespace CharacterStudio
             byte[] bytes = generatedTexture.EncodeToPNG();
             System.IO.File.WriteAllBytes(path + "/" + fileName + ".png", bytes);
         }
+        internal static int Negative(this int value )
+        {
+            return -value;
+        }
+        internal static float Negative( this float value )
+        {
+            return -value;
+        }
     }
 }
