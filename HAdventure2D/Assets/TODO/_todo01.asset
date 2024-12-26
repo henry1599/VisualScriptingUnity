@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df3c3e4177f7014dafc9e0dd05d2609, type: 3}
   m_Name: _todo01
   m_EditorClassIdentifier: 
-  content: "- Update Functionality for Random button\n- Add naming option for export
-    popup \n- Add functionality for Sprite Library export\n- Add functionality for
-    export all (Sprites, spritesheet and library), each type is a checkbox option\n-
-    Add option for spritesheet to include instructions (the title for each row indicate
-    which animation is that), and add watermark to the sprite. And another option
-    for auto slice spritesheet by 32x32 size."
+  content: "(v) Update Functionality for Random button\n(v) Update animation buttons\n(v)
+    Update animation slider\n- Add selected visual for button item\n- Add naming
+    option for export popup \n- Add functionality for Sprite Library export\n- Add
+    functionality for export all (Sprites, spritesheet and library), each type is
+    a checkbox option\n- Add option for spritesheet to include instructions (the
+    title for each row indicate which animation is that), and add watermark to the
+    sprite. And another option for auto slice spritesheet by 32x32 size."
