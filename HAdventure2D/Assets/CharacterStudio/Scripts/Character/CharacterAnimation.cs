@@ -12,7 +12,7 @@ using UnityEditor;
 
 namespace CharacterStudio
 {
-    public class CharacterAnimation : MonoBehaviour
+    public class CharacterAnimation : MonoSingleton<CharacterAnimation>
     {
         [SerializeField] Transform _spriteContainer;
         [SerializeField] AnimationDatabase _animationDatabase;
@@ -32,6 +32,7 @@ namespace CharacterStudio
         private float _counter = 0;
         private float _animationInterval = 0.15f;
         private bool _isSetup = false;
+        public bool IsPlaying = true;
 
         [SerializeField] private SerializedDictionary<eCharacterPart, string> _characterSelection = new SerializedDictionary<eCharacterPart, string>();
 
@@ -446,6 +447,7 @@ namespace CharacterStudio
             {
                 UpdateTexture(part, id);
             }
+            UpdateVisual();
         }
         private void OnChangeAnimation(ChangeAnimationArg arg)
         {
@@ -470,6 +472,10 @@ namespace CharacterStudio
             {
                 return;
             }
+            if (!IsPlaying)
+            {
+                return;
+            }
             if (_currentAnimationTextures.Count == 0)
             {
                 return;
@@ -480,6 +486,32 @@ namespace CharacterStudio
                 return;
             }
             _counter = _animationInterval;
+            UpdateVisual(frameIndex);
+            frameIndex++;
+            if (frameIndex >= _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count)
+            {
+                frameIndex = 0;
+            }
+        }
+        public void SetFrameIndex(int frameIndex)
+        {
+            if (_currentAnimationTextures.Count == 0)
+            {
+                return;
+            }
+            if (!_currentAnimationTextures.ContainsKey(_currentAnimation))
+            {
+                return;
+            }
+            if (!_currentAnimationTextures[_currentAnimation].ContainsKey(_spriteRenderers.Keys.First()))
+            {
+                return;
+            }
+            this.frameIndex = Mathf.Clamp(frameIndex, 0, _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count - 1);
+            UpdateVisual(this.frameIndex);
+        }
+        void UpdateVisual(int frameIndex)
+        {
             foreach (var (part, spriteRenderer) in _spriteRenderers)
             {
                 if (_currentAnimationTextures[_currentAnimation].TryGetValue(part, out List<Texture2D> textures))
@@ -487,6 +519,10 @@ namespace CharacterStudio
                     if (textures.Count == 0)
                     {
                         continue;
+                    }
+                    if (frameIndex >= textures.Count)
+                    {
+                        frameIndex = 0;
                     }
                     Texture2D texture = textures[frameIndex];
                     if (texture == null)
@@ -497,11 +533,10 @@ namespace CharacterStudio
                     spriteRenderer.sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
                 }
             }
-            frameIndex++;
-            if (frameIndex >= _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count)
-            {
-                frameIndex = 0;
-            }
+        }
+        void UpdateVisual()
+        {
+            UpdateVisual(this.frameIndex);
         }
     }
 }

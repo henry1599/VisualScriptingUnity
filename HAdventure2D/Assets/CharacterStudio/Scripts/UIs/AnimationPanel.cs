@@ -14,7 +14,7 @@ namespace CharacterStudio
         [SerializeField] AnimationDatabase _animationDatabase;
 
         [Header("CONTROL")]
-        [SerializeField] Button _playButton;
+        [SerializeField] Toggle _playButton;
         [SerializeField] Image _playButtonImage;
         [SerializeField] Sprite _playSprite;
         [SerializeField] Sprite _pauseSprite;
@@ -55,13 +55,55 @@ namespace CharacterStudio
         {
             SetupAnimationData();
 
+            _playButton.onValueChanged.AddListener(OnPlayButtonClicked);
+            _nextFrameButton.onClick.AddListener(OnNextFrameButtonClicked);
+            _prevFrameButton.onClick.AddListener(OnPrevFrameButtonClicked);
+            _animationSlider.onValueChanged.AddListener(OnSliderValueChanged);
+
             _frameIndexUpdateSubscription = EventBus.Instance.Subscribe<FrameIndexUpdateArg>(OnFrameIndexUpdate);
             _animationUpdateSubscription = EventBus.Instance.Subscribe<AnimationUpdateArg>(OnAnimationUpdate);
         }
+
+        private void OnSliderValueChanged(float value)
+        {
+            int frameIndex = (int)value;
+            CharacterAnimation.Instance?.SetFrameIndex(frameIndex);
+        }
+
+        private void OnPlayButtonClicked(bool isOn)
+        {
+            Sprite sprite = isOn ? _pauseSprite : _playSprite;
+            _playButtonImage.sprite = sprite;
+            if (CharacterAnimation.Instance == null)
+            {
+                return;
+            }
+            CharacterAnimation.Instance.IsPlaying = isOn;
+            _prevFrameButton.interactable = _nextFrameButton.interactable = !isOn;
+        }
+
+        private void OnNextFrameButtonClicked()
+        {
+            int currentFrameIndex = (int)_animationSlider.value;
+            int nextFrameIndex = currentFrameIndex + 1;
+            CharacterAnimation.Instance?.SetFrameIndex(nextFrameIndex);
+        }
+
+        private void OnPrevFrameButtonClicked()
+        {
+            int currentFrameIndex = (int)_animationSlider.value;
+            int prevFrameIndex = currentFrameIndex - 1;
+            CharacterAnimation.Instance?.SetFrameIndex(prevFrameIndex);
+        }
+
         void OnDestroy()
         {
             EventBus.Instance.Unsubscribe(_frameIndexUpdateSubscription);
             EventBus.Instance.Unsubscribe(_animationUpdateSubscription);
+
+            _playButton.onValueChanged.RemoveAllListeners();
+            _nextFrameButton.onClick.RemoveAllListeners();
+            _prevFrameButton.onClick.RemoveAllListeners();
         }
 
         private void OnAnimationUpdate(AnimationUpdateArg arg)
@@ -82,9 +124,9 @@ namespace CharacterStudio
             // * Minus to left and right of _sliderRect
             
 
-            float totalWidth = _sliderParentRect.rect.width - Mathf.Abs(_sliderRect.offsetMax.x) - Mathf.Abs(_sliderRect.offsetMin.x); 
-            float fragmentWidth = totalWidth / frameCount;
-            for (int i = 0; i < frameCount - 1; i++)
+            float totalWidth = _sliderParentRect.rect.width - Mathf.Abs(_sliderRect.offsetMax.x) - Mathf.Abs(_sliderRect.offsetMin.x) - 10.5f; 
+            float fragmentWidth = totalWidth / (frameCount - 1);
+            for (int i = 0; i < frameCount - 2; i++)
             {
                 GameObject keyFrameBack = Instantiate(_keyFrameBack, _keyFrameBackContainer);
                 GameObject keyFrameFront = Instantiate(_keyFrameFront, _keyFrameFrontContainer);
@@ -96,7 +138,7 @@ namespace CharacterStudio
                 keyFrameFront.SetActive(true);
             }
 
-            _animationSlider.maxValue = frameCount;
+            _animationSlider.maxValue = frameCount - 1;
         }
 
         private void OnFrameIndexUpdate(FrameIndexUpdateArg arg)
