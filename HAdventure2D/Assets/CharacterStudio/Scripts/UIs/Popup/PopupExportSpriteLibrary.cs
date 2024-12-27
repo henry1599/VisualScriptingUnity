@@ -12,35 +12,35 @@ using UnityEngine.UI;
 
 namespace CharacterStudio
 {
-    public class PopupExportSpriteSheet : PopupBase
+    public class PopupExportSpriteLibrary : PopupBase
     {
         [SerializeField] Button _explorerButton;
         [SerializeField] TMP_Text _pathText;
         [SerializeField] Button _exportButton;
-        [ShowNativeProperty] override public ePopupType PopupType => ePopupType.ExportSpriteSheet;
+        [ShowNativeProperty] override public ePopupType PopupType => ePopupType.ExportSpriteLibrary;
         public override void Show()
         {
             base.Show();
 
-            _exportButton.onClick.AddListener( OnExportButtonClicked );
-            _explorerButton.onClick.AddListener( OnExplorerButtonClicked );
+            _exportButton.onClick.AddListener(OnExportButtonClicked);
+            _explorerButton.onClick.AddListener(OnExplorerButtonClicked);
         }
 
         private void OnExportButtonClicked()
         {
-            if ( !Directory.Exists( _pathText.text ) )
+            if (!Directory.Exists(_pathText.text))
                 return;
-            EventBus.Instance.Publish( new ExportArg( eExportType.SpriteSheet, _pathText.text ) );
+            EventBus.Instance.Publish(new ExportArg(eExportType.SpriteLibrary, _pathText.text));
         }
 
         private void OnBrowseCancel()
         {
         }
 
-        private void OnBrowseSuccess( string[] paths )
+        private void OnBrowseSuccess(string[] paths)
         {
-            if ( paths.Length > 0 )
-                _pathText.text = paths[ 0 ];
+            if (paths.Length > 0)
+                _pathText.text = paths[0];
         }
 
         private void OnExplorerButtonClicked()
@@ -57,7 +57,7 @@ namespace CharacterStudio
                 _pathText.text = selectedPath;
             }
 #else
-            _pathSelected = FileBrowser.ShowSaveDialog( OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: initialPath, title: "Choose save folder" );
+            _pathSelected = FileBrowser.ShowSaveDialog(OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: initialPath, title: "Choose save folder");
 #endif
         }
     }

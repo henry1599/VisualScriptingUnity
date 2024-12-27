@@ -6,6 +6,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor.U2D.Sprites;
+using UnityEngine.U2D.Animation;
+using UnityEngine.Experimental.U2D;
 
 
 #if UNITY_EDITOR
@@ -172,6 +174,57 @@ namespace CharacterStudio
 
         private void ExportSpriteLibrary(ExportArg arg)
         {
+            // * Export sprite sheet
+            ExportSpriteSheet(arg);
+
+            // * Then use the sprite sheet to create a sprite library at the same location
+            string spriteSheetPath = arg.FolderPath + "/" + "SpriteSheet.png";
+            string assetPath = spriteSheetPath.Substring(spriteSheetPath.IndexOf("Assets"));
+
+#if UNITY_EDITOR
+            // Load the texture at the specified path
+            Texture2D spriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
+            if (spriteSheet == null)
+            {
+                Debug.LogError("Failed to load sprite sheet at path: " + assetPath);
+                return;
+            }
+
+            // Create a new sprite library asset
+            SpriteLibraryAsset spriteLibraryAsset = ScriptableObject.CreateInstance<SpriteLibraryAsset>();
+
+            // Load the texture importer to get the sliced sprites
+            TextureImporter textureImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (textureImporter != null)
+            {
+                var factory = new SpriteDataProviderFactories();
+                factory.Init();
+                var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
+                dataProvider.InitSpriteEditorDataProvider();
+                var spriteRects = dataProvider.GetSpriteRects();
+
+                // Add each sprite to the sprite library
+                foreach (var spriteRect in spriteRects)
+                {
+                    Sprite sprite = Sprite.Create(spriteSheet, spriteRect.rect, spriteRect.pivot);
+                    sprite.name = spriteRect.name;
+                    spriteLibraryAsset.AddCategoryLabel(sprite, "Default", sprite.name);
+                }
+
+                // Save the sprite library asset
+                string spriteLibraryPath = arg.FolderPath + "/" + "_SpriteLibrary.asset";
+                assetPath = spriteLibraryPath.Substring(spriteLibraryPath.IndexOf("Assets"));
+                AssetDatabase.CreateAsset(spriteLibraryAsset, assetPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                Debug.Log("Sprite library created at: " + spriteLibraryPath);
+            }
+            else
+            {
+                Debug.LogError("Failed to load texture importer at path: " + assetPath);
+            }
+#endif
         }
         private void FormatSprite( string path )
         {
@@ -226,6 +279,10 @@ namespace CharacterStudio
             }
             AssetDatabase.Refresh();
 #endif
+        }
+        private void CreateSpriteLibrary(List<(string animName, int animFrameCount)> frameData, string path)
+        {
+
         }
         private void SliceSpriteSheet(List<(string animName, int animFrameCount)> frameData, string path, int cellSize)
         {

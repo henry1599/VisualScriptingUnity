@@ -16,7 +16,7 @@ namespace CharacterStudio
         }
         public void OnSpriteLibraryButtonClicked()
         {
-
+            PopupManager.Instance?.PushPopup(new ShowPopupArg(ePopupType.ExportSpriteLibrary));
         }
         public void OnAllButtonClicked()
         {

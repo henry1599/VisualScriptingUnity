@@ -4,7 +4,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using SimpleFileBrowser;
 using NaughtyAttributes;
 using System.IO;
