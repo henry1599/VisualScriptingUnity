@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: _todo01
   m_EditorClassIdentifier: 
   content: "(v) Update Functionality for Random button\n(v) Update animation buttons\n(v)
-    Update animation slider\n- Add selected visual for button item\n- Add naming
+    Update animation slider\n(v) Add selected visual for button item\n- Add naming
     option for export popup \n- Add functionality for Sprite Library export\n- Add
     functionality for export all (Sprites, spritesheet and library), each type is
     a checkbox option\n- Add option for spritesheet to include instructions (the
     title for each row indicate which animation is that), and add watermark to the
-    sprite. And another option for auto slice spritesheet by 32x32 size."
+    sprite.\n- Add another option for auto slice spritesheet by 32x32 size.\n- Embed
+    a runtime pixel art tool inside unity (or at least editor tool)\n- Add tooltip
+    system"
