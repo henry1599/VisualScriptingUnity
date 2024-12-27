@@ -19,9 +19,6 @@ namespace CharacterStudio
         Category,
         Item
     }
-    // Features List:
-    // - Choose a list of animations of specific items on the character
-    // - 
     public class CharacterStudioMain : MonoBehaviour
     {
         [Header("DATABASE")]

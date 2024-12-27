@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor.U2D.Sprites;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,6 +21,7 @@ namespace CharacterStudio
         [SerializeField] CharacterDatabase _characterDatabase;
         [SerializeField] MapDatabase _mapDatabase;
         [SerializeField] eCharacterAnimation _currentAnimation;
+        [SerializeField] int size = 32;
 
         private int frameIndex
         {
@@ -224,6 +227,45 @@ namespace CharacterStudio
             AssetDatabase.Refresh();
 #endif
         }
+        private void SliceSpriteSheet(string path, int cellSize)
+        {
+            // path is full path, just get the part from Assets/
+            if (string.IsNullOrEmpty(path) || !path.Contains("Assets"))
+                return;
+            string assetPath = path.Substring(path.IndexOf("Assets"));
+#if UNITY_EDITOR
+            // Load the texture at the specified path
+            TextureImporter textureImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            Texture2D spriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
+            var factory = new SpriteDataProviderFactories();
+            factory.Init();
+            var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
+            dataProvider.InitSpriteEditorDataProvider();
+            var spriteRects = dataProvider.GetSpriteRects();
+            int columns = spriteSheet.width / cellSize;
+            int rows = spriteSheet.height / cellSize;
+            List<SpriteRect> newSpriteRects = new List<SpriteRect>();
+
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    SpriteRect spriteRect = new SpriteRect();
+                    spriteRect.rect = new Rect(x * cellSize, y * cellSize, cellSize, cellSize);
+                    spriteRect.pivot = new Vector2(0.5f, 0.0f); // set pivot to bottom center
+                    newSpriteRects.Add(spriteRect);
+                }
+            }
+
+            dataProvider.SetSpriteRects(newSpriteRects.ToArray());
+            dataProvider.Apply();
+            // Reimport the asset to have the changes applied
+            var assetImporter = dataProvider.targetObject as AssetImporter;
+            assetImporter.SaveAndReimport();
+            textureImporter.SaveAndReimport();
+            AssetDatabase.Refresh();
+#endif
+        }
         private void ExportSeparatedSprites(ExportArg arg)
         {
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
@@ -262,7 +304,7 @@ namespace CharacterStudio
                     }
                     sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
-                    assembledTexture = CropTexture( assembledTexture, 32f / 48f );
+                    assembledTexture = CropTexture( assembledTexture, this.size / assembledTexture.width );
                     string path = arg.FolderPath + "/" + animation.ToString();
                     if (!System.IO.Directory.Exists(path))
                     {
@@ -273,7 +315,8 @@ namespace CharacterStudio
                     CSUtils.SaveTexture(assembledTexture, path, fileName);
                     AssetDatabase.Refresh();
 #if UNITY_EDITOR
-                    FormatSprite( path + "/" + fileName + ".png");
+                    string fullPath = path + "/" + fileName + ".png";
+                    FormatSprite( fullPath );
 #endif
                 }
             }
@@ -282,7 +325,8 @@ namespace CharacterStudio
         private void ExportSpriteSheet( ExportArg arg )
         {
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
-            List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.ToList();
+            // For some reason, the order of the animations is reversed
+            List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.Reverse().ToList();
             Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
 
             // Load mapped colors for each part
@@ -333,6 +377,7 @@ namespace CharacterStudio
                     }
                     sortedPart = sortedPart.OrderBy( x => x.sortingLayer ).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures( sortedPart.Select( x => x.texture ).ToList() );
+                    assembledTexture = CropTexture( assembledTexture, this.size / assembledTexture.width );
 
                     // Copy the assembled texture to the sprite sheet
                     int xOffset = frameIndex * maxWidth;
@@ -355,7 +400,9 @@ namespace CharacterStudio
             CSUtils.SaveTexture( spriteSheet, path, fileName );
             AssetDatabase.Refresh();
 #if UNITY_EDITOR
-            FormatSpritesheet( path + "/" + fileName + ".png");
+            string fullPath = path + "/" + fileName + ".png";
+            FormatSpritesheet( fullPath );
+            SliceSpriteSheet( fullPath, this.size );
 #endif
         }
         private Texture2D CropTexture( Texture2D texture, float percentage )
@@ -414,8 +461,9 @@ namespace CharacterStudio
             return result;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             EventBus.Instance.Unsubscribe(_changePartSubscription);
             EventBus.Instance.Unsubscribe(_changeAnimationSubscription);
             EventBus.Instance.Unsubscribe(_exportSubscription);
@@ -467,9 +515,10 @@ namespace CharacterStudio
         }
         void SelectDefault()
         {
-            Select(eCharacterPart.Body, "Body_01");
-            Select(eCharacterPart.LHand, "LHand_01");
-            Select(eCharacterPart.RHand, "RHand_01");
+            foreach (var (part, id) in _characterDatabase.DefaultParts)
+            {
+                Select(part, id);
+            }
         }
         void Update()
         {

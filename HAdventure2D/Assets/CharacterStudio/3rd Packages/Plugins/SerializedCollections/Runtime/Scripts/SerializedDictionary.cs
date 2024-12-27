@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -171,6 +172,11 @@ namespace AYellowpaper.SerializedCollections
             foreach (var kvp in this)
                 _serializedList.Add(new SerializedKeyValuePair<TKey, TValue>(kvp.Key, kvp.Value));
 #endif
+        }
+
+        public void ForEach(Action<object> value)
+        {
+            throw new NotImplementedException();
         }
     }
 }
