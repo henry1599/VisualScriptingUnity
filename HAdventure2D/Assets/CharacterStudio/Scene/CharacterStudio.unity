@@ -1138,6 +1138,7 @@ MonoBehaviour:
   _characterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
   _mapDatabase: {fileID: 11400000, guid: f4585b04a3bc102419c99be69afe97b9, type: 2}
   _currentAnimation: 1
+  size: 32
   IsPlaying: 1
   _characterSelection:
     _serializedList: []
