@@ -17,6 +17,7 @@ namespace CharacterStudio
     public class CharacterDatabase : ScriptableObject
     {
         public string CatgoryIconPath;
+        public int Size = 32;
         public List<string> Paths;
         [SerializedDictionary("Part", "Category Data")]
         public SerializedDictionary<eCharacterPart, CategoryData> Categories;

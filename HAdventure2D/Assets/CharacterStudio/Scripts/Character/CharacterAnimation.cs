@@ -227,7 +227,7 @@ namespace CharacterStudio
             AssetDatabase.Refresh();
 #endif
         }
-        private void SliceSpriteSheet(string path, int cellSize)
+        private void SliceSpriteSheet(List<(string animName, int animFrameCount)> frameData, string path, int cellSize)
         {
             // path is full path, just get the part from Assets/
             if (string.IsNullOrEmpty(path) || !path.Contains("Assets"))
@@ -242,17 +242,18 @@ namespace CharacterStudio
             var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
             dataProvider.InitSpriteEditorDataProvider();
             var spriteRects = dataProvider.GetSpriteRects();
-            int columns = spriteSheet.width / cellSize;
-            int rows = spriteSheet.height / cellSize;
+            // int columns = spriteSheet.width / cellSize;
+            int rows = frameData.Count;
             List<SpriteRect> newSpriteRects = new List<SpriteRect>();
 
             for (int y = 0; y < rows; y++)
             {
-                for (int x = 0; x < columns; x++)
+                for (int x = 0; x < frameData[y].animFrameCount; x++)
                 {
                     SpriteRect spriteRect = new SpriteRect();
                     spriteRect.rect = new Rect(x * cellSize, y * cellSize, cellSize, cellSize);
                     spriteRect.pivot = new Vector2(0.5f, 0.0f); // set pivot to bottom center
+                    spriteRect.name = frameData[y].animName + "_" + x;
                     newSpriteRects.Add(spriteRect);
                 }
             }
@@ -304,7 +305,8 @@ namespace CharacterStudio
                     }
                     sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
-                    assembledTexture = CropTexture( assembledTexture, this.size / assembledTexture.width );
+                    float percentage = (float)this.size / (float)assembledTexture.width;
+                    assembledTexture = CropTexture( assembledTexture, percentage);
                     string path = arg.FolderPath + "/" + animation.ToString();
                     if (!System.IO.Directory.Exists(path))
                     {
@@ -339,10 +341,13 @@ namespace CharacterStudio
 
             // Calculate the dimensions of the sprite sheet
             int maxFrameCount = allAnimations.Max( animation => _animationDatabase.Data[ animation ].AnimationsByPart.First().Value.Textures.Count );
-            int maxWidth = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.width ) );
-            int maxHeight = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.height ) );
-            int sheetWidth = maxWidth * maxFrameCount;
-            int sheetHeight = maxHeight * allAnimations.Count;
+            int maxCellWidth = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.width ) );
+            int maxCellHeight = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.height ) );
+            maxCellWidth = maxCellWidth * this.size / maxCellWidth;
+            maxCellHeight = maxCellHeight * this.size / maxCellHeight;
+            int sheetWidth = maxCellWidth * maxFrameCount;
+            int sheetHeight = maxCellHeight * allAnimations.Count;
+            List<(string animName, int animFrameCount)> frameData = new ();
 
             Texture2D spriteSheet = new Texture2D( sheetWidth, sheetHeight, TextureFormat.RGBA32, false ) { filterMode = FilterMode.Point };
             var colors = spriteSheet.GetPixels32();
@@ -362,6 +367,7 @@ namespace CharacterStudio
                     return;
                 }
                 int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
+                frameData.Add( (animation.ToString(), frameCount) );
                 for ( int frameIndex = 0; frameIndex < frameCount; frameIndex++ )
                 {
                     List<(int sortingLayer, Texture2D texture)> sortedPart = new List<(int sortingLayer, Texture2D texture)>();
@@ -377,11 +383,12 @@ namespace CharacterStudio
                     }
                     sortedPart = sortedPart.OrderBy( x => x.sortingLayer ).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures( sortedPart.Select( x => x.texture ).ToList() );
-                    assembledTexture = CropTexture( assembledTexture, this.size / assembledTexture.width );
+                    float percentage = (float)this.size / (float)assembledTexture.width;
+                    assembledTexture = CropTexture( assembledTexture, percentage );
 
                     // Copy the assembled texture to the sprite sheet
-                    int xOffset = frameIndex * maxWidth;
-                    int yOffset = animIndex * maxHeight;
+                    int xOffset = frameIndex * maxCellWidth;
+                    int yOffset = animIndex * maxCellHeight;
                     for ( int x = 0; x < assembledTexture.width; x++ )
                     {
                         for ( int y = 0; y < assembledTexture.height; y++ )
@@ -402,7 +409,7 @@ namespace CharacterStudio
 #if UNITY_EDITOR
             string fullPath = path + "/" + fileName + ".png";
             FormatSpritesheet( fullPath );
-            SliceSpriteSheet( fullPath, this.size );
+            SliceSpriteSheet( frameData, fullPath, this.size );
 #endif
         }
         private Texture2D CropTexture( Texture2D texture, float percentage )
