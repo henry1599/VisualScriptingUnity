@@ -165,8 +165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ec1f03625112948a658c264b064fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 5817943539133567388}
-  button: {fileID: 36861485604087486}
+  _iconImage: {fileID: 5817943539133567388}
+  _button: {fileID: 36861485604087486}
+  _backgroundImage: {fileID: 7380797965698638658}
+  _defaultColor: {r: 0.38039216, g: 0.38039216, b: 0.38039216, a: 1}
+  _selectedColor: {r: 0.23713954, g: 0.6514797, b: 0.6886792, a: 1}
 --- !u!1 &3909518618241253891
 GameObject:
   m_ObjectHideFlags: 0

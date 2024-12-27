@@ -38,17 +38,22 @@ namespace CharacterStudio
         [SerializeField] private UIItem _itemPrefab;
         [SerializeField] private Button _rightPanelBackButton;
         [ReadOnly, SerializeField] List<eCharacterPart> _actualCategories = new List<eCharacterPart>();
-        private List<GameObject> _itemObjects = new List<GameObject>();
         private eStudioState _studioState;
-        private EventBus _eventBus;
-        
+        private List<UIItem> _partItems = new List<UIItem>();
+        private EventSubscription<ItemClickArg> _itemClickSubscription;
+
         void Awake()
         {
-            EventBus.Instance.Subscribe<ItemClickArg>(OnItemClick);
+            _itemClickSubscription = EventBus.Instance.Subscribe<ItemClickArg>(OnItemClick);
             UpdateState(eStudioState.Category);
             ReloadCategories();
 
             _rightPanelBackButton.onClick.AddListener(OnBackButtonClicked);
+        }
+
+        private void OnDestroy()
+        {
+            EventBus.Instance.Unsubscribe( _itemClickSubscription );
         }
 
         private void OnBackButtonClicked()
@@ -121,7 +126,12 @@ namespace CharacterStudio
             foreach (var item in _characterDatabase.Data[category].TextureDict)
             {
                 UIItem uiItem = Instantiate(_itemPrefab, _itemContainer);
-                uiItem.SetupId(item.Value, category, item.Key);
+                bool selected = false;
+                if (CharacterAnimation.Instance != null)
+                {
+                    selected = CharacterAnimation.Instance.CharacterSelection.ContainsKey( category ) && CharacterAnimation.Instance.CharacterSelection[ category ] == item.Key;
+                }
+                uiItem.SetupId(item.Value, category, item.Key, selected );
             }
         }
     }

@@ -35,6 +35,7 @@ namespace CharacterStudio
         public bool IsPlaying = true;
 
         [SerializeField] private SerializedDictionary<eCharacterPart, string> _characterSelection = new SerializedDictionary<eCharacterPart, string>();
+        public SerializedDictionary<eCharacterPart, string> CharacterSelection => _characterSelection;
 
 
 
@@ -448,6 +449,10 @@ namespace CharacterStudio
                 UpdateTexture(part, id);
             }
             UpdateVisual();
+            foreach ( var (part, id) in _characterSelection )
+            {
+                EventBus.Instance.Publish( new PartChangedArg( part, id ) );
+            }
         }
         private void OnChangeAnimation(ChangeAnimationArg arg)
         {
