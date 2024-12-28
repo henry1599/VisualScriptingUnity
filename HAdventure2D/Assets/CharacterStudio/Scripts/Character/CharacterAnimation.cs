@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEditor.U2D.Sprites;
 using UnityEngine.U2D.Animation;
 using System.Reflection;
+using System.IO;
+
 
 
 
@@ -176,12 +178,12 @@ namespace CharacterStudio
             SpriteLibrarayResult result = new SpriteLibrarayResult();
             // * Export sprite sheet
 
-            SpritesheetExportArg spriteSheetExportArg = new SpritesheetExportArg(arg.FolderPath, true);
+            SpritesheetExportArg spriteSheetExportArg = new SpritesheetExportArg(arg.FolderPath, true, arg.Name);
             SpriteSheetResult spriteSheetResult = ExportSpriteSheet(spriteSheetExportArg);
             SliceSpriteSheet(spriteSheetResult.FrameCount, spriteSheetResult.OutputPath, size);
 
             // * Then use the sprite sheet to create a sprite library at the same location
-            string spriteSheetPath = arg.FolderPath + "/" + "SpriteSheet.png";
+            string spriteSheetPath = $"{arg.FolderPath}/{arg.Name}_SpriteSheet.png";
             string assetPath = spriteSheetPath.Substring(spriteSheetPath.IndexOf("Assets"));
 
 #if UNITY_EDITOR
@@ -205,7 +207,7 @@ namespace CharacterStudio
                 var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
                 dataProvider.InitSpriteEditorDataProvider();
                 int rows = spriteSheetResult.FrameCount.Count;
-                string spriteLibAssetPath = arg.FolderPath + "/" + "SpriteLibrary.asset";
+                string spriteLibAssetPath = $"{arg.FolderPath}/{arg.Name}_SpriteLibrary.asset";
                 spriteLibAssetPath = spriteLibAssetPath.Substring(spriteLibAssetPath.IndexOf("Assets"));
 
                 var allSprites = AssetDatabase.LoadAllAssetsAtPath(assetPath).OfType<Sprite>().ToList();
@@ -480,7 +482,7 @@ namespace CharacterStudio
 
             // Save the sprite sheet to a file
             string path = arg.FolderPath;
-            string fileName = "SpriteSheet";
+            string fileName = $"{arg.Name}_SpriteSheet";
             Debug.Log( "Exporting: " + path );
             CSUtils.SaveTexture( spriteSheet, path, fileName );
             AssetDatabase.Refresh();

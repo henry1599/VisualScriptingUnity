@@ -15,29 +15,31 @@ namespace CharacterStudio
     {
         public eExportType ExportType { get; private set; }
         public string FolderPath { get; set; }
-        public ExportArg(eExportType exportType, string folderPath)
+        public string Name { get; set; }
+        public ExportArg(eExportType exportType, string folderPath, string name)
         {
             ExportType = exportType;
             FolderPath = folderPath;
+            Name = name;
         }
     }
     public class SpritesheetExportArg : ExportArg
     {
         public bool AutoSlice {get; private set;}
-        public SpritesheetExportArg(string folderPath, bool autoSlice) : base(eExportType.SpriteSheet, folderPath)
+        public SpritesheetExportArg(string folderPath, bool autoSlice, string name) : base(eExportType.SpriteSheet, folderPath, name)
         {
             AutoSlice = autoSlice;
         }
     }
     public class SpriteLibraryExportArg : ExportArg
     {
-        public SpriteLibraryExportArg(string folderPath) : base(eExportType.SpriteLibrary, folderPath)
+        public SpriteLibraryExportArg(string folderPath, string name) : base(eExportType.SpriteLibrary, folderPath, name)
         {
         }
     }
     public class SeparatedSpritesExportArg : ExportArg
     {
-        public SeparatedSpritesExportArg(string folderPath) : base(eExportType.SeparatedSprites, folderPath)
+        public SeparatedSpritesExportArg(string folderPath, string name) : base(eExportType.SeparatedSprites, folderPath, name)
         {
         }
     }

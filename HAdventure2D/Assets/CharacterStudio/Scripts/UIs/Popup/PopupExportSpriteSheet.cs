@@ -36,7 +36,7 @@ namespace CharacterStudio
             string exportFolder = Path.Combine(_pathText.text, _name.text);
             if (!Directory.Exists(exportFolder))
                 Directory.CreateDirectory(exportFolder);
-            EventBus.Instance.Publish( new SpritesheetExportArg( exportFolder, _autoSliceToggle.isOn ) );
+            EventBus.Instance.Publish( new SpritesheetExportArg( exportFolder, _autoSliceToggle.isOn, _name.text ) );
         }
 
         private void OnBrowseCancel()
