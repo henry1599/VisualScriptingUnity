@@ -8,6 +8,10 @@ using UnityEngine.UI;
 using UnityEditor.U2D.Sprites;
 using UnityEngine.U2D.Animation;
 using UnityEngine.Experimental.U2D;
+using System.IO;
+using System.Runtime.CompilerServices;
+
+
 
 
 #if UNITY_EDITOR
@@ -153,13 +157,16 @@ namespace CharacterStudio
 
         private void OnExport(ExportArg arg)
         {
+            ExportResult result = null;
             switch (arg.ExportType)
             {
                 case eExportType.SpriteSheet:
-                    ExportSpriteSheet(arg);
+                    result = ExportSpriteSheet(arg);
+                    SpriteSheetResult spriteSheetResult = result as SpriteSheetResult;
+                    SliceSpriteSheet(spriteSheetResult.FrameCount, spriteSheetResult.OutputPath, size);
                     break;
                 case eExportType.SeparatedSprites:
-                    ExportSeparatedSprites(arg);
+                    result = ExportSeparatedSprites(arg);
                     break;
                 case eExportType.SpriteLibrary:
                     ExportSpriteLibrary(arg);
@@ -175,7 +182,8 @@ namespace CharacterStudio
         private void ExportSpriteLibrary(ExportArg arg)
         {
             // * Export sprite sheet
-            ExportSpriteSheet(arg);
+            SpriteSheetResult spriteSheetResult = ExportSpriteSheet(arg);
+            SliceSpriteSheet(spriteSheetResult.FrameCount, spriteSheetResult.OutputPath, size);
 
             // * Then use the sprite sheet to create a sprite library at the same location
             string spriteSheetPath = arg.FolderPath + "/" + "SpriteSheet.png";
@@ -201,24 +209,33 @@ namespace CharacterStudio
                 factory.Init();
                 var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
                 dataProvider.InitSpriteEditorDataProvider();
-                var spriteRects = dataProvider.GetSpriteRects();
+                int rows = spriteSheetResult.FrameCount.Count;
+                string spriteLibPath = arg.FolderPath + "/" + "SpriteLibrary.asset";
+                spriteLibPath = spriteLibPath.Substring(spriteLibPath.IndexOf("Assets"));
 
-                // Add each sprite to the sprite library
-                foreach (var spriteRect in spriteRects)
+                var allSprites = AssetDatabase.LoadAllAssetsAtPath(assetPath).OfType<Sprite>().ToList();
+
+                for (int y = 0; y < rows; y++)
                 {
-                    Sprite sprite = Sprite.Create(spriteSheet, spriteRect.rect, spriteRect.pivot);
-                    sprite.name = spriteRect.name;
-                    spriteLibraryAsset.AddCategoryLabel(sprite, "Default", sprite.name);
+                    for (int x = 0; x < spriteSheetResult.FrameCount[y].frameCount; x++)
+                    {
+                        string category = spriteSheetResult.FrameCount[y].anim.ToString();
+                        string spriteName = category + "_" + x;
+                        Sprite sprite = allSprites.FirstOrDefault(s => s.name == spriteName);
+                        spriteLibraryAsset.AddCategoryLabel(sprite, category, sprite.name);
+                    }
                 }
-
-                // Save the sprite library asset
-                string spriteLibraryPath = arg.FolderPath + "/" + "_SpriteLibrary.asset";
-                assetPath = spriteLibraryPath.Substring(spriteLibraryPath.IndexOf("Assets"));
-                AssetDatabase.CreateAsset(spriteLibraryAsset, assetPath);
+                AssetDatabase.CreateAsset(spriteLibraryAsset, spriteLibPath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
-                Debug.Log("Sprite library created at: " + spriteLibraryPath);
+
+                SpriteLibraryAsset createdAsset = AssetDatabase.LoadAssetAtPath<SpriteLibraryAsset>(spriteLibPath);
+                if (createdAsset != null)
+                {
+                    EditorGUIUtility.PingObject(createdAsset);
+                    Selection.activeObject = createdAsset; 
+                }
             }
             else
             {
@@ -284,7 +301,7 @@ namespace CharacterStudio
         {
 
         }
-        private void SliceSpriteSheet(List<(string animName, int animFrameCount)> frameData, string path, int cellSize)
+        private void SliceSpriteSheet(List<(eCharacterAnimation anim, int animFrameCount)> frameData, string path, int cellSize)
         {
             // path is full path, just get the part from Assets/
             if (string.IsNullOrEmpty(path) || !path.Contains("Assets"))
@@ -299,7 +316,6 @@ namespace CharacterStudio
             var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
             dataProvider.InitSpriteEditorDataProvider();
             var spriteRects = dataProvider.GetSpriteRects();
-            // int columns = spriteSheet.width / cellSize;
             int rows = frameData.Count;
             List<SpriteRect> newSpriteRects = new List<SpriteRect>();
 
@@ -307,10 +323,12 @@ namespace CharacterStudio
             {
                 for (int x = 0; x < frameData[y].animFrameCount; x++)
                 {
-                    SpriteRect spriteRect = new SpriteRect();
-                    spriteRect.rect = new Rect(x * cellSize, y * cellSize, cellSize, cellSize);
-                    spriteRect.pivot = new Vector2(0.5f, 0.0f); // set pivot to bottom center
-                    spriteRect.name = frameData[y].animName + "_" + x;
+                    SpriteRect spriteRect = new SpriteRect
+                    {
+                        rect = new Rect(x * cellSize, y * cellSize, cellSize, cellSize),
+                        pivot = new Vector2(0.5f, 0.0f),
+                        name = frameData[y].anim.ToString() + "_" + x
+                    };
                     newSpriteRects.Add(spriteRect);
                 }
             }
@@ -324,8 +342,9 @@ namespace CharacterStudio
             AssetDatabase.Refresh();
 #endif
         }
-        private void ExportSeparatedSprites(ExportArg arg)
+        private SeparatedSpriteResult ExportSeparatedSprites(ExportArg arg)
         {
+            SeparatedSpriteResult result = new SeparatedSpriteResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
             List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.ToList();
             Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
@@ -338,13 +357,14 @@ namespace CharacterStudio
                 map.TryAdd(part, CSUtils.LoadMappedColors(_mapDatabase.Data[part], baseTexture));
             }
 
+            result.Sprites = new Dictionary<string, Texture2D>();
             // * Generate textures for each animation
             foreach (var animation in allAnimations)
             {
                 if (!_animationDatabase.Data.TryGetValue(animation, out AnimationData animationData))
                 {
                     Debug.LogError("Animation not found in database: " + animation);
-                    return;
+                    return result;
                 }
                 int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
                 for (int i = 0; i < frameCount; i++)
@@ -355,7 +375,7 @@ namespace CharacterStudio
                         if (!map.TryGetValue(part, out Dictionary<Color32, Color32> partMap))
                         {
                             Debug.LogError("Map not found for part: " + part);
-                            return;
+                            return result;
                         }
                         Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[i], sBaseTexture[part], partMap);
                         sortedPart.Add((_characterDatabase.SortedData[part], generatedTexture));
@@ -371,18 +391,22 @@ namespace CharacterStudio
                     }
                     string fileName = animation.ToString() + "_" + i;
                     Debug.Log("Exporting: " + path + "/" + fileName);
+                    string fullPath = path + "/" + fileName + ".png";
+                    result.Sprites.TryAdd(fullPath, assembledTexture);
+                    result.OutputPath = arg.FolderPath;
                     CSUtils.SaveTexture(assembledTexture, path, fileName);
                     AssetDatabase.Refresh();
 #if UNITY_EDITOR
-                    string fullPath = path + "/" + fileName + ".png";
                     FormatSprite( fullPath );
 #endif
                 }
             }
+            return result;
         }
 
-        private void ExportSpriteSheet( ExportArg arg )
+        private SpriteSheetResult ExportSpriteSheet( ExportArg arg )
         {
+            SpriteSheetResult result = new SpriteSheetResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
             // For some reason, the order of the animations is reversed
             List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.Reverse().ToList();
@@ -404,7 +428,7 @@ namespace CharacterStudio
             maxCellHeight = maxCellHeight * this.size / maxCellHeight;
             int sheetWidth = maxCellWidth * maxFrameCount;
             int sheetHeight = maxCellHeight * allAnimations.Count;
-            List<(string animName, int animFrameCount)> frameData = new ();
+            List<(eCharacterAnimation anim, int animFrameCount)> frameData = new ();
 
             Texture2D spriteSheet = new Texture2D( sheetWidth, sheetHeight, TextureFormat.RGBA32, false ) { filterMode = FilterMode.Point };
             var colors = spriteSheet.GetPixels32();
@@ -421,10 +445,10 @@ namespace CharacterStudio
                 if ( !_animationDatabase.Data.TryGetValue( animation, out AnimationData animationData ) )
                 {
                     Debug.LogError( "Animation not found in database: " + animation );
-                    return;
+                    return result;
                 }
                 int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
-                frameData.Add( (animation.ToString(), frameCount) );
+                frameData.Add( (animation, frameCount) );
                 for ( int frameIndex = 0; frameIndex < frameCount; frameIndex++ )
                 {
                     List<(int sortingLayer, Texture2D texture)> sortedPart = new List<(int sortingLayer, Texture2D texture)>();
@@ -433,7 +457,7 @@ namespace CharacterStudio
                         if ( !map.TryGetValue( part, out Dictionary<Color32, Color32> partMap ) )
                         {
                             Debug.LogError( "Map not found for part: " + part );
-                            return;
+                            return result;
                         }
                         Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], sBaseTexture[ part ], partMap );
                         sortedPart.Add( (_characterDatabase.SortedData[ part ], generatedTexture) );
@@ -466,7 +490,15 @@ namespace CharacterStudio
 #if UNITY_EDITOR
             string fullPath = path + "/" + fileName + ".png";
             FormatSpritesheet( fullPath );
-            SliceSpriteSheet( frameData, fullPath, this.size );
+            result.SpriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>( fullPath.Substring( fullPath.IndexOf( "Assets" ) ) );
+            result.FrameCount = frameData;
+            result.OutputPath = fullPath;
+            return result;
+#else
+            result.SpriteSheet = spriteSheet;
+            result.FrameCount = frameData;
+            result.OutputPath = path;
+            return result;
 #endif
         }
         private Texture2D CropTexture( Texture2D texture, float percentage )
