@@ -122,6 +122,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &26941558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 26941559}
+  - component: {fileID: 26941560}
+  m_Layer: 0
+  m_Name: TooltipManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &26941559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26941558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1329734057}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &26941560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26941558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ed87330f1b0ea4e86c1032368e7b41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 4542350214874513336, guid: 806cf29dce8313f4fbc4ceebb5ed0368,
+    type: 3}
 --- !u!1 &45458023
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +180,7 @@ GameObject:
   - component: {fileID: 45458026}
   - component: {fileID: 45458025}
   - component: {fileID: 45458027}
+  - component: {fileID: 45458028}
   m_Layer: 5
   m_Name: ResetButton
   m_TagString: Untagged
@@ -243,6 +290,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &45458028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45458023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Reset
+    Description: Reset outfit and camera
 --- !u!1 &84041541
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +317,7 @@ GameObject:
   - component: {fileID: 84041544}
   - component: {fileID: 84041543}
   - component: {fileID: 84041545}
+  - component: {fileID: 84041546}
   m_Layer: 5
   m_Name: ToggleBGButton
   m_TagString: Untagged
@@ -368,6 +431,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &84041546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84041541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Toggle background
+    Description: Toggle moving background
 --- !u!1 &89502104
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,6 +706,7 @@ GameObject:
   - component: {fileID: 167795014}
   - component: {fileID: 167795013}
   - component: {fileID: 167795015}
+  - component: {fileID: 167795016}
   m_Layer: 5
   m_Name: VFlipButton
   m_TagString: Untagged
@@ -737,6 +816,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &167795016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167795011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Vertical flip
+    Description: Flip the character vertically
 --- !u!1 &172638709
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,6 +994,7 @@ GameObject:
   - component: {fileID: 216025794}
   - component: {fileID: 216025793}
   - component: {fileID: 216025795}
+  - component: {fileID: 216025796}
   m_Layer: 5
   m_Name: PlusButton
   m_TagString: Untagged
@@ -1009,6 +1104,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &216025796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216025791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Zoom in
+    Description: Zoom in button
 --- !u!1 &223039342
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,6 +2316,7 @@ GameObject:
   - component: {fileID: 710711345}
   - component: {fileID: 710711344}
   - component: {fileID: 710711346}
+  - component: {fileID: 710711347}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -2319,6 +2430,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &710711347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710711342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Menu
+    Description: Open menu buttons
 --- !u!1 &778818530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2647,6 +2773,7 @@ GameObject:
   - component: {fileID: 977179475}
   - component: {fileID: 977179474}
   - component: {fileID: 977179476}
+  - component: {fileID: 977179477}
   m_Layer: 5
   m_Name: RandomButton
   m_TagString: Untagged
@@ -2756,6 +2883,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &977179477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977179472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Random
+    Description: Randomly select outfit
 --- !u!1 &1016294815
 GameObject:
   m_ObjectHideFlags: 0
@@ -2843,6 +2985,7 @@ GameObject:
   - component: {fileID: 1036645930}
   - component: {fileID: 1036645929}
   - component: {fileID: 1036645931}
+  - component: {fileID: 1036645932}
   m_Layer: 5
   m_Name: ToggleOverlayUIButton
   m_TagString: Untagged
@@ -2955,6 +3098,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &1036645932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036645927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: 
+    Description: Show/Hide overlay UI
 --- !u!1 &1110654693
 GameObject:
   m_ObjectHideFlags: 0
@@ -3428,6 +3586,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 223039344}
+  - {fileID: 26941559}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1343642396
@@ -4063,6 +4222,7 @@ GameObject:
   - component: {fileID: 1767231867}
   - component: {fileID: 1767231866}
   - component: {fileID: 1767231868}
+  - component: {fileID: 1767231869}
   m_Layer: 5
   m_Name: HFlipButton
   m_TagString: Untagged
@@ -4172,6 +4332,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1767231869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767231864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Horizontal flip
+    Description: Flip the character horizontally
 --- !u!1 &1782750794
 GameObject:
   m_ObjectHideFlags: 0
@@ -4184,6 +4359,7 @@ GameObject:
   - component: {fileID: 1782750797}
   - component: {fileID: 1782750796}
   - component: {fileID: 1782750798}
+  - component: {fileID: 1782750799}
   m_Layer: 5
   m_Name: MinusButton
   m_TagString: Untagged
@@ -4293,6 +4469,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1782750799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782750794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Zoom out
+    Description: Zoom out button
 --- !u!1 &1931026003
 GameObject:
   m_ObjectHideFlags: 0
@@ -4760,6 +4951,7 @@ GameObject:
   - component: {fileID: 2658240792646770514}
   - component: {fileID: 4908102346481967053}
   - component: {fileID: 4306484634253494274}
+  - component: {fileID: 9011395767214104994}
   m_Layer: 5
   m_Name: PlayStopButton
   m_TagString: Untagged
@@ -4934,6 +5126,7 @@ GameObject:
   - component: {fileID: 8665579022247778492}
   - component: {fileID: 7822474764107812554}
   - component: {fileID: 5969082021149939509}
+  - component: {fileID: 8665579022247778493}
   m_Layer: 5
   m_Name: NextFrameButton
   m_TagString: Untagged
@@ -6857,6 +7050,7 @@ GameObject:
   - component: {fileID: 1527673411652723855}
   - component: {fileID: 3904191549929189393}
   - component: {fileID: 8773577054404677409}
+  - component: {fileID: 8773577054404677410}
   m_Layer: 5
   m_Name: PrevFrameButton
   m_TagString: Untagged
@@ -7011,6 +7205,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780995909302072041}
   m_CullTransparentMesh: 1
+--- !u!114 &8665579022247778493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780995909302072041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Next frame
+    Description: Go to next frame (active when stop playing)
 --- !u!114 &8773577054404677409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7055,6 +7264,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8773577054404677410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8020886769383900914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Previous frame
+    Description: Go to previous frame (active when stop playing)
 --- !u!114 &8913541396165327661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7166,6 +7390,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 65, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9011395767214104994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125167434116769625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: 
+    Description: Play/Stop animation
 --- !u!222 &9119541394154569243
 CanvasRenderer:
   m_ObjectHideFlags: 0

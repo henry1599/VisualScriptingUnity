@@ -17,12 +17,12 @@ MonoBehaviour:
     option for auto slice spritesheet by 32x32 size.\n(v) Add functionality for Sprite
     Library export (current we can export library, but is incorrectly assigned, need
     data from slicer from spritesheet, need to split create spritesheet and slicer
-    into 2 different process)\n(v) Add naming option for export popup \n(-) Add functionality
-    for export all (Sprites, spritesheet and library), each type is a checkbox option\n(-)
-    Add option for spritesheet to include instructions (the title for each row indicate
-    which animation is that), and add watermark to the sprite.\n\n- Embed a runtime
-    pixel art tool inside unity (or at least editor tool)\n- Add tooltip system\n-
-    Add more animations:\n\t+ Jump-up\n\t+ Jump-down\n\t+ Climp\n\t+ Attack-sword-01
-    (RHand) (cond - has sword)\n\t+ Attack-sword-02 (RHand) (cond - has sword)\n\t+
-    Attack-sword-03 (RHand) (cond - has sword)\n\t+ Special-sword-01 (use 2 hand)
-    (cond - has sword)\n\t+ Block (LHand) (cond - has shield)"
+    into 2 different process)\n(v) Add naming option for export popup \n(v) Add tooltip
+    system\n(-) Add functionality for export all (Sprites, spritesheet and library),
+    each type is a checkbox option\n(-) Add option for spritesheet to include instructions
+    (the title for each row indicate which animation is that), and add watermark
+    to the sprite.\n\n- Embed a runtime pixel art tool inside unity (or at least
+    editor tool)\n- Add more animations:\n\t+ Jump-up\n\t+ Jump-down\n\t+ Climp\n\t+
+    Attack-sword-01 (RHand) (cond - has sword)\n\t+ Attack-sword-02 (RHand) (cond
+    - has sword)\n\t+ Attack-sword-03 (RHand) (cond - has sword)\n\t+ Special-sword-01
+    (use 2 hand) (cond - has sword)\n\t+ Block (LHand) (cond - has shield)"

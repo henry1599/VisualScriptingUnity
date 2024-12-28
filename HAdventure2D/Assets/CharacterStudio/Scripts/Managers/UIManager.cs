@@ -27,5 +27,51 @@ namespace CharacterStudio
 
             return false;
         }
+        public static GameObject GetCurrentUIObjectMouseIsOver()
+        {
+            PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
+            {
+                position = Input.mousePosition
+            };
+
+            List<RaycastResult> raycastResults = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+            if (raycastResults.Count > 0)
+            {
+                Debug.Log("UI object found under mouse: " + raycastResults[0].gameObject.name);
+                return raycastResults[0].gameObject;
+            }
+
+            return null;
+        }
+        public static Tooltipable GetFirstTooltipableObjectOnMouseHover()
+        {
+            GameObject uiObjectMouseIsOver = GetCurrentUIObjectMouseIsOver();
+
+            if (uiObjectMouseIsOver != null)
+            {
+                Tooltipable tooltipable = uiObjectMouseIsOver.GetComponent<Tooltipable>();
+
+                if (tooltipable != null)
+                {
+                    return tooltipable;
+                }
+
+                tooltipable = uiObjectMouseIsOver.GetComponentInParent<Tooltipable>();
+                if (tooltipable != null)
+                {
+                    return tooltipable;
+                }
+
+                // tooltipable = uiObjectMouseIsOver.GetComponentInChildren<Tooltipable>();
+                // if (tooltipable != null)
+                // {
+                //     return tooltipable;
+                // }
+            }
+
+            return null;
+        }
     }
 }

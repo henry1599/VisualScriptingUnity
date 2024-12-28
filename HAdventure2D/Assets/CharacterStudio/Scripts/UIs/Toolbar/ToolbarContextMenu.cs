@@ -9,6 +9,7 @@ namespace CharacterStudio
     public class ToolbarContextMenuItem
     {
         public string Text;
+        public TooltipData Tooltip; 
         public UnityEvent OnClick;
     }
 }

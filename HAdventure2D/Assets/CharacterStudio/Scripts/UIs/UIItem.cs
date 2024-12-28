@@ -20,13 +20,20 @@ namespace CharacterStudio
         string id = string.Empty;
 
         EventSubscription<PartChangedArg> _itemClickSubscription;
-        public void SetupCategory(Texture2D icon, eCharacterPart part)
+        public void SetupCategory(Texture2D icon, eCharacterPart part, TooltipData tooltip)
         {
             Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
             this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = string.Empty;
             this._button.onClick.AddListener(OnClicked);
+
+            Tooltipable tooltipable = gameObject.GetComponent<Tooltipable>();
+            if (tooltipable == null)
+            {
+                tooltipable = gameObject.AddComponent<Tooltipable>();
+            }
+            tooltipable.Data = tooltip;
         }
         public void SetupId( Texture2D icon, eCharacterPart part, string id, bool selected = false)
         {

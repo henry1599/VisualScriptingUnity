@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9017213318032016028}
   - component: {fileID: 8133190384651932765}
   - component: {fileID: 6202265288993495959}
+  - component: {fileID: 8719304122659588319}
   m_Layer: 5
   m_Name: Export
   m_TagString: Untagged
@@ -154,6 +155,9 @@ MonoBehaviour:
   _item: {fileID: 6150638163356159211, guid: 0797967bec8b1b94a9ebe5df2c693ba8, type: 3}
   ContextMenuList:
   - Text: Sprite Sheet
+    Tooltip:
+      Title: Export spritesheet
+      Description: Export a spritesheet with slice options
     OnClick:
       m_PersistentCalls:
         m_Calls:
@@ -170,6 +174,9 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   - Text: Sprites
+    Tooltip:
+      Title: Export sprites
+      Description: Export every single sprites to different folders
     OnClick:
       m_PersistentCalls:
         m_Calls:
@@ -186,6 +193,10 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   - Text: Sprite Library
+    Tooltip:
+      Title: Export sprite library
+      Description: Export a spritesheet and a fully set-up sprite library in the
+        same folder
     OnClick:
       m_PersistentCalls:
         m_Calls:
@@ -204,6 +215,21 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8719304122659588319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627954077632371439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be01a35c2aff648aaf167e4fa69319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Title: Export
+    Description: Export current character
 --- !u!1 &6828802029905010493
 GameObject:
   m_ObjectHideFlags: 0

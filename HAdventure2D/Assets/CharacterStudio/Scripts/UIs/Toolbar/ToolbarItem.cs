@@ -38,7 +38,7 @@ namespace CharacterStudio
             {
                 width = Mathf.Max(width, GetTextLength(item.Text));
                 var contextMenuItem = Instantiate(_item, _itemContainer).GetComponent<ContextMenuItem>();
-                contextMenuItem.Setup(item.Text, item.OnClick);
+                contextMenuItem.Setup(item.Text, item.OnClick, item.Tooltip);
             }
             RectTransform rectTransform = _itemContainer.GetComponent<RectTransform>();
             var size = rectTransform.sizeDelta;

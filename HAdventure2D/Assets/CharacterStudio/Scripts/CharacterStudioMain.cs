@@ -104,7 +104,11 @@ namespace CharacterStudio
             foreach (var category in _actualCategories)
             {
                 UIItem item = Instantiate(_itemPrefab, _itemContainer);
-                item.SetupCategory(_characterDatabase.Categories[category].Icon, category);
+                TooltipData tooltip = new TooltipData()
+                {
+                    Description = $"Enter {_characterDatabase.Categories[category].DisplayName} selection"
+                };
+                item.SetupCategory(_characterDatabase.Categories[category].Icon, category, tooltip);
             }
         }
         public void ReloadItems(eCharacterPart category)
