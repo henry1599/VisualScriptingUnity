@@ -167,7 +167,7 @@ namespace CharacterStudio
                     result = ExportSeparatedSprites(arg);
                     break;
                 case eExportType.SpriteLibrary:
-                    ExportSpriteLibrary(arg);
+                    result = ExportSpriteLibrary(arg);
                     break;
                 case eExportType.All:
                     ExportSeparatedSprites(arg);
@@ -177,8 +177,9 @@ namespace CharacterStudio
             }
         }
 
-        private void ExportSpriteLibrary(ExportArg arg)
+        private SpriteLibrarayResult ExportSpriteLibrary(ExportArg arg)
         {
+            SpriteLibrarayResult result = new SpriteLibrarayResult();
             // * Export sprite sheet
             SpriteSheetResult spriteSheetResult = ExportSpriteSheet(arg);
             SliceSpriteSheet(spriteSheetResult.FrameCount, spriteSheetResult.OutputPath, size);
@@ -193,7 +194,7 @@ namespace CharacterStudio
             if (spriteSheet == null)
             {
                 Debug.LogError("Failed to load sprite sheet at path: " + assetPath);
-                return;
+                return result;
             }
 
             // Create a new sprite library asset
@@ -223,6 +224,7 @@ namespace CharacterStudio
                         spriteLibraryAsset.AddCategoryLabel(sprite, category, sprite.name);
                     }
                 }
+                result.OutputPath = spriteLibAssetPath;
                 AssetDatabase.CreateAsset(spriteLibraryAsset, spriteLibAssetPath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -240,6 +242,7 @@ namespace CharacterStudio
                 Debug.LogError("Failed to load texture importer at path: " + assetPath);
             }
 #endif
+            return result;
         }
         private void FormatSprite( string path )
         {
