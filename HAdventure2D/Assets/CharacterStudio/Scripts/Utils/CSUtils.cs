@@ -33,7 +33,7 @@ namespace CharacterStudio
             }
             return result;
         }
-        public static Texture2D GenerateTexture(Texture2D baseMap, Texture2D baseTexture, Dictionary<Color32, Color32> map)
+        public static Texture2D GenerateTexture(Texture2D baseMap , Dictionary<Color32, Color32> map)
         {
             Texture2D newTexture = new Texture2D(baseMap.width, baseMap.height, TextureFormat.RGBA32, false)
             {
@@ -51,7 +51,7 @@ namespace CharacterStudio
                     }
                     if (map.TryGetValue(baseMapColor, out Color32 baseTextureColor))
                     {
-                        baseTextureColor.a = 255;
+                        // baseTextureColor.a = 255;
                         newTexture.SetPixel(x, y, baseTextureColor);
                     }
                     else

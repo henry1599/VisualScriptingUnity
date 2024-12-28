@@ -111,7 +111,7 @@ namespace CharacterStudio
             }
             for (int i = 0; i < textures.Count; i++)
             {
-                Texture2D generatedTexture = CSUtils.GenerateTexture(textures[i], baseTexture, map);
+                Texture2D generatedTexture = CSUtils.GenerateTexture(textures[i], map);
                 _currentAnimationTextures[_currentAnimation].TryAdd(part, new List<Texture2D>(textures.Count));
                 if (i >= 0 && i < _currentAnimationTextures[_currentAnimation][part].Count)
                 {
@@ -323,7 +323,8 @@ namespace CharacterStudio
                     SpriteRect spriteRect = new SpriteRect
                     {
                         rect = new Rect(x * cellSize, y * cellSize, cellSize, cellSize),
-                        pivot = new Vector2(0.5f, 0.0f),
+                        alignment = SpriteAlignment.Custom,
+                        pivot = new Vector2(0.5f, 0.25f),
                         name = frameData[y].anim.ToString() + "_" + x
                     };
                     newSpriteRects.Add(spriteRect);
@@ -374,7 +375,7 @@ namespace CharacterStudio
                             Debug.LogError("Map not found for part: " + part);
                             return result;
                         }
-                        Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[i], sBaseTexture[part], partMap);
+                        Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[i], partMap);
                         sortedPart.Add((_characterDatabase.SortedData[part], generatedTexture));
                     }
                     sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
@@ -456,7 +457,7 @@ namespace CharacterStudio
                             Debug.LogError( "Map not found for part: " + part );
                             return result;
                         }
-                        Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], sBaseTexture[ part ], partMap );
+                        Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], partMap );
                         sortedPart.Add( (_characterDatabase.SortedData[ part ], generatedTexture) );
                     }
                     sortedPart = sortedPart.OrderBy( x => x.sortingLayer ).Reverse().ToList();
