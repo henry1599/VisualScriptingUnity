@@ -49,7 +49,9 @@ namespace CharacterStudio
 
         private EventSubscription<ChangePartArg> _changePartSubscription;
         private EventSubscription<ChangeAnimationArg> _changeAnimationSubscription;
-        private EventSubscription<ExportArg> _exportSubscription;
+        private EventSubscription<SeparatedSpritesExportArg> _exportSeparatedSpritesSubscription;
+        private EventSubscription<SpriteLibraryExportArg> _exportSpriteLibrarySubscription;
+        private EventSubscription<SpritesheetExportArg> _exportSpriteSheetSubscription;
         private EventSubscription<ChangePartRandomlyArg> _changepartRandomlySubscription;
         private EventSubscription<ResetPartArg> _resetPartSubscription;
 
@@ -125,7 +127,9 @@ namespace CharacterStudio
         {
             _changePartSubscription = EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
             _changeAnimationSubscription = EventBus.Instance.Subscribe<ChangeAnimationArg>(OnChangeAnimation);
-            _exportSubscription = EventBus.Instance.Subscribe<ExportArg>(OnExport);
+            _exportSeparatedSpritesSubscription = EventBus.Instance.Subscribe<SeparatedSpritesExportArg>(OnExportSeparatedSprites);
+            _exportSpriteLibrarySubscription = EventBus.Instance.Subscribe<SpriteLibraryExportArg>(OnExportSpriteLibrary);
+            _exportSpriteSheetSubscription = EventBus.Instance.Subscribe<SpritesheetExportArg>(OnExportSpriteSheet);
             _changepartRandomlySubscription = EventBus.Instance.Subscribe<ChangePartRandomlyArg>( OnChangePartRandomly );
             _resetPartSubscription = EventBus.Instance.Subscribe<ResetPartArg>( OnResetPart );
 
@@ -152,36 +156,28 @@ namespace CharacterStudio
             }
             ApplySelection();
         }
-
-        private void OnExport(ExportArg arg)
+        private void OnExportSeparatedSprites( SeparatedSpritesExportArg arg )
         {
-            ExportResult result = null;
-            switch (arg.ExportType)
-            {
-                case eExportType.SpriteSheet:
-                    result = ExportSpriteSheet(arg);
-                    SpriteSheetResult spriteSheetResult = result as SpriteSheetResult;
-                    SliceSpriteSheet(spriteSheetResult.FrameCount, spriteSheetResult.OutputPath, size);
-                    break;
-                case eExportType.SeparatedSprites:
-                    result = ExportSeparatedSprites(arg);
-                    break;
-                case eExportType.SpriteLibrary:
-                    result = ExportSpriteLibrary(arg);
-                    break;
-                case eExportType.All:
-                    ExportSeparatedSprites(arg);
-                    ExportSpriteLibrary(arg);
-                    ExportSpriteSheet(arg);
-                    break;
-            }
+            _ = ExportSeparatedSprites(arg);
+        }
+        private void OnExportSpriteLibrary( SpriteLibraryExportArg arg )
+        {
+            _ = ExportSpriteLibrary(arg);
+        }
+        private void OnExportSpriteSheet( SpritesheetExportArg arg )
+        {
+            SpriteSheetResult result = ExportSpriteSheet(arg);
+            if (arg.AutoSlice)
+                SliceSpriteSheet(result.FrameCount, result.OutputPath, size);
         }
 
-        private SpriteLibrarayResult ExportSpriteLibrary(ExportArg arg)
+        private SpriteLibrarayResult ExportSpriteLibrary(SpriteLibraryExportArg arg)
         {
             SpriteLibrarayResult result = new SpriteLibrarayResult();
             // * Export sprite sheet
-            SpriteSheetResult spriteSheetResult = ExportSpriteSheet(arg);
+
+            SpritesheetExportArg spriteSheetExportArg = new SpritesheetExportArg(arg.FolderPath, true);
+            SpriteSheetResult spriteSheetResult = ExportSpriteSheet(spriteSheetExportArg);
             SliceSpriteSheet(spriteSheetResult.FrameCount, spriteSheetResult.OutputPath, size);
 
             // * Then use the sprite sheet to create a sprite library at the same location
@@ -343,7 +339,7 @@ namespace CharacterStudio
             AssetDatabase.Refresh();
 #endif
         }
-        private SeparatedSpriteResult ExportSeparatedSprites(ExportArg arg)
+        private SeparatedSpriteResult ExportSeparatedSprites(SeparatedSpritesExportArg arg)
         {
             SeparatedSpriteResult result = new SeparatedSpriteResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
@@ -405,7 +401,7 @@ namespace CharacterStudio
             return result;
         }
 
-        private SpriteSheetResult ExportSpriteSheet( ExportArg arg )
+        private SpriteSheetResult ExportSpriteSheet( SpritesheetExportArg arg )
         {
             SpriteSheetResult result = new SpriteSheetResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
@@ -563,7 +559,9 @@ namespace CharacterStudio
             base.OnDestroy();
             EventBus.Instance.Unsubscribe(_changePartSubscription);
             EventBus.Instance.Unsubscribe(_changeAnimationSubscription);
-            EventBus.Instance.Unsubscribe(_exportSubscription);
+            EventBus.Instance.Unsubscribe(_exportSeparatedSpritesSubscription);
+            EventBus.Instance.Unsubscribe(_exportSpriteLibrarySubscription);
+            EventBus.Instance.Unsubscribe(_exportSpriteSheetSubscription);
             EventBus.Instance.Unsubscribe( _changepartRandomlySubscription );
             EventBus.Instance.Unsubscribe( _resetPartSubscription );
         }

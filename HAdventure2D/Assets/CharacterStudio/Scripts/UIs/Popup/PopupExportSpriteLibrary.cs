@@ -30,7 +30,12 @@ namespace CharacterStudio
         {
             if (!Directory.Exists(_pathText.text))
                 return;
-            EventBus.Instance.Publish(new ExportArg(eExportType.SpriteLibrary, _pathText.text));
+            if (string.IsNullOrEmpty(_name.text))
+                return;
+            string exportFolder = Path.Combine(_pathText.text, _name.text);
+            if (!Directory.Exists(exportFolder))
+                Directory.CreateDirectory(exportFolder);
+            EventBus.Instance.Publish(new SpriteLibraryExportArg(exportFolder));
         }
 
         private void OnBrowseCancel()

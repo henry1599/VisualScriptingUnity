@@ -7,7 +7,6 @@ namespace CharacterStudio
 {
     public enum eExportType
     {
-        All,
         SpriteLibrary,
         SpriteSheet,
         SeparatedSprites
@@ -20,6 +19,26 @@ namespace CharacterStudio
         {
             ExportType = exportType;
             FolderPath = folderPath;
+        }
+    }
+    public class SpritesheetExportArg : ExportArg
+    {
+        public bool AutoSlice {get; private set;}
+        public SpritesheetExportArg(string folderPath, bool autoSlice) : base(eExportType.SpriteSheet, folderPath)
+        {
+            AutoSlice = autoSlice;
+        }
+    }
+    public class SpriteLibraryExportArg : ExportArg
+    {
+        public SpriteLibraryExportArg(string folderPath) : base(eExportType.SpriteLibrary, folderPath)
+        {
+        }
+    }
+    public class SeparatedSpritesExportArg : ExportArg
+    {
+        public SeparatedSpritesExportArg(string folderPath) : base(eExportType.SeparatedSprites, folderPath)
+        {
         }
     }
 }

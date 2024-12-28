@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ namespace CharacterStudio
 {
     public abstract class PopupBase : MonoBehaviour, IPopup
     {
+        [SerializeField] protected TMP_InputField _name;
         [SerializeField] Button _cancelButton;
         public abstract ePopupType PopupType { get; }
 
