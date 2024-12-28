@@ -4,12 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor.U2D.Sprites;
 using UnityEngine.U2D.Animation;
-using UnityEngine.Experimental.U2D;
-using System.IO;
-using System.Runtime.CompilerServices;
+using System.Reflection;
+
 
 
 
@@ -210,8 +208,8 @@ namespace CharacterStudio
                 var dataProvider = factory.GetSpriteEditorDataProviderFromObject(textureImporter);
                 dataProvider.InitSpriteEditorDataProvider();
                 int rows = spriteSheetResult.FrameCount.Count;
-                string spriteLibPath = arg.FolderPath + "/" + "SpriteLibrary.asset";
-                spriteLibPath = spriteLibPath.Substring(spriteLibPath.IndexOf("Assets"));
+                string spriteLibAssetPath = arg.FolderPath + "/" + "SpriteLibrary.asset";
+                spriteLibAssetPath = spriteLibAssetPath.Substring(spriteLibAssetPath.IndexOf("Assets"));
 
                 var allSprites = AssetDatabase.LoadAllAssetsAtPath(assetPath).OfType<Sprite>().ToList();
 
@@ -225,12 +223,12 @@ namespace CharacterStudio
                         spriteLibraryAsset.AddCategoryLabel(sprite, category, sprite.name);
                     }
                 }
-                AssetDatabase.CreateAsset(spriteLibraryAsset, spriteLibPath);
+                AssetDatabase.CreateAsset(spriteLibraryAsset, spriteLibAssetPath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
 
-                SpriteLibraryAsset createdAsset = AssetDatabase.LoadAssetAtPath<SpriteLibraryAsset>(spriteLibPath);
+                SpriteLibraryAsset createdAsset = AssetDatabase.LoadAssetAtPath<SpriteLibraryAsset>(spriteLibAssetPath);
                 if (createdAsset != null)
                 {
                     EditorGUIUtility.PingObject(createdAsset);
