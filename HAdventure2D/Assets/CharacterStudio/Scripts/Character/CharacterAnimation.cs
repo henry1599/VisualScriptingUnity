@@ -6,8 +6,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor.U2D.Sprites;
 using UnityEngine.U2D.Animation;
-using System.Reflection;
-using System.IO;
 
 
 
