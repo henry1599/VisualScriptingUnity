@@ -4,7 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor.U2D.Sprites;
+#endif
 using UnityEngine.U2D.Animation;
 
 
@@ -393,8 +396,8 @@ namespace CharacterStudio
                     result.Sprites.TryAdd(fullPath, assembledTexture);
                     result.OutputPath = arg.FolderPath;
                     CSUtils.SaveTexture(assembledTexture, path, fileName);
-                    AssetDatabase.Refresh();
 #if UNITY_EDITOR
+                    AssetDatabase.Refresh();
                     FormatSprite( fullPath );
 #endif
                 }
@@ -484,8 +487,8 @@ namespace CharacterStudio
             string fileName = $"{arg.Name}_SpriteSheet";
             Debug.Log( "Exporting: " + path );
             CSUtils.SaveTexture( spriteSheet, path, fileName );
-            AssetDatabase.Refresh();
 #if UNITY_EDITOR
+            AssetDatabase.Refresh();
             string fullPath = path + "/" + fileName + ".png";
             FormatSpritesheet( fullPath );
             result.SpriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>( fullPath.Substring( fullPath.IndexOf( "Assets" ) ) );
