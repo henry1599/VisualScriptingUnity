@@ -79,6 +79,12 @@ namespace CharacterStudio
         {
             return -value;
         }
+        internal static Vector2Int GetPixelIndex( Vector2 normalizedPixelPosition, RenderTexture rt)
+        {
+            int x = Mathf.Clamp((int)(normalizedPixelPosition.x * rt.width), 0, rt.width - 1);
+            int y = Mathf.Clamp((int)(normalizedPixelPosition.y * rt.height), 0, rt.height - 1);
+            return new Vector2Int(x, y);
+        }
         internal static Vector2 GetNormalizedPositionOnPaintingCanvas( PointerEventData eventData, RectTransform rectTransform )
         {
             if ( RectTransformUtility.ScreenPointToLocalPointInRectangle( rectTransform, eventData.position, eventData.pressEventCamera, out Vector2 localPosition ) )
