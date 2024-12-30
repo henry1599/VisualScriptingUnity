@@ -39,7 +39,6 @@ namespace CharacterStudio
 
             if (raycastResults.Count > 0)
             {
-                Debug.Log("UI object found under mouse: " + raycastResults[0].gameObject.name);
                 return raycastResults[0].gameObject;
             }
 
@@ -63,12 +62,6 @@ namespace CharacterStudio
                 {
                     return tooltipable;
                 }
-
-                // tooltipable = uiObjectMouseIsOver.GetComponentInChildren<Tooltipable>();
-                // if (tooltipable != null)
-                // {
-                //     return tooltipable;
-                // }
             }
 
             return null;

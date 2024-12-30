@@ -5,9 +5,7 @@ namespace CharacterStudio
 {
     public class CSPen : CSBrush
     {
-        public bool IsPixelPerfect = true;
         private Vector2Int? _previousPixelPosition = null;
-        private HashSet<Vector2Int> _drawnPixels = new();
 
         public override eBrushType BrushType => eBrushType.Pen;
 
@@ -16,7 +14,6 @@ namespace CharacterStudio
             Vector2Int currentPixel = GetPixelPosition(normalizedPixelPosition);
             DrawAtPixel(currentPixel, color);
             _previousPixelPosition = currentPixel;
-            _drawnPixels.Add(currentPixel);
         }
 
         public override void DrawPointerMove(Vector2 normalizedPixelPosition, Color color)
@@ -30,13 +27,11 @@ namespace CharacterStudio
             }
 
             _previousPixelPosition = currentPixel;
-            _drawnPixels.Add(currentPixel);
         }
 
         public override void DrawPointerUp(Vector2 normalizedPixelPosition, Color color)
         {
             _previousPixelPosition = null;
-            _drawnPixels.Clear();
         }
         private void DrawSimpleLine(Vector2Int start, Vector2Int end, Color color)
         {
