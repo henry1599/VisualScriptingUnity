@@ -7,20 +7,14 @@ namespace CharacterStudio
 {
     public class CSPaintingRenderer : MonoBehaviour
     {
-        // private const int BG_BLOCK_SIZE = 16;
-        // [SerializeField] Color bgBlockColor1;
-        // [SerializeField] Color bgBlockColor2;
-        [SerializeField] RenderTexture _renderTexture;
-        // [SerializeField] RenderTexture _bgRenderTexture;
-        Texture2D _drawingTexture;
-        // Texture2D _bgTexture;
-        Color[] _pixelColors;
-        // Color[] _bgColors;
+        [SerializeField] protected RenderTexture _renderTexture;
+        protected Texture2D _drawingTexture;
+        protected Color[] _pixelColors;
 
         public Texture2D DrawingTexture => _drawingTexture;
         public RenderTexture RT => _renderTexture;
         public Color[] PixelColors => _pixelColors;
-        private void Start()
+        protected virtual void Start()
         {
             // _bgColors = new Color[ _bgRenderTexture.width * _bgRenderTexture.height ];
             // _bgTexture = new Texture2D( _bgRenderTexture.width, _bgRenderTexture.height, TextureFormat.RGBA32, false );
