@@ -37,7 +37,7 @@ namespace CharacterStudio
         }
         public override void DrawOnHover(Vector2 normalizedPixelPosition, Color color)
         {
-            color = Color.clear;
+            color = new Color(0, 0, 0, 0.25f);
             base.DrawOnHover(normalizedPixelPosition, color);
         }
         public override void DrawPreview(Vector2 normalizedPixelPosition, Color color)
