@@ -25,7 +25,7 @@ namespace CharacterStudio
         protected CSPaintingRenderer _csMainRenderer;
         protected CSPaintingRenderer _csPreviewRenderer;
         protected CSPaintingRenderer _csHoverRenderer;
-        public void Initialize( CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer )
+        public void Setup( CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer )
         {
             _csMainRenderer = mainRenderer;
             _csPreviewRenderer = previewRenderer;

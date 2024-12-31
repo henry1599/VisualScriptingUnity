@@ -15,3 +15,10 @@ MonoBehaviour:
   BackgroundTileSize: 16
   BackgroundTileColor1: {r: 0.41176474, g: 0.4156863, b: 0.4156863, a: 1}
   BackgroundTileColor2: {r: 0.60784316, g: 0.6784314, b: 0.7176471, a: 1}
+  DefaultBrush: 0
+  BrushIconsDict:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 21300000, guid: cf37e121975b68144a14611466a91975, type: 3}
+    - Key: 1
+      Value: {fileID: 21300000, guid: f74abfc2b954c9644ae09ee94c6eb831, type: 3}
