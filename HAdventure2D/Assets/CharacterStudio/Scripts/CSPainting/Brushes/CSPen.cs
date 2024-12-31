@@ -37,5 +37,11 @@ namespace CharacterStudio
         public override void DrawPreview(Vector2 normalizedPixelPosition, Color color)
         {
         }
+
+        public override void HandleCursor(bool isEnter)
+        {
+            Cursor.visible = !isEnter;
+        }
+
     }
 }

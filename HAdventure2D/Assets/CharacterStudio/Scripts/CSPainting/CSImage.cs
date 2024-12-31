@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace CharacterStudio
 {
-    public class CSImage : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
+    public class CSImage : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler, IPointerExitHandler, IPointerEnterHandler
     {
         public RectTransform RectTransform
         {
@@ -31,6 +31,16 @@ namespace CharacterStudio
         {
             EventBus.Instance?.Publish( new PointerUpArgs( this, eventData ) );
         }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            EventBus.Instance?.Publish( new PointerExitArgs( this, eventData ) );
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            EventBus.Instance?.Publish( new PointerEnterArgs( this, eventData ) );
+        }
     }
     public class PointerArgs : EventArgs
     {
@@ -44,18 +54,22 @@ namespace CharacterStudio
     }
     public class PointerDownArgs : PointerArgs
     {
-        public PointerDownArgs( CSImage image, PointerEventData evt ) : base( image, evt )
-        {
-        }
+        public PointerDownArgs( CSImage image, PointerEventData evt ) : base( image, evt ) { }
     }
     public class PointerMoveArgs : PointerArgs
     {
-        public PointerMoveArgs( CSImage image, PointerEventData evt ) : base( image, evt ) 
-        {
-        }
+        public PointerMoveArgs( CSImage image, PointerEventData evt ) : base( image, evt ) { }
     }
     public class PointerUpArgs : PointerArgs
     {
         public PointerUpArgs( CSImage image, PointerEventData evt ) : base( image, evt ) { }
+    }
+    public class PointerExitArgs : PointerArgs
+    {
+        public PointerExitArgs( CSImage image, PointerEventData evt ) : base( image, evt ) { }
+    }
+    public class PointerEnterArgs : PointerArgs
+    {
+        public PointerEnterArgs( CSImage image, PointerEventData evt ) : base( image, evt ) { }
     }
 }

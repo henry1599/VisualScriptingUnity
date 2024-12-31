@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04f9149bc7d3d1e4d86d40db49bb7df9, type: 3}
+  m_Name: CSPaintingSetting
+  m_EditorClassIdentifier: 
+  BackgroundTileSize: 16
+  BackgroundTileColor1: {r: 0.41176474, g: 0.4156863, b: 0.4156863, a: 1}
+  BackgroundTileColor2: {r: 0.60784316, g: 0.6784314, b: 0.7176471, a: 1}

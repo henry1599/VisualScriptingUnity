@@ -34,6 +34,7 @@ namespace CharacterStudio
         public abstract void DrawPointerDown( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerMove( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerUp( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
+        public abstract void HandleCursor( bool isEnter ); 
         // * Call when dragging a line, shapes, etc. and draw on a preview texture
         public abstract void DrawPreview( Vector2 normalizedPixelPosition, Color color );
         // * Call when hovering over the canvas, draw on a hover texture
