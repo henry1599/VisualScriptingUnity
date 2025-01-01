@@ -13,11 +13,7 @@ namespace CharacterStudio
         public override void Setup(CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer)
         {
             base.Setup(mainRenderer, previewRenderer, hoverRenderer);
-            
-            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor(eBrushType.EyeDropper);
-            Vector2 hotpot = new Vector2(0, icon.height);
-            Cursor.SetCursor(icon, hotpot, CursorMode.Auto);
-            Cursor.visible = true;
+            SetSelfCursor();
         }
         public override void DrawPointerDown(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
@@ -50,17 +46,23 @@ namespace CharacterStudio
 
         public override void HandleCursor(bool isEnter)
         {
-            // if (!isEnter)
-            // {
-            //     Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            //     return;
-            // }
-            // Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor(eBrushType.EyeDropper);
-            // Vector2 hotpot = new Vector2(0, icon.height);
-            // Cursor.SetCursor(icon, hotpot, CursorMode.Auto);
-            Cursor.visible = true;
+            if (isEnter)
+            {
+                SetSelfCursor();
+            }
+            else
+            {
+                SetDefaultCursor();
+            }
         }
 
+        public override void SetSelfCursor()
+        {
+            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor(BrushType);
+            Vector2 hotpot = new Vector2(0, icon.height);
+            Cursor.SetCursor(icon, hotpot, CursorMode.Auto);
+            Cursor.visible = true;
+        }
     }
 
     internal class OnColorPickedArgs : EventArgs

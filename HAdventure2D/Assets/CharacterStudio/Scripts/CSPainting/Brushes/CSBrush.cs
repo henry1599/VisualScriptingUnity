@@ -39,6 +39,11 @@ namespace CharacterStudio
             _csPreviewRenderer?.ClearCanvas();
             _csHoverRenderer?.ClearCanvas();
         }
+        public virtual void SetDefaultCursor()
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+        public abstract void SetSelfCursor() ;
         public abstract void DrawPointerDown( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerMove( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerUp( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );

@@ -11,7 +11,7 @@ namespace CharacterStudio
         public override void Setup(CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer)
         {
             base.Setup(mainRenderer, previewRenderer, hoverRenderer);
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            SetSelfCursor();
         }
         public override void DrawPointerDown(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
@@ -44,7 +44,23 @@ namespace CharacterStudio
 
         public override void HandleCursor(bool isEnter)
         {
-            Cursor.visible = !isEnter;
+            if (isEnter)
+            {
+                SetSelfCursor();
+            }
+            else
+            {
+                SetDefaultCursor();
+            }
         }
+
+        public override void SetSelfCursor()
+        {
+            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor(BrushType);
+            Vector2 hotpot = new Vector2(icon.width / 2f, icon.height / 2f);
+            Cursor.SetCursor(icon, hotpot, CursorMode.Auto);
+            Cursor.visible = true;
+        }
+
     }
 }
