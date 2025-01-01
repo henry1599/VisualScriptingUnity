@@ -44,3 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e26d1593c88c7f46982097509854040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Tooltip:
+    Title: Pen Tool
+    Description: 
+  Shortcut:
+    Key: 98
+    Callback:
+      m_PersistentCalls:
+        m_Calls: []

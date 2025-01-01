@@ -41,6 +41,16 @@ namespace CharacterStudio
         void Update()
         {
             Tooltipable tooltipable = UIManager.GetFirstTooltipableObjectOnMouseHover();
+            Shortcutable shortcutable = tooltipable?.GetComponent<Shortcutable>();
+            if (shortcutable != null)
+            {
+                string key = shortcutable.Data.Key.ToString();
+                if (!tooltipable.Data.Description.Contains("(Shortcut:"))
+                {
+                    tooltipable.Data.Description = $"(Shortcut: {key}) {tooltipable.Data.Description}";
+                }
+            }
+            Debug.Log(tooltipable);
             if (tooltipable == null)
             {
                 this.tooltipObject.Hide();

@@ -23,6 +23,7 @@ namespace CharacterStudio
         [Foldout("Renderers"), SerializeField] private CSPaintingBackgroundRenderer _backgroundRenderer;
         [SerializeField] private Transform _brushContainer;
         [SerializeField] private Transform _brushUIContainer;
+        [SerializeField] private FlexibleColorPicker _colorPicker;
         [Space(5)]
 
 
@@ -42,12 +43,12 @@ namespace CharacterStudio
         EventSubscription<PointerEnterArgs> _pointerEnterSubscription;
         EventSubscription<PointerExitArgs> _pointerExitSubscription;
         EventSubscription<OnBrushSelectedArgs> _brushSelectedSubscription;
+        EventSubscription<OnColorPickedArgs> _colorPickedSubscription;
 
 
 
         public CSPaintingSetting Setting => _paintingSetting;
-
-        private Color cuurentColor = Color.cyan;
+        public Color CuurentColor => _colorPicker.color;
 
         protected override bool Awake()
         {
@@ -57,11 +58,13 @@ namespace CharacterStudio
             _pointerEnterSubscription = EventBus.Instance.Subscribe<PointerEnterArgs>( OnPointerEnter );
             _pointerExitSubscription = EventBus.Instance.Subscribe<PointerExitArgs>( OnPointerExit );
             _brushSelectedSubscription = EventBus.Instance.Subscribe<OnBrushSelectedArgs>( OnBrushSelected );
+            _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>(OnColorPicked);
 
             _backgroundRenderer.Setup( _paintingSetting );
 
             return base.Awake();
         }
+
 
         void Start()
         {
@@ -77,6 +80,7 @@ namespace CharacterStudio
                 _brushUIs.TryAdd( brush.BrushType, brushUI );
             }
             SelectBrush(_paintingSetting.DefaultBrush);
+            SetCurrentColor(_colorPicker.StartingColor);
         }
         protected override void OnDestroy()
         {
@@ -88,6 +92,11 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe( _pointerEnterSubscription );
             EventBus.Instance.Unsubscribe( _pointerExitSubscription );
             EventBus.Instance.Unsubscribe( _brushSelectedSubscription );
+            EventBus.Instance.Unsubscribe( _colorPickedSubscription );
+        }
+        private void OnColorPicked(OnColorPickedArgs args)
+        {
+            SetCurrentColor(args.CapturedColor);
         }
         private void OnPointerHover(PointerMoveArgs args)
         {
@@ -125,6 +134,10 @@ namespace CharacterStudio
 
 
 
+        public void SetCurrentColor(Color color)
+        {
+            _colorPicker.SetColor(color);
+        }
         void SelectBrush(eBrushType brushType)
         {
             // * Reset all brushes
@@ -161,23 +174,23 @@ namespace CharacterStudio
         }
         void StopDrawing()
         {
-            _activeBrush.DrawPointerUp( eCanvasType.Main, Vector2.zero, cuurentColor );
+            _activeBrush.DrawPointerUp( eCanvasType.Main, Vector2.zero, CuurentColor );
             EventBus.Instance.Unsubscribe( _pointerMoveSubscription );
         }
         void Draw(PointerEventData evt)
         {
             Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas( evt, _csImage.RectTransform );
-            _activeBrush.DrawPointerMove( eCanvasType.Main, normalizedVector, cuurentColor );
+            _activeBrush.DrawPointerMove( eCanvasType.Main, normalizedVector, CuurentColor );
         }
         void DrawHover( PointerEventData evt )
         {
             Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas( evt, _csImage.RectTransform );
-            _activeBrush.DrawOnHover( normalizedVector, cuurentColor );
+            _activeBrush.DrawOnHover( normalizedVector, CuurentColor );
         }
         void StartDrawing( PointerEventData evt )
         {
             Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas( evt, _csImage.RectTransform );
-            _activeBrush.DrawPointerDown( eCanvasType.Main, normalizedVector, cuurentColor );
+            _activeBrush.DrawPointerDown( eCanvasType.Main, normalizedVector, CuurentColor );
             _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>( OnPointerMove );
         }
         [Button("Clear")]

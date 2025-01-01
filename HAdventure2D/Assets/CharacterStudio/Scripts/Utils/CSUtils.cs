@@ -8,6 +8,15 @@ namespace CharacterStudio
 {
     public static class CSUtils
     {
+        public static T SafeAddComponent<T>( this GameObject go ) where T : Component
+        {
+            T component = go.GetComponent<T>();
+            if ( component == null )
+            {
+                component = go.AddComponent<T>();
+            }
+            return component;
+        }
         public static Rect GetIconRect(Texture2D icon, int iconSize)
         {
             if (iconSize % 2 != 0)

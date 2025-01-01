@@ -11,7 +11,8 @@ namespace CharacterStudio
         Line,
         Rectangle,
         Circle,
-        Fill
+        Fill,
+        EyeDropper
     }
     public enum eCanvasType
     {
@@ -22,6 +23,8 @@ namespace CharacterStudio
     public abstract class CSBrush : MonoBehaviour
     {
         public abstract eBrushType BrushType { get; }
+        public TooltipData Tooltip;
+        public ShortcutData Shortcut;
         protected CSPaintingRenderer _csMainRenderer;
         protected CSPaintingRenderer _csPreviewRenderer;
         protected CSPaintingRenderer _csHoverRenderer;

@@ -33,6 +33,13 @@ namespace CharacterStudio
                 Debug.LogError("BrushIcon is not found");
                 return;
             }
+            var tooltipable = gameObject.SafeAddComponent<Tooltipable>();
+            tooltipable.Data = brush.Tooltip;
+
+            var shortcutable = gameObject.SafeAddComponent<Shortcutable>();
+            shortcutable.Data = brush.Shortcut;
+            shortcutable.Data.Callback.AddListener(SelectBrush);
+            
 
             _icon.sprite = brushIcon;
             _background.color = _unselectedColor;

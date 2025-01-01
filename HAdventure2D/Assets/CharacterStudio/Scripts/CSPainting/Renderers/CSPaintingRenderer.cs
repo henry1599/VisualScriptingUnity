@@ -38,6 +38,18 @@ namespace CharacterStudio
             }
             UpdateRenderTexture();
         }
+        public Color GetColorAtIndex(int x, int y)
+        {
+            return _pixelColors[ y * _renderTexture.width + x ];
+        }
+        public Color GetColorAtIndex(Vector2Int index)
+        {
+            return GetColorAtIndex(index.x, index.y);
+        }
+        public Color GetColorAtIndex(int i)
+        {
+            return _pixelColors[ i ];
+        }
         public void UpdateRenderTexture()
         {
             RenderTexture currentActiveRT = RenderTexture.active;

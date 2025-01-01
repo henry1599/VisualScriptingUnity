@@ -25,7 +25,10 @@ namespace CharacterStudio
 
             titleText.text = data.Title;
             descriptionText.text = data.Description;
-            rectTransform.sizeDelta = new Vector2(Mathf.Max(titleText.preferredWidth, descriptionText.preferredWidth), Mathf.Max(titleText.preferredHeight, descriptionText.preferredHeight, 50));
+            float widthPerCharacter = 20;
+            float width = Mathf.Max(titleText.textInfo.characterCount, descriptionText.textInfo.characterCount) * widthPerCharacter;
+            float height = Mathf.Max(titleText.preferredHeight + descriptionText.preferredHeight, 100);
+            rectTransform.sizeDelta = new Vector2(width, height);
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
 
