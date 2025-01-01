@@ -25,6 +25,7 @@ namespace CharacterStudio
         public abstract eBrushType BrushType { get; }
         public TooltipData Tooltip;
         public ShortcutData Shortcut;
+        public int SizeLevel = 1;
         protected CSPaintingRenderer _csMainRenderer;
         protected CSPaintingRenderer _csPreviewRenderer;
         protected CSPaintingRenderer _csHoverRenderer;
@@ -43,7 +44,7 @@ namespace CharacterStudio
         {
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
-        public abstract void SetSelfCursor() ;
+        public abstract void SetSelfCursor();
         public abstract void DrawPointerDown( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerMove( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerUp( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
@@ -110,13 +111,63 @@ namespace CharacterStudio
             if (renderer == null || renderer.RT == null)
                 return;
 
-            int pixelIndex = pixelPosition.y * renderer.RT.width + pixelPosition.x;
+            List<(int x, int y)> pixelIndexes = new ();
+            Queue<(int x, int y)> pixelQueue = new();
+            pixelQueue.Enqueue((pixelPosition.x, pixelPosition.y));
+            int size = SizeLevel;
+            while (pixelQueue.Count > 0)
+            {
+                var candidate = pixelQueue.Dequeue();
+                pixelIndexes.Add(candidate);
 
-            if (pixelIndex < 0 || pixelIndex >= renderer.PixelColors.Length)
-                return;
+                if (size < 0)
+                    continue;
+                List<(int x, int y)> neighbors = GetNeighborIndexes(candidate.x, candidate.y, renderer);
+                foreach (var neighbor in neighbors)
+                {
+                    pixelQueue.Enqueue(neighbor);
+                } 
+                --size;
+            }
 
-            renderer.PixelColors[pixelIndex] = color;
-            renderer.UpdateRenderTexture();
+            foreach (var pixelIndex in pixelIndexes)
+            {
+                if (!IsValidIndex(pixelIndex.x, pixelIndex.y, renderer))
+                    return;
+                int index = pixelIndex.y * renderer.RT.width + pixelIndex.x;
+                renderer.PixelColors[index] = color;
+                renderer.UpdateRenderTexture();
+            }
+        }
+        protected List<(int x, int y)> GetNeighborIndexes(int x, int y, CSPaintingRenderer renderer)
+        {
+            int current = y * renderer.RT.width + x;
+            int top = (y + 1) * renderer.RT.width + x;
+            int bot = (y - 1) * renderer.RT.width + x;
+            int left = y * renderer.RT.width + (x - 1);
+            int right = y * renderer.RT.width + (x + 1);
+            List<(int x, int y)> result = new();
+            if (IsValidIndex(current, renderer))
+                result.Add((x, y));
+            if (IsValidIndex(top, renderer))
+                result.Add((x, y + 1));
+            if (IsValidIndex(bot, renderer))
+                result.Add((x, y - 1));
+            if (IsValidIndex(left, renderer))
+                result.Add((x - 1, y));
+            if (IsValidIndex(right, renderer))
+                result.Add((x + 1, y));
+
+            return result;
+        }
+        protected bool IsValidIndex(int x, int y, CSPaintingRenderer renderer)
+        {
+            int index = y * renderer.RT.width + x;
+            return IsValidIndex(index, renderer);
+        }
+        protected bool IsValidIndex(int index, CSPaintingRenderer renderer)
+        {
+            return index >= 0 && index < renderer.PixelColors.Length;
         }
         protected CSPaintingRenderer GetRenderer(eCanvasType canvasType) => canvasType switch
         {
