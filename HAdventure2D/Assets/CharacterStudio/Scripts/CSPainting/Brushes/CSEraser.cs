@@ -8,7 +8,11 @@ namespace CharacterStudio
         private Vector2Int? _previousPixelPosition = null;
 
         public override eBrushType BrushType => eBrushType.Eraser;
-
+        public override void Setup(CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer)
+        {
+            base.Setup(mainRenderer, previewRenderer, hoverRenderer);
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
         public override void DrawPointerDown(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
             color = Color.clear;

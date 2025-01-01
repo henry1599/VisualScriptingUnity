@@ -140,6 +140,10 @@ namespace CharacterStudio
         }
         void SelectBrush(eBrushType brushType)
         {
+            if (_activeBrush != null && _activeBrush.BrushType != brushType)
+            {
+                _activeBrush.Unsetup();
+            }
             // * Reset all brushes
             _activeBrush = null;
             foreach (var brush in _brushes.Values)

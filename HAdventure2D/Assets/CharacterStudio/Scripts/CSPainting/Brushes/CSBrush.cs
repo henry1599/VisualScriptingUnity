@@ -28,11 +28,16 @@ namespace CharacterStudio
         protected CSPaintingRenderer _csMainRenderer;
         protected CSPaintingRenderer _csPreviewRenderer;
         protected CSPaintingRenderer _csHoverRenderer;
-        public void Setup( CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer )
+        public virtual void Setup( CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer )
         {
             _csMainRenderer = mainRenderer;
             _csPreviewRenderer = previewRenderer;
             _csHoverRenderer = hoverRenderer;
+        }
+        public virtual void Unsetup()
+        {
+            _csPreviewRenderer?.ClearCanvas();
+            _csHoverRenderer?.ClearCanvas();
         }
         public abstract void DrawPointerDown( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );
         public abstract void DrawPointerMove( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color );

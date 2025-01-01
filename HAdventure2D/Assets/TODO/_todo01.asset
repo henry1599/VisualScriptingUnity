@@ -23,11 +23,11 @@ MonoBehaviour:
     to include instructions (the title for each row indicate which animation is that),
     and add watermark to the sprite.\n- Embed a runtime pixel art tool inside unity
     (or at least editor tool)\n\t# BASIC PAINTING TOOL\n\t(v) Implement Eye dropper
-    tool\n\t(v) Implement basic pen tool\n\t(v) Implement basic eraser tool\n\t+
-    Implement rectangle tool\n\t+ Implement circle tool\n\t+ Implement brush size
-    feature (scroll mouse up/down to change size)\n\t+ Implement color palette and
-    color picker hue field\n\t+ Implement selection tool\n\t+ Implement layer system\n\t+
-    Implement export sprites/layers function\n\t+ Implement shortcut\n\t\n\t# COMPATIBLE
+    tool\n\t(v) Implement basic pen tool\n\t(v) Implement basic eraser tool\n\t(v)
+    Implement shortcut\n\t+ Implement rectangle tool\n\t+ Implement circle tool\n\t+
+    Implement brush size feature (scroll mouse up/down to change size)\n\t+ Implement
+    color palette and color picker hue field\n\t+ Implement selection tool\n\t+ Implement
+    layer system\n\t+ Implement export sprites/layers function\n\t\n\t# COMPATIBLE
     SYSTEM\n\t+ Implement hint background if enter painting mode from Character editor\n\t+
     Implement auto apply/save system to newly created part\n\t\n\n- Add restriction
     feature on build\n\t+ Export sprite library can only be active in Editor\n\t+
