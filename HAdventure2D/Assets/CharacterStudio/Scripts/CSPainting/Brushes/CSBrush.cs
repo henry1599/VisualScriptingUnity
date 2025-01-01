@@ -25,7 +25,7 @@ namespace CharacterStudio
         public abstract eBrushType BrushType { get; }
         public TooltipData Tooltip;
         public ShortcutData Shortcut;
-        public int SizeLevel = 1;
+        public int SizeLevel = 0;
         protected CSPaintingRenderer _csMainRenderer;
         protected CSPaintingRenderer _csPreviewRenderer;
         protected CSPaintingRenderer _csHoverRenderer;
@@ -120,7 +120,7 @@ namespace CharacterStudio
                 var candidate = pixelQueue.Dequeue();
                 pixelIndexes.Add(candidate);
 
-                if (size < 0)
+                if (size <= 0)
                     continue;
                 List<(int x, int y)> neighbors = GetNeighborIndexes(candidate.x, candidate.y, renderer);
                 foreach (var neighbor in neighbors)
