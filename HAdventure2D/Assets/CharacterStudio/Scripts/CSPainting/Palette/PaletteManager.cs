@@ -11,6 +11,9 @@ namespace CharacterStudio
         [SerializeField] Transform _paletteContainer;
         [SerializeField] PaletteButton _paletteButtonPrefab;
         [SerializeField] Button _addButton;
+        [SerializeField] Button _resetToDefaultButton;
+        [SerializeField] Button _clearPaletteButton;
+
         [SerializeField] List<Color> _defaultColors;
 
         List<PaletteButton> _paletteButtons;
@@ -20,7 +23,24 @@ namespace CharacterStudio
             InitPalette();
 
             _addButton.onClick.AddListener( OnAddButtonClick );
+            _resetToDefaultButton.onClick.AddListener( OnResetToDefaultButtonClick );
+            _clearPaletteButton.onClick.AddListener( OnClearPaletteButtonClick );
             _removeColorSubscription = EventBus.Instance.Subscribe<OnRemoveColorArgs>( OnRemoveColor );
+        }
+
+        private void OnClearPaletteButtonClick()
+        {
+            _paletteButtons = new List<PaletteButton>();
+            int childCount = _paletteContainer.childCount;
+            for (int i = childCount - 1; i >= 0; i-- )
+            {
+                Destroy( _paletteContainer.GetChild( i ).gameObject );
+            }
+        }
+
+        private void OnResetToDefaultButtonClick()
+        {
+            InitPalette();
         }
 
         private void OnAddButtonClick()
@@ -45,6 +65,8 @@ namespace CharacterStudio
         {
             EventBus.Instance.Unsubscribe( _removeColorSubscription );
             _addButton.onClick.RemoveAllListeners();
+            _resetToDefaultButton.onClick.RemoveAllListeners();
+            _clearPaletteButton.onClick.RemoveAllListeners();
         }
         void InitPalette()
         {

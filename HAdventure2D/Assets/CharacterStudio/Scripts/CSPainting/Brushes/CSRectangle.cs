@@ -14,10 +14,7 @@ namespace CharacterStudio
         public override void DrawPointerDown( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color )
         {
             var renderer = GetRenderer( canvasType );
-            _startPosition = new Vector2Int(
-                Mathf.RoundToInt( normalizedPixelPosition.x * renderer.DrawingTexture.width ),
-                Mathf.RoundToInt( normalizedPixelPosition.y * renderer.DrawingTexture.height )
-            );
+            _startPosition = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT );
             _isDrawing = true;
         }
 
@@ -43,10 +40,7 @@ namespace CharacterStudio
         public override void DrawPreview( Vector2 normalizedPixelPosition, Color color )
         {
             var renderer = GetRenderer( eCanvasType.Preview );
-            Vector2Int endPosition = new Vector2Int(
-                Mathf.RoundToInt( normalizedPixelPosition.x * renderer.DrawingTexture.width ),
-                Mathf.RoundToInt( normalizedPixelPosition.y * renderer.DrawingTexture.height )
-            );
+            Vector2Int endPosition = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT );
             _csPreviewRenderer.ClearCanvas();
             Draw( eCanvasType.Preview, _startPosition, endPosition, color );
         }

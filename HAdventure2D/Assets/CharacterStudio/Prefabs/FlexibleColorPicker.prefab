@@ -6503,6 +6503,7 @@ MonoBehaviour:
     staticSpriteHor: {fileID: 0}
     staticSpriteVer: {fileID: 0}
     dynamicMaterial: {fileID: 2100000, guid: d122a9ab83052a844bff54d706f46330, type: 2}
+  _colorPreviewToggle: {fileID: 7447163079461981940}
   hexInput: {fileID: 2790075548749369981}
   modeDropdown: {fileID: 0}
   mode: 3
@@ -6532,7 +6533,7 @@ MonoBehaviour:
       overrideStatic: 0
     h:
       range: {x: 0, y: 1}
-      overrideStatic: 0
+      overrideStatic: 1
     s:
       range: {x: 0, y: 1}
       overrideStatic: 0
