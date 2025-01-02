@@ -18,7 +18,7 @@ namespace CharacterStudio
         protected virtual void Start()
         {
             _isSetup = false;
-            _drawingTexture = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false)
+            _drawingTexture = new Texture2D( _renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false )
             {
                 filterMode = FilterMode.Point
             };
@@ -38,15 +38,15 @@ namespace CharacterStudio
             }
             UpdateRenderTexture();
         }
-        public Color GetColorAtIndex(int x, int y)
+        public Color GetColorAtIndex( int x, int y )
         {
             return _pixelColors[ y * _renderTexture.width + x ];
         }
-        public Color GetColorAtIndex(Vector2Int index)
+        public Color GetColorAtIndex( Vector2Int index )
         {
-            return GetColorAtIndex(index.x, index.y);
+            return GetColorAtIndex( index.x, index.y );
         }
-        public Color GetColorAtIndex(int i)
+        public Color GetColorAtIndex( int i )
         {
             return _pixelColors[ i ];
         }
@@ -58,6 +58,16 @@ namespace CharacterStudio
             _drawingTexture.Apply();
             Graphics.Blit( _drawingTexture, _renderTexture );
             RenderTexture.active = currentActiveRT;
+        }
+        public static void CopyTo( CSPaintingRenderer from, CSPaintingRenderer to )
+        {
+            for ( int i = 0; i < from.PixelColors.Length; i++ )
+            {
+                if ( from.PixelColors[ i ] == Color.clear )
+                    continue;
+                to.PixelColors[ i ] = from.PixelColors[ i ];
+            }
+            to.UpdateRenderTexture();
         }
     }
 }

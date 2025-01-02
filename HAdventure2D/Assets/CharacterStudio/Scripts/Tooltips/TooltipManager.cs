@@ -50,7 +50,6 @@ namespace CharacterStudio
                     tooltipable.Data.Description = $"(Shortcut: {key}) {tooltipable.Data.Description}";
                 }
             }
-            Debug.Log(tooltipable);
             if (tooltipable == null)
             {
                 this.tooltipObject.Hide();

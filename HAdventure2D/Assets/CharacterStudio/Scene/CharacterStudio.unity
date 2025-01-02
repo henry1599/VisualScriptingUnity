@@ -3222,8 +3222,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 172.5}
-  m_SizeDelta: {x: -50, y: -395}
+  m_AnchoredPosition: {x: 0, y: 147.5}
+  m_SizeDelta: {x: -50, y: -445}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &899087731
 MonoBehaviour:
@@ -4733,6 +4733,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _paintingSetting: {fileID: 11400000, guid: a067a74a0838b12458f01f2f27a61ece, type: 2}
+  _inputActionAsset: {fileID: -944628639613478452, guid: c2cb2a3885a89214d867762f80ecb2bd,
+    type: 3}
   _csImage: {fileID: 998277327}
   _paintingRenderer: {fileID: 998277328}
   _paintingPreview: {fileID: 64810665}
@@ -4745,6 +4747,7 @@ MonoBehaviour:
   - {fileID: 632774436301549500, guid: 37fc836a7edc5b24798f45897c22bf75, type: 3}
   - {fileID: 8647569157863697876, guid: 45c1fed3bfb9b3f47905955f6baa1106, type: 3}
   - {fileID: 5728656650456777403, guid: 6ebed9c2c7aaea348b19333af77b986f, type: 3}
+  - {fileID: -2318947894225489941, guid: 60771f0fd370bf847b90ecc823fd4c34, type: 3}
   _brushUIPrefab: {fileID: 687546826026214362, guid: 68ae3b4808c9e224baf69122d8801bf4,
     type: 3}
 --- !u!1 &1448984225

@@ -29,6 +29,9 @@ namespace CharacterStudio
         protected CSPaintingRenderer _csMainRenderer;
         protected CSPaintingRenderer _csPreviewRenderer;
         protected CSPaintingRenderer _csHoverRenderer;
+        protected Vector2 _currentNormalizedPosition;
+        protected Vector2Int _currentIndex;
+        protected Color _currentColor;
         public virtual void Setup( CSPaintingRenderer mainRenderer, CSPaintingRenderer previewRenderer, CSPaintingRenderer hoverRenderer )
         {
             _csMainRenderer = mainRenderer;
@@ -59,8 +62,14 @@ namespace CharacterStudio
             {
                 renderer.PixelColors[ i ] = Color.clear;
             }
-            Vector2Int index = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT);
+            _currentColor = color;
+            _currentNormalizedPosition = normalizedPixelPosition;
+            var index = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT);
             DrawAtPixel( eCanvasType.Hover, index, color );
+        }
+        public virtual void Reload()
+        {
+            DrawOnHover( _currentNormalizedPosition, _currentColor );
         }
         protected void DrawSimpleLine( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color)
         {
@@ -111,14 +120,14 @@ namespace CharacterStudio
             if (renderer == null || renderer.RT == null)
                 return;
 
+            _currentIndex = pixelPosition;
             int radius = SizeLevel;
 
             for ( int x = -radius; x <= radius; x++ )
             {
                 for ( int y = -radius; y <= radius; y++ )
                 {
-                    // Calculate the distance from the center
-                    float distance = Mathf.Sqrt( x * x + y * y );
+                    int distance = Mathf.CeilToInt(Mathf.Sqrt( x * x + y * y ));
                     if ( distance > radius )
                         continue;
                     (int x, int y) indexPair = (pixelPosition.x + x, pixelPosition.y + y );
@@ -133,6 +142,18 @@ namespace CharacterStudio
         protected bool IsValidIndex(int x, int y, CSPaintingRenderer renderer)
         {
             return x >= 0 && x < renderer.DrawingTexture.width && y >= 0 && y < renderer.DrawingTexture.height;
+        }
+        public virtual void IncreaseSize()
+        {
+            SizeLevel++;
+            SizeLevel = Mathf.Clamp( SizeLevel, 0, 10 );
+            Reload();
+        }
+        public virtual void DecreaseSize()
+        {
+            SizeLevel--;
+            SizeLevel = Mathf.Clamp( SizeLevel, 0, 10 );
+            Reload();
         }
         protected CSPaintingRenderer GetRenderer(eCanvasType canvasType) => canvasType switch
         {

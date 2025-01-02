@@ -41,9 +41,13 @@ namespace CharacterStudio
         }
         public override void DrawOnHover(Vector2 normalizedPixelPosition, Color color)
         {
-            // base.DrawOnHover(normalizedPixelPosition, color);
         }
-
+        public override void IncreaseSize()
+        {
+        }
+        public override void DecreaseSize()
+        {
+        }
         public override void HandleCursor(bool isEnter)
         {
             if (isEnter)

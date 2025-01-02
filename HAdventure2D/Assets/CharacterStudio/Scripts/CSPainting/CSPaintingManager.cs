@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace CharacterStudio
 {
@@ -12,6 +13,7 @@ namespace CharacterStudio
         [Header("Setting")]
         [SerializeField] private CSPaintingSetting _paintingSetting;
         [Space(5)]
+
 
 
 
@@ -45,8 +47,6 @@ namespace CharacterStudio
         EventSubscription<OnBrushSelectedArgs> _brushSelectedSubscription;
         EventSubscription<OnColorPickedArgs> _colorPickedSubscription;
 
-
-
         public CSPaintingSetting Setting => _paintingSetting;
         public Color CuurentColor => _colorPicker.color;
 
@@ -61,8 +61,22 @@ namespace CharacterStudio
             _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>(OnColorPicked);
 
             _backgroundRenderer.Setup( _paintingSetting );
-
             return base.Awake();
+        }
+        private void Update()
+        {
+            if ( Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl ) )
+            {
+                float mouseVScroll = Input.mouseScrollDelta.y;
+                if ( mouseVScroll < 0 )
+                {
+                    _activeBrush?.DecreaseSize();
+                }
+                else if ( mouseVScroll > 0 )
+                {
+                    _activeBrush?.IncreaseSize();
+                }
+            }
         }
 
 

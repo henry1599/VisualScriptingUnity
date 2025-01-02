@@ -24,7 +24,6 @@ namespace CharacterStudio
         }
         public void OnPointerMove( PointerEventData eventData )
         {
-            Debug.Log("OnPointerMove");
             EventBus.Instance?.Publish( new PointerMoveArgs( this, eventData ) );
         }
         public void OnPointerUp( PointerEventData eventData )
