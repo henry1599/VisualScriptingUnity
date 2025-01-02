@@ -12,6 +12,7 @@ namespace CharacterStudio
         [SerializeField] Button _button;
         [SerializeField] Button _removeButton;
         Color _color;
+        public Color Color => _color;
         public void Setup( Color color )
         {
             this._color = color;

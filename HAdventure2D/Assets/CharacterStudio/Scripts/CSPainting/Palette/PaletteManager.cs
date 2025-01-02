@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CharacterStudio
 {
@@ -9,6 +10,7 @@ namespace CharacterStudio
     {
         [SerializeField] Transform _paletteContainer;
         [SerializeField] PaletteButton _paletteButtonPrefab;
+        [SerializeField] Button _addButton;
         [SerializeField] List<Color> _defaultColors;
 
         List<PaletteButton> _paletteButtons;
@@ -17,7 +19,20 @@ namespace CharacterStudio
         {
             InitPalette();
 
+            _addButton.onClick.AddListener( OnAddButtonClick );
             _removeColorSubscription = EventBus.Instance.Subscribe<OnRemoveColorArgs>( OnRemoveColor );
+        }
+
+        private void OnAddButtonClick()
+        {
+            Color currentColor = CSPaintingManager.Instance.CuurentColor;
+            if ( _paletteButtons.Exists( x => x.Color == currentColor ) )
+            {
+                return;
+            }
+            var button = Instantiate( _paletteButtonPrefab, _paletteContainer );
+            button.Setup( currentColor );
+            _paletteButtons.Add( button );
         }
 
         private void OnRemoveColor( OnRemoveColorArgs args )
@@ -29,6 +44,7 @@ namespace CharacterStudio
         private void OnDestroy()
         {
             EventBus.Instance.Unsubscribe( _removeColorSubscription );
+            _addButton.onClick.RemoveAllListeners();
         }
         void InitPalette()
         {
