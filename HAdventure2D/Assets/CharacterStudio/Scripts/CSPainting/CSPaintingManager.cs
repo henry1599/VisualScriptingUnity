@@ -60,6 +60,7 @@ namespace CharacterStudio
             _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>(OnColorPicked);
 
             _backgroundRenderer.Setup( _paintingSetting );
+            Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
             return base.Awake();
         }
         private void Update()
