@@ -2089,8 +2089,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data:
-    Title: New color
-    Description: Add current color into list
+    Title: Load default palette
+    Description: Reset current palette to default
 --- !u!114 &473507994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2554,8 +2554,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data:
-    Title: New color
-    Description: Add current color into list
+    Title: Clear palette
+    Description: Clear all color in current palette
 --- !u!114 &600744062
 MonoBehaviour:
   m_ObjectHideFlags: 0

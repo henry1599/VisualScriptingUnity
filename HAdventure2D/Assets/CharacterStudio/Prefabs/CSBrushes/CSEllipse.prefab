@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3593833516659736462}
   - component: {fileID: -4108840352877906136}
   m_Layer: 0
-  m_Name: CSElipse
+  m_Name: CSEllipse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tooltip:
-    Title: Elipse tool
+    Title: Ellipse tool
     Description: 
   Shortcut:
     Key: 116
