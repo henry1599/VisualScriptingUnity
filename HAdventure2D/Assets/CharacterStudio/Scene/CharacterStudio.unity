@@ -3340,11 +3340,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
+    m_Left: 1
     m_Right: 0
     m_Top: 10
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 50, y: 50}
@@ -4921,6 +4921,7 @@ MonoBehaviour:
   _paletteContainer: {fileID: 899087730}
   _paletteButtonPrefab: {fileID: 8915573953670457366, guid: 81e37b692336bce44addbf98e6093c38,
     type: 3}
+  _addButton: {fileID: 1329289467}
   _defaultColors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
