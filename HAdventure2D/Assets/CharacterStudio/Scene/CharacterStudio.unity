@@ -4733,8 +4733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _paintingSetting: {fileID: 11400000, guid: a067a74a0838b12458f01f2f27a61ece, type: 2}
-  _inputActionAsset: {fileID: -944628639613478452, guid: c2cb2a3885a89214d867762f80ecb2bd,
-    type: 3}
   _csImage: {fileID: 998277327}
   _paintingRenderer: {fileID: 998277328}
   _paintingPreview: {fileID: 64810665}
@@ -4748,6 +4746,7 @@ MonoBehaviour:
   - {fileID: 8647569157863697876, guid: 45c1fed3bfb9b3f47905955f6baa1106, type: 3}
   - {fileID: 5728656650456777403, guid: 6ebed9c2c7aaea348b19333af77b986f, type: 3}
   - {fileID: -2318947894225489941, guid: 60771f0fd370bf847b90ecc823fd4c34, type: 3}
+  - {fileID: -4108840352877906136, guid: ffe2805ae7424294da9a3652392fa700, type: 3}
   _brushUIPrefab: {fileID: 687546826026214362, guid: 68ae3b4808c9e224baf69122d8801bf4,
     type: 3}
 --- !u!1 &1448984225
