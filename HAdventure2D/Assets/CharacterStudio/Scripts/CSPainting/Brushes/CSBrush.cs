@@ -111,63 +111,28 @@ namespace CharacterStudio
             if (renderer == null || renderer.RT == null)
                 return;
 
-            List<(int x, int y)> pixelIndexes = new ();
-            Queue<(int x, int y)> pixelQueue = new();
-            pixelQueue.Enqueue((pixelPosition.x, pixelPosition.y));
-            int size = SizeLevel;
-            while (pixelQueue.Count > 0)
-            {
-                var candidate = pixelQueue.Dequeue();
-                pixelIndexes.Add(candidate);
+            int radius = SizeLevel;
 
-                if (size <= 0)
-                    continue;
-                List<(int x, int y)> neighbors = GetNeighborIndexes(candidate.x, candidate.y, renderer);
-                foreach (var neighbor in neighbors)
+            for ( int x = -radius; x <= radius; x++ )
+            {
+                for ( int y = -radius; y <= radius; y++ )
                 {
-                    pixelQueue.Enqueue(neighbor);
-                } 
-                --size;
+                    // Calculate the distance from the center
+                    float distance = Mathf.Sqrt( x * x + y * y );
+                    if ( distance > radius )
+                        continue;
+                    (int x, int y) indexPair = (pixelPosition.x + x, pixelPosition.y + y );
+                    int index = indexPair.y * renderer.RT.width + indexPair.x;
+                    if ( !IsValidIndex( indexPair.x, indexPair.y, renderer ) )
+                        continue;
+                    renderer.PixelColors[ index ] = color;
+                }
             }
-
-            foreach (var pixelIndex in pixelIndexes)
-            {
-                if (!IsValidIndex(pixelIndex.x, pixelIndex.y, renderer))
-                    return;
-                int index = pixelIndex.y * renderer.RT.width + pixelIndex.x;
-                renderer.PixelColors[index] = color;
-                renderer.UpdateRenderTexture();
-            }
-        }
-        protected List<(int x, int y)> GetNeighborIndexes(int x, int y, CSPaintingRenderer renderer)
-        {
-            int current = y * renderer.RT.width + x;
-            int top = (y + 1) * renderer.RT.width + x;
-            int bot = (y - 1) * renderer.RT.width + x;
-            int left = y * renderer.RT.width + (x - 1);
-            int right = y * renderer.RT.width + (x + 1);
-            List<(int x, int y)> result = new();
-            if (IsValidIndex(current, renderer))
-                result.Add((x, y));
-            if (IsValidIndex(top, renderer))
-                result.Add((x, y + 1));
-            if (IsValidIndex(bot, renderer))
-                result.Add((x, y - 1));
-            if (IsValidIndex(left, renderer))
-                result.Add((x - 1, y));
-            if (IsValidIndex(right, renderer))
-                result.Add((x + 1, y));
-
-            return result;
+            renderer.UpdateRenderTexture();
         }
         protected bool IsValidIndex(int x, int y, CSPaintingRenderer renderer)
         {
-            int index = y * renderer.RT.width + x;
-            return IsValidIndex(index, renderer);
-        }
-        protected bool IsValidIndex(int index, CSPaintingRenderer renderer)
-        {
-            return index >= 0 && index < renderer.PixelColors.Length;
+            return x >= 0 && x < renderer.DrawingTexture.width && y >= 0 && y < renderer.DrawingTexture.height;
         }
         protected CSPaintingRenderer GetRenderer(eCanvasType canvasType) => canvasType switch
         {
