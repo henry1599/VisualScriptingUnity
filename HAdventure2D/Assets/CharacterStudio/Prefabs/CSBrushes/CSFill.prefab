@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3593833516659736462}
-  - component: {fileID: -2318947894225489941}
+  - component: {fileID: 5331799603529936584}
   m_Layer: 0
   m_Name: CSFill
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2318947894225489941
+--- !u!114 &5331799603529936584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,14 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5044628835862282061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 142d62eef6442be438dd01f06cb87167, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d7e9667297b7194e8f61ad4985e8d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Tooltip:
-    Title: Rectangle tool
+    Title: Fill Tool
     Description: 
   Shortcut:
-    Key: 114
+    Key: 103
     Callback:
       m_PersistentCalls:
         m_Calls: []

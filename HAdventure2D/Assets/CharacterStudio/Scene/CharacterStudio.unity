@@ -5552,6 +5552,7 @@ MonoBehaviour:
   - {fileID: 5728656650456777403, guid: 6ebed9c2c7aaea348b19333af77b986f, type: 3}
   - {fileID: -2318947894225489941, guid: 60771f0fd370bf847b90ecc823fd4c34, type: 3}
   - {fileID: -4108840352877906136, guid: ffe2805ae7424294da9a3652392fa700, type: 3}
+  - {fileID: 5331799603529936584, guid: 8161570ad1893154792aa19217f3fcc9, type: 3}
   _brushUIPrefab: {fileID: 687546826026214362, guid: 68ae3b4808c9e224baf69122d8801bf4,
     type: 3}
 --- !u!1 &1425597918

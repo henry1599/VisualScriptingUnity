@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tooltip:
-    Title: Ellipse tool
+    Title: Ellipse Tool
     Description: 
   Shortcut:
     Key: 116

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tooltip:
-    Title: Rectangle tool
+    Title: Rectangle Tool
     Description: 
   Shortcut:
     Key: 114
