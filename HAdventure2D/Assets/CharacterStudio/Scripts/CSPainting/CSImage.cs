@@ -20,14 +20,20 @@ namespace CharacterStudio
         private RectTransform _rectTransform;
         public void OnPointerDown( PointerEventData eventData )
         {
+            if ( eventData.button != PointerEventData.InputButton.Left )
+                return;
             EventBus.Instance?.Publish( new PointerDownArgs( this, eventData ) );
         }
         public void OnPointerMove( PointerEventData eventData )
         {
+            if ( eventData.button != PointerEventData.InputButton.Left )
+                return;
             EventBus.Instance?.Publish( new PointerMoveArgs( this, eventData ) );
         }
         public void OnPointerUp( PointerEventData eventData )
         {
+            if ( eventData.button != PointerEventData.InputButton.Left )
+                return;
             EventBus.Instance?.Publish( new PointerUpArgs( this, eventData ) );
         }
 

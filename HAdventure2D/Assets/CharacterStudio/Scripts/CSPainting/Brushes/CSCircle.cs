@@ -61,50 +61,7 @@ namespace CharacterStudio
             }
             else
             {
-                DrawElipse( canvasType, start, end, color );
-            }
-        }
-        private void DrawElipse( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
-        {
-            var renderer = GetRenderer( canvasType );
-            int a = Mathf.Abs( end.x - start.x ) / 2;
-            int b = Mathf.Abs( end.y - start.y ) / 2;
-            int centerX = ( start.x + end.x ) / 2;
-            int centerY = ( start.y + end.y ) / 2;
-
-            for ( int x = -a; x <= a; x++ )
-            {
-                int y = Mathf.RoundToInt( b * Mathf.Sqrt( 1 - ( x * x ) / ( float ) ( a * a ) ) );
-                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
-                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY - y ), color );
-            }
-
-            for ( int y = -b; y <= b; y++ )
-            {
-                int x = Mathf.RoundToInt( a * Mathf.Sqrt( 1 - ( y * y ) / ( float ) ( b * b ) ) );
-                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
-                DrawAtPixel( canvasType, new Vector2Int( centerX - x, centerY + y ), color );
-            }
-        }
-        private void DrawCircle( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
-        {
-            var renderer = GetRenderer( canvasType );
-            int radius = Mathf.Min( Mathf.Abs( end.x - start.x ), Mathf.Abs( end.y - start.y ) ) / 2;
-            int centerX = ( start.x + end.x ) / 2;
-            int centerY = ( start.y + end.y ) / 2;
-
-            for ( int x = -radius; x <= radius; x++ )
-            {
-                int y = Mathf.RoundToInt( Mathf.Sqrt( radius * radius - x * x ) );
-                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
-                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY - y ), color );
-            }
-
-            for ( int y = -radius; y <= radius; y++ )
-            {
-                int x = Mathf.RoundToInt( Mathf.Sqrt( radius * radius - y * y ) );
-                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
-                DrawAtPixel( canvasType, new Vector2Int( centerX - x, centerY + y ), color );
+                DrawEllipse( canvasType, start, end, color );
             }
         }
 

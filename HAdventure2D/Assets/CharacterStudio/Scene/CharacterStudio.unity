@@ -339,10 +339,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1380946381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 720, y: 720}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &64810662
 MonoBehaviour:
@@ -1699,10 +1699,10 @@ RectTransform:
   - {fileID: 998277324}
   m_Father: {fileID: 1380946381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 720, y: 720}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &389095242
 GameObject:
@@ -3078,10 +3078,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1380946381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 720, y: 720}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &750528981
 MonoBehaviour:
@@ -3768,10 +3768,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1380946381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 720, y: 720}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &936126294
 MonoBehaviour:
@@ -5366,8 +5366,8 @@ RectTransform:
   m_Children:
   - {fileID: 750528979}
   - {fileID: 362251407}
-  - {fileID: 64810661}
   - {fileID: 936126293}
+  - {fileID: 64810661}
   m_Father: {fileID: 1403701599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5494,6 +5494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1403701599}
   - component: {fileID: 1403701600}
+  - component: {fileID: 1403701601}
   m_Layer: 5
   m_Name: DrawingLayout
   m_TagString: Untagged
@@ -5547,6 +5548,7 @@ MonoBehaviour:
   _brushUIContainer: {fileID: 1128231776}
   _colorPicker: {fileID: 2130943086643670331}
   _brushPrefabs:
+  - {fileID: 2651763976187395186, guid: 86debf27a1af351429ed56c5c95d1c01, type: 3}
   - {fileID: 632774436301549500, guid: 37fc836a7edc5b24798f45897c22bf75, type: 3}
   - {fileID: 8647569157863697876, guid: 45c1fed3bfb9b3f47905955f6baa1106, type: 3}
   - {fileID: 5728656650456777403, guid: 6ebed9c2c7aaea348b19333af77b986f, type: 3}
@@ -5555,6 +5557,19 @@ MonoBehaviour:
   - {fileID: 5331799603529936584, guid: 8161570ad1893154792aa19217f3fcc9, type: 3}
   _brushUIPrefab: {fileID: 687546826026214362, guid: 68ae3b4808c9e224baf69122d8801bf4,
     type: 3}
+--- !u!114 &1403701601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403701598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1935bcf2d4a3ad47b79fe7d78ef33b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _paintingCanvas: {fileID: 1380946381}
 --- !u!1 &1425597918
 GameObject:
   m_ObjectHideFlags: 0

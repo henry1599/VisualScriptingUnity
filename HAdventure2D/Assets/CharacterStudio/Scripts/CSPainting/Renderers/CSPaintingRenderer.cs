@@ -38,6 +38,39 @@ namespace CharacterStudio
             }
             UpdateRenderTexture();
         }
+        public void ClearCanvasWithouRect( Vector2Int startIndex, Vector2Int endIndex )
+        {
+            int minX = Mathf.Min( startIndex.x, endIndex.x );
+            int maxX = Mathf.Max( startIndex.x, endIndex.x );
+            int minY = Mathf.Min( startIndex.y, endIndex.y );
+            int maxY = Mathf.Max( startIndex.y, endIndex.y );
+            for ( int i = 0; i < _pixelColors.Length; i++ )
+            {
+                int x = i % _renderTexture.width;
+                int y = i / _renderTexture.width;
+                if ( x >= minX && x <= maxX && y >= minY && y <= maxY )
+                    continue;
+                _pixelColors[ i ] = Color.clear;
+            }
+        }
+        public void ClearInRect( Vector2Int startIndex, Vector2Int endIndex )
+        {
+            int minX = Mathf.Min( startIndex.x, endIndex.x );
+            int maxX = Mathf.Max( startIndex.x, endIndex.x );
+            int minY = Mathf.Min( startIndex.y, endIndex.y );
+            int maxY = Mathf.Max( startIndex.y, endIndex.y );
+            for ( int y = minY; y <= maxY; y++ )
+            {
+                for ( int x = minX; x <= maxX; x++ )
+                {
+                    int i = y * _renderTexture.width + x;
+                    if ( i >= _pixelColors.Length || i < 0 )
+                        continue;
+                    _pixelColors[ i ] = Color.clear;
+                }
+            }
+            UpdateRenderTexture();
+        }
         public Color GetColorAtIndex( int x, int y )
         {
             return _pixelColors[ y * _renderTexture.width + x ];
@@ -63,9 +96,31 @@ namespace CharacterStudio
         {
             for ( int i = 0; i < from.PixelColors.Length; i++ )
             {
+                if ( i >= from.PixelColors.Length || i < 0 )
+                    continue;
                 if ( from.PixelColors[ i ] == Color.clear )
                     continue;
                 to.PixelColors[ i ] = from.PixelColors[ i ];
+            }
+            to.UpdateRenderTexture();
+        }
+        public static void CopyToRect( CSPaintingRenderer from, CSPaintingRenderer to, Vector2Int startIndex, Vector2Int endIndex )
+        {
+            int minX = Mathf.Min( startIndex.x, endIndex.x );
+            int maxX = Mathf.Max( startIndex.x, endIndex.x );
+            int minY = Mathf.Min( startIndex.y, endIndex.y );
+            int maxY = Mathf.Max( startIndex.y, endIndex.y );
+            for ( int y = minY; y <= maxY; y++ )
+            {
+                for ( int x = minX; x <= maxX; x++ )
+                {
+                    int i = y * from.RT.width + x;
+                    if ( i >= from.PixelColors.Length || i < 0)
+                        continue;
+                    if ( from.PixelColors[ i ] == Color.clear )
+                        continue;
+                    to.PixelColors[ i ] = from.PixelColors[ i ];
+                }
             }
             to.UpdateRenderTexture();
         }

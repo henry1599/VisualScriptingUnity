@@ -12,7 +12,8 @@ namespace CharacterStudio
         Rectangle,
         Circle,
         Fill,
-        EyeDropper
+        EyeDropper,
+        RectSelection,
     }
     public enum eCanvasType
     {
@@ -138,6 +139,114 @@ namespace CharacterStudio
                 }
             }
             renderer.UpdateRenderTexture();
+        }
+        protected void DrawRectangle( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
+        {
+            int xMin = Mathf.Min( start.x, end.x );
+            int xMax = Mathf.Max( start.x, end.x );
+            int yMin = Mathf.Min( start.y, end.y );
+            int yMax = Mathf.Max( start.y, end.y );
+
+            for ( int x = xMin; x <= xMax; x++ )
+            {
+                DrawAtPixel( canvasType, new Vector2Int( x, yMin ), color );
+                DrawAtPixel( canvasType, new Vector2Int( x, yMax ), color );
+            }
+
+            for ( int y = yMin; y <= yMax; y++ )
+            {
+                DrawAtPixel( canvasType, new Vector2Int( xMin, y ), color );
+                DrawAtPixel( canvasType, new Vector2Int( xMax, y ), color );
+            }
+
+            GetRenderer( canvasType ).UpdateRenderTexture();
+        }
+        protected void DrawSquare( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
+        {
+            int width = Mathf.Abs( end.x - start.x );
+            int height = Mathf.Abs( end.y - start.y );
+            int size = Mathf.Max( width, height );
+
+            // Adjust the end position to form a square without moving the start position
+            if ( end.x >= start.x && end.y >= start.y )
+            {
+                end = new Vector2Int( start.x + size, start.y + size );
+            }
+            else if ( end.x >= start.x && end.y < start.y )
+            {
+                end = new Vector2Int( start.x + size, start.y - size );
+            }
+            else if ( end.x < start.x && end.y >= start.y )
+            {
+                end = new Vector2Int( start.x - size, start.y + size );
+            }
+            else
+            {
+                end = new Vector2Int( start.x - size, start.y - size );
+            }
+
+            // Draw the square using the adjusted end position
+            int xMin = Mathf.Min( start.x, end.x );
+            int xMax = Mathf.Max( start.x, end.x );
+            int yMin = Mathf.Min( start.y, end.y );
+            int yMax = Mathf.Max( start.y, end.y );
+
+            for ( int x = xMin; x <= xMax; x++ )
+            {
+                DrawAtPixel( canvasType, new Vector2Int( x, yMin ), color );
+                DrawAtPixel( canvasType, new Vector2Int( x, yMax ), color );
+            }
+
+            for ( int y = yMin; y <= yMax; y++ )
+            {
+                DrawAtPixel( canvasType, new Vector2Int( xMin, y ), color );
+                DrawAtPixel( canvasType, new Vector2Int( xMax, y ), color );
+            }
+
+            GetRenderer( canvasType ).UpdateRenderTexture();
+        }
+        protected void DrawEllipse( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
+        {
+            var renderer = GetRenderer( canvasType );
+            int a = Mathf.Abs( end.x - start.x ) / 2;
+            int b = Mathf.Abs( end.y - start.y ) / 2;
+            int centerX = ( start.x + end.x ) / 2;
+            int centerY = ( start.y + end.y ) / 2;
+
+            for ( int x = -a; x <= a; x++ )
+            {
+                int y = Mathf.RoundToInt( b * Mathf.Sqrt( 1 - ( x * x ) / ( float ) ( a * a ) ) );
+                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
+                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY - y ), color );
+            }
+
+            for ( int y = -b; y <= b; y++ )
+            {
+                int x = Mathf.RoundToInt( a * Mathf.Sqrt( 1 - ( y * y ) / ( float ) ( b * b ) ) );
+                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
+                DrawAtPixel( canvasType, new Vector2Int( centerX - x, centerY + y ), color );
+            }
+        }
+        protected void DrawCircle( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
+        {
+            var renderer = GetRenderer( canvasType );
+            int radius = Mathf.Min( Mathf.Abs( end.x - start.x ), Mathf.Abs( end.y - start.y ) ) / 2;
+            int centerX = ( start.x + end.x ) / 2;
+            int centerY = ( start.y + end.y ) / 2;
+
+            for ( int x = -radius; x <= radius; x++ )
+            {
+                int y = Mathf.RoundToInt( Mathf.Sqrt( radius * radius - x * x ) );
+                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
+                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY - y ), color );
+            }
+
+            for ( int y = -radius; y <= radius; y++ )
+            {
+                int x = Mathf.RoundToInt( Mathf.Sqrt( radius * radius - y * y ) );
+                DrawAtPixel( canvasType, new Vector2Int( centerX + x, centerY + y ), color );
+                DrawAtPixel( canvasType, new Vector2Int( centerX - x, centerY + y ), color );
+            }
         }
         protected bool IsValidIndex(int x, int y, CSPaintingRenderer renderer)
         {
