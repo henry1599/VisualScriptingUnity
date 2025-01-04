@@ -27,7 +27,7 @@ MonoBehaviour:
     Implement shortcut\n\t(v) Implement brush size feature (scroll mouse up/down
     to change size)\n\t(v) Implement rectangle tool\n\t(v) Implement circle tool\n\t(v)
     Implement color palette and color picker hue field\n\t(v) Implement fill tool\n\t(v)
-    Implement zoom/move view\n\t(v) Implement selection tool\n\t(v) Implement undo/redo\n\t+
+    Implement zoom/move view\n\t(v) Implement selection tool\n\t(v) Implement undo/redo\n\t(v)
     Implement Line tool\n\t+ Implement tool bar menu for painting, including:\n\t\t.
     Undo, Redo\n\t\t. Export\n\t\t. Go back to character studio\n\t+ Implement pixel
     perfect for pen tool\n\t+ Implement layer system\n\t+ Implement export sprites/layers
