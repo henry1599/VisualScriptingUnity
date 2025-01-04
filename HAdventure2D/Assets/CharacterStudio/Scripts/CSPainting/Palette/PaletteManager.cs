@@ -14,8 +14,6 @@ namespace CharacterStudio
         [SerializeField] Button _resetToDefaultButton;
         [SerializeField] Button _clearPaletteButton;
 
-        [SerializeField] List<Color> _defaultColors;
-
         List<PaletteButton> _paletteButtons;
         EventSubscription<OnRemoveColorArgs> _removeColorSubscription;
         private void Awake()
@@ -76,7 +74,7 @@ namespace CharacterStudio
             {
                 Destroy( _paletteContainer.GetChild( i ).gameObject );
             }
-            foreach ( var color in _defaultColors )
+            foreach ( var color in CSPaintingManager.Instance.Setting.DefaultPalette )
             {
                 var button = Instantiate( _paletteButtonPrefab, _paletteContainer );
                 button.Setup( color );

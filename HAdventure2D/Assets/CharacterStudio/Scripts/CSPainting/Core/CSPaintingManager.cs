@@ -30,7 +30,6 @@ namespace CharacterStudio
 
 
         [Header("Brush")]
-        [SerializeField] private List<CSBrush> _brushPrefabs;
         [SerializeField] private CSBrushUI _brushUIPrefab;
 
 
@@ -88,7 +87,7 @@ namespace CharacterStudio
 
         void Start()
         {
-            foreach (var brushPrefab in _brushPrefabs)
+            foreach (var brushPrefab in _paintingSetting.GetAllBrushes())
             {
                 CSBrush brush = Instantiate( brushPrefab, _brushContainer );
                 brush.Setup( _paintingRenderer, _paintingPreview, _paintingHover );

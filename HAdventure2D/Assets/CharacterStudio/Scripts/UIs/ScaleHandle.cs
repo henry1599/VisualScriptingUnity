@@ -63,14 +63,12 @@ namespace CharacterStudio
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            // Optionally, change the cursor or visual feedback
             Cursor.SetCursor(scaleCursor, new Vector2(scaleCursor.width / 2f, scaleCursor.height / 2f), CursorMode.Auto);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             if (isDragging) return;
-            // Optionally, revert the cursor or visual feedback
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
     }

@@ -9,10 +9,6 @@ namespace CharacterStudio
         int _backgroundBlockSize = 16;
         Color _bgBlockColor1 = new Color( 0.8f, 0.8f, 0.8f, 1f );
         Color _bgBlockColor2 = new Color( 0.6f, 0.6f, 0.6f, 1f );
-        protected override void OnDestroy()
-        {
-            
-        }
         public void Setup(CSPaintingSetting setting)
         {
             StartCoroutine( Cor_Setup(setting) );
