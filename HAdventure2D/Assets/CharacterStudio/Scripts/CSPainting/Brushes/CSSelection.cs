@@ -24,16 +24,17 @@ namespace CharacterStudio
             {
                 if ( IsInsideSelectionArea( touchPosition, _startPosition.Value, _endPosition.Value ) )
                 {
+                    var previewRenderer = GetRenderer( eCanvasType.Preview );
                     _isDraggingSelection = true;
                     _isDrawing = false;
                     _dragOffset = touchPosition - _startPosition.Value;
-                    _selectionPixels = CSPaintingRenderer.SaveToArray(GetRenderer(eCanvasType.Main), _startPosition.Value, _endPosition.Value);
-                    _csMainRenderer.ClearInRect( _startPosition.Value, _endPosition.Value );
-                    CSPaintingRenderer.LoadArrayToRenderer(GetRenderer(eCanvasType.Preview), _selectionPixels, _startPosition.Value, _endPosition.Value);
+                    _selectionPixels = CSPaintingRenderer.SaveToArray(renderer, _startPosition.Value, _endPosition.Value);
+                    renderer.ClearInRect( _startPosition.Value, _endPosition.Value );
+                    CSPaintingRenderer.LoadArrayToRenderer(previewRenderer, _selectionPixels, _startPosition.Value, _endPosition.Value);
                 }
                 else
                 {
-                    _csPreviewRenderer.ClearCanvas();
+                    GetRenderer(eCanvasType.Preview).ClearCanvas();
                     _startPosition = touchPosition;
                     _endPosition = null;
                     _isDrawing = true;
@@ -65,12 +66,11 @@ namespace CharacterStudio
         {
             if ( _isDrawing )
             {
-                // _csMainRenderer.ClearInRect( _startPosition.Value, _endPosition.Value );
                 _isDrawing = false;
             }
             else if ( _isDraggingSelection )
             {
-                CSPaintingRenderer.CopyToRect( _csPreviewRenderer, _csMainRenderer, _startPosition.Value, _endPosition.Value );
+                CSPaintingRenderer.CopyToRect( GetRenderer(eCanvasType.Preview), GetRenderer(eCanvasType.Main), _startPosition.Value, _endPosition.Value );
                 _startPosition = _endPosition = null;
                 _selectionPixels = null;
                 _isDraggingSelection = false;
@@ -82,7 +82,7 @@ namespace CharacterStudio
             color = selectColor;
             var renderer = GetRenderer( eCanvasType.Preview );
             _endPosition = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT );
-            _csPreviewRenderer.ClearCanvas();
+            renderer.ClearCanvas();
             Draw( eCanvasType.Preview, _startPosition.Value, _endPosition.Value, color );
         }
 

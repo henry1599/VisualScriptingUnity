@@ -39,9 +39,9 @@ namespace CharacterStudio
         {
             if ( _isDrawing )
             {
-                CSPaintingRenderer.CopyTo( _csPreviewRenderer, _csMainRenderer );
-                _csPreviewRenderer.ClearCanvas();
-                _csHoverRenderer.ClearCanvas();
+                CSPaintingRenderer.CopyTo( GetRenderer(eCanvasType.Preview), GetRenderer(eCanvasType.Main) );
+                GetRenderer(eCanvasType.Preview).ClearCanvas();
+                GetRenderer(eCanvasType.Hover).ClearCanvas();
                 _isDrawing = false;
             }
         }
@@ -50,7 +50,7 @@ namespace CharacterStudio
         {
             var renderer = GetRenderer( eCanvasType.Preview );
             Vector2Int endPosition = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT );
-            _csPreviewRenderer.ClearCanvas();
+            GetRenderer(eCanvasType.Preview).ClearCanvas();
             Draw( eCanvasType.Preview, _startPosition, endPosition, color );
         }
         private void Draw( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )

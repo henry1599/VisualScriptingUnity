@@ -41,8 +41,8 @@ namespace CharacterStudio
         }
         public virtual void Unsetup()
         {
-            _csPreviewRenderer?.ClearCanvas();
-            _csHoverRenderer?.ClearCanvas();
+            GetRenderer(eCanvasType.Preview)?.ClearCanvas();
+            GetRenderer(eCanvasType.Hover)?.ClearCanvas();
         }
         public virtual void SetDefaultCursor()
         {
