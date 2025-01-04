@@ -48,7 +48,7 @@ MonoBehaviour:
     Title: Rectangle Tool
     Description: 
   Shortcut:
-    Key: 114
+    Key: 117
     Callback:
       m_PersistentCalls:
         m_Calls: []

@@ -48,7 +48,7 @@ MonoBehaviour:
     Title: Selection Tool
     Description: Select a rectangular area (Experimental - not too perfect)
   Shortcut:
-    Key: 118
+    Key: 109
     Callback:
       m_PersistentCalls:
         m_Calls: []
