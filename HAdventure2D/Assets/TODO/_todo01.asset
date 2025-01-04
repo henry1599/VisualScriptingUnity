@@ -27,7 +27,7 @@ MonoBehaviour:
     Implement shortcut\n\t(v) Implement brush size feature (scroll mouse up/down
     to change size)\n\t(v) Implement rectangle tool\n\t(v) Implement circle tool\n\t(v)
     Implement color palette and color picker hue field\n\t(v) Implement fill tool\n\t(v)
-    Implement zoom/move view\n\t(v) Implement selection tool\n\t+ Implement undo/redo\n\t+
+    Implement zoom/move view\n\t(v) Implement selection tool\n\t(v) Implement undo/redo\n\t+
     Implement layer system\n\t+ Implement export sprites/layers function\n\t\n\t#
     COMPATIBLE SYSTEM\n\t+ Implement hint background if enter painting mode from
     Character editor\n\t+ Implement auto apply/save system to newly created part\n\t\n\n-

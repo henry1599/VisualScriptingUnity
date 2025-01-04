@@ -11,14 +11,13 @@ namespace CharacterStudio
         [SerializeField] int _maxStateCount = 10;
         [SerializeField] SerializableStack<CSState> _undoStack;
         [SerializeField] SerializableStack<CSState> _redoStack;
-        SerializableStack<CSState> _tempStack;
         EventSubscription<RegisterStateArg> _registerStateSubscription;
+        CSState _currentState = null;
 
         protected override bool Awake()
         {
             _undoStack = new Stack<CSState>();
             _redoStack = new Stack<CSState>();
-            _tempStack = new Stack<CSState>();
             _registerStateSubscription = EventBus.Instance.Subscribe<RegisterStateArg>(OnRegisterState);
             return base.Awake();
         }
@@ -40,7 +39,11 @@ namespace CharacterStudio
             CSState state = new CSState(_undoStack.Pop());
 
 
-            _redoStack.Push(state);
+            if (_currentState != null)
+            {
+                _redoStack.Push(_currentState);
+            }
+            _currentState = state;
             RemoveOldestState(_undoStack);
             return state;
         }
@@ -51,14 +54,26 @@ namespace CharacterStudio
                 return null;
             CSState state = new CSState(_redoStack.Pop());
 
-            _undoStack.Push(state);
+            if (_currentState != null)
+            {
+                _undoStack.Push(_currentState);
+            }
+            _currentState = state;
             RemoveOldestState(_redoStack);
             return state;
         }
 
         void AddState(CSState state)
         {
-            _undoStack.Push(state);
+            if (_currentState != null && state.Equals(_currentState))
+                return;
+
+            if (_currentState != null)
+            {
+                _undoStack.Push(new CSState(_currentState));
+            }
+
+            _currentState = state;
             _redoStack.Clear(); // Clear redo stack on new state addition
             RemoveOldestState(_undoStack);
         }
