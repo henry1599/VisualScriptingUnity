@@ -39,6 +39,7 @@ namespace CharacterStudio
                 return null;
             CSState state = new CSState(_undoStack.Pop());
 
+
             _redoStack.Push(state);
             RemoveOldestState(_undoStack);
             return state;
@@ -49,6 +50,7 @@ namespace CharacterStudio
             if (_redoStack.Count == 0)
                 return null;
             CSState state = new CSState(_redoStack.Pop());
+
             _undoStack.Push(state);
             RemoveOldestState(_redoStack);
             return state;

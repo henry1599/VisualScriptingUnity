@@ -172,6 +172,7 @@ namespace CharacterStudio
 
 
 
+
         public void SetCurrentColor(Color color)
         {
             _colorPicker.SetColor(color);
