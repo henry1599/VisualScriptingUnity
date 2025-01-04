@@ -48,6 +48,7 @@ namespace CharacterStudio
 
         public CSPaintingSetting Setting => _paintingSetting;
         public Color CuurentColor => _colorPicker.color;
+        public CSBrush ActiveBrush => _activeBrush;
 
         protected override bool Awake()
         {

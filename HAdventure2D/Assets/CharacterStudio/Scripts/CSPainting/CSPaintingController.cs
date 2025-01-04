@@ -8,8 +8,28 @@ namespace CharacterStudio
     {
         [SerializeField] RectTransform _paintingCanvas;
         private Vector3 _lastMousePosition;
+        private CSBrush _cacheBrush = null;
 
         private void Update()
+        {
+            HandleMouseControl();
+            HandleQuickEyeDrop();
+        }
+        void HandleQuickEyeDrop()
+        {
+            if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+            {
+                if (_cacheBrush == null)
+                    _cacheBrush = CSPaintingManager.Instance.ActiveBrush;
+                EventBus.Instance.Publish(new OnBrushSelectedArgs(eBrushType.EyeDropper));
+            }
+            if (Input.GetKeyUp(KeyCode.LeftAlt) || Input.GetKeyUp(KeyCode.RightAlt))
+            {
+                EventBus.Instance.Publish(new OnBrushSelectedArgs(_cacheBrush.BrushType));
+                _cacheBrush = null;
+            }
+        }
+        void HandleMouseControl()
         {
             if ( Input.GetMouseButton( 2 ) )
             {
@@ -25,7 +45,6 @@ namespace CharacterStudio
                 HandleZoom( true );
             }
         }
-
         void HandleMoveView()
         {
             if ( Input.GetMouseButtonDown( 2 ) )
