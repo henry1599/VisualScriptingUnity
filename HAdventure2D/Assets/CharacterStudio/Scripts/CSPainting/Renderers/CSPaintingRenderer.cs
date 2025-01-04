@@ -124,5 +124,64 @@ namespace CharacterStudio
             }
             to.UpdateRenderTexture();
         }
+        // * Save a rect on a renderer into a separated array
+        public static Color[] SaveToArray( CSPaintingRenderer renderer, Vector2Int startIndex, Vector2Int endIndex )
+        {
+            int minX = Mathf.Min(startIndex.x, endIndex.x);
+            int maxX = Mathf.Max(startIndex.x, endIndex.x);
+            int minY = Mathf.Min(startIndex.y, endIndex.y);
+            int maxY = Mathf.Max(startIndex.y, endIndex.y);
+
+            int countX = maxX - minX + 1;
+            int countY = maxY - minY + 1;
+            Color[] results = new Color[countX * countY];
+            for (int i = 0; i < results.Length; i++)
+            {
+                results[i] = Color.clear;
+            }
+            for (int y = minY, rY = 0; y <= maxY; y++, rY++)
+            {
+                for (int x = minX, rX = 0; x <= maxX; x++, rX++)
+                {
+                    int i = y * renderer.RT.width + x;
+                    int rI = rY * countX + rX; // Corrected index calculation
+                    if (i >= renderer.PixelColors.Length || i < 0)
+                        continue;
+                    results[rI] = renderer.PixelColors[i];
+                }
+            }
+            return results;
+        }
+        public static void LoadArrayToRenderer( CSPaintingRenderer renderer, Color[] pixelArray, Vector2Int startIndex, Vector2Int endIndex )
+        {
+            int minX = Mathf.Min(startIndex.x, endIndex.x);
+            int maxX = Mathf.Max(startIndex.x, endIndex.x);
+            int minY = Mathf.Min(startIndex.y, endIndex.y);
+            int maxY = Mathf.Max(startIndex.y, endIndex.y);
+            int width = renderer.RT.width;
+            int height = renderer.RT.height;
+
+            int countX = maxX - minX + 1;
+            int countY = maxY - minY + 1;
+
+            for (int y = 0; y < countY; y++)
+            {
+                for (int x = 0; x < countX; x++)
+                {
+                    int resultY = startIndex.y + y - countY + 1;
+                    int resultX = startIndex.x + x;
+
+                    if (resultX < 0 || resultX > renderer.DrawingTexture.width)
+                        continue;
+
+                    int i = resultY * width + resultX;
+                    int rI = y * countX + x;
+                    if (i >= renderer.PixelColors.Length || i < 0)
+                        continue;
+                    renderer.PixelColors[i] = pixelArray[rI];
+                }
+            }
+            renderer.UpdateRenderTexture();
+        }
     }
 }

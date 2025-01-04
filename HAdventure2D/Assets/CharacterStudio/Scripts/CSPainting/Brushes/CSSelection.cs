@@ -12,6 +12,7 @@ namespace CharacterStudio
         private bool _isDrawing = false;
         private bool _isDraggingSelection = false;
         private Vector2Int _dragOffset;
+        private Color[] _selectionPixels;
 
         public override eBrushType BrushType => eBrushType.RectSelection;
 
@@ -26,9 +27,9 @@ namespace CharacterStudio
                     _isDraggingSelection = true;
                     _isDrawing = false;
                     _dragOffset = touchPosition - _startPosition.Value;
-                    // Copy the selected area to the preview canvas and clear the main canvas
-                    CSPaintingRenderer.CopyToRect( _csMainRenderer, _csPreviewRenderer, _startPosition.Value, _endPosition.Value );
+                    _selectionPixels = CSPaintingRenderer.SaveToArray(GetRenderer(eCanvasType.Main), _startPosition.Value, _endPosition.Value);
                     _csMainRenderer.ClearInRect( _startPosition.Value, _endPosition.Value );
+                    CSPaintingRenderer.LoadArrayToRenderer(GetRenderer(eCanvasType.Preview), _selectionPixels, _startPosition.Value, _endPosition.Value);
                 }
                 else
                 {
@@ -64,12 +65,14 @@ namespace CharacterStudio
         {
             if ( _isDrawing )
             {
-                CSPaintingRenderer.CopyToRect( _csMainRenderer, _csPreviewRenderer, _startPosition.Value, _endPosition.Value );
-                _csMainRenderer.ClearInRect( _startPosition.Value, _endPosition.Value );
+                // _csMainRenderer.ClearInRect( _startPosition.Value, _endPosition.Value );
                 _isDrawing = false;
             }
             else if ( _isDraggingSelection )
             {
+                CSPaintingRenderer.CopyToRect( _csPreviewRenderer, _csMainRenderer, _startPosition.Value, _endPosition.Value );
+                _startPosition = _endPosition = null;
+                _selectionPixels = null;
                 _isDraggingSelection = false;
             }
         }
@@ -90,8 +93,8 @@ namespace CharacterStudio
             var newStartPosition = touchPosition - _dragOffset;
             var newEndPosition = newStartPosition + ( _endPosition.Value - _startPosition.Value );
 
-            _csPreviewRenderer.ClearCanvas();
-            Draw( eCanvasType.Preview, newStartPosition, newEndPosition, selectColor );
+            renderer.ClearCanvas();
+            CSPaintingRenderer.LoadArrayToRenderer(renderer, _selectionPixels, newStartPosition, newEndPosition);
 
             _startPosition = newStartPosition;
             _endPosition = newEndPosition;
