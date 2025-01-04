@@ -72,6 +72,10 @@ namespace CharacterStudio
         {
             DrawOnHover( _currentNormalizedPosition, _currentColor );
         }
+        protected void RegisterState()
+        {
+            EventBus.Instance.Publish(new RegisterStateArg(new CSState(GetRenderer(eCanvasType.Main).GetClonedPixelColors())));
+        }
         protected void DrawSimpleLine( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color)
         {
             List<Vector2Int> linePixels = GetLinePixels(start, end);

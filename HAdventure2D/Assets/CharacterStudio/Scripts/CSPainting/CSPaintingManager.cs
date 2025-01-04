@@ -45,6 +45,8 @@ namespace CharacterStudio
         EventSubscription<PointerExitArgs> _pointerExitSubscription;
         EventSubscription<OnBrushSelectedArgs> _brushSelectedSubscription;
         EventSubscription<OnColorPickedArgs> _colorPickedSubscription;
+        EventSubscription<OnUndoArg> _undoSubscription;
+        EventSubscription<OnRedoArg> _redoSubscription;
 
         public CSPaintingSetting Setting => _paintingSetting;
         public Color CuurentColor => _colorPicker.color;
@@ -58,12 +60,15 @@ namespace CharacterStudio
             _pointerEnterSubscription = EventBus.Instance.Subscribe<PointerEnterArgs>( OnPointerEnter );
             _pointerExitSubscription = EventBus.Instance.Subscribe<PointerExitArgs>( OnPointerExit );
             _brushSelectedSubscription = EventBus.Instance.Subscribe<OnBrushSelectedArgs>( OnBrushSelected );
-            _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>(OnColorPicked);
+            _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>( OnColorPicked );
+            _undoSubscription = EventBus.Instance.Subscribe<OnUndoArg>( OnUndo );
+            _redoSubscription = EventBus.Instance.Subscribe<OnRedoArg>( OnRedo );
 
             _backgroundRenderer.Setup( _paintingSetting );
             Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
             return base.Awake();
         }
+
         private void Update()
         {
             if ( Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl ) )
@@ -108,6 +113,24 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe( _pointerExitSubscription );
             EventBus.Instance.Unsubscribe( _brushSelectedSubscription );
             EventBus.Instance.Unsubscribe( _colorPickedSubscription );
+            EventBus.Instance.Unsubscribe( _undoSubscription );
+            EventBus.Instance.Unsubscribe( _redoSubscription );
+        }
+
+        private void OnUndo(OnUndoArg arg)
+        {
+            CSState state = CSStateManager.Instance.GetUndoState();
+            if (state == null)
+                return;
+            CSPaintingRenderer.LoadFromState(_paintingRenderer, state);
+        }
+
+        private void OnRedo(OnRedoArg arg)
+        {
+            CSState state = CSStateManager.Instance.GetRedoState();
+            if (state == null)
+                return;
+            CSPaintingRenderer.LoadFromState(_paintingRenderer, state);
         }
         private void OnColorPicked(OnColorPickedArgs args)
         {

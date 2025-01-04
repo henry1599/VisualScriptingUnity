@@ -74,6 +74,7 @@ namespace CharacterStudio
                 _startPosition = _endPosition = null;
                 _selectionPixels = null;
                 _isDraggingSelection = false;
+                RegisterState();
             }
         }
 

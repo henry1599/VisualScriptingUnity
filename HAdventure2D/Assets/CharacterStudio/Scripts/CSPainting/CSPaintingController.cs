@@ -14,6 +14,39 @@ namespace CharacterStudio
         {
             HandleMouseControl();
             HandleQuickEyeDrop();
+            HandleUndoRedohortcut();
+        }
+        void HandleUndoRedohortcut()
+        {
+            // if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            // {
+            //     if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            //     {
+            //         if (Input.GetKeyDown(KeyCode.Z))
+            //         {
+            //             EventBus.Instance.Publish(new OnRedoArg());
+            //         }
+            //     }
+            //     else
+            //     {
+            //         if (Input.GetKeyDown(KeyCode.Z))
+            //         {
+            //             EventBus.Instance.Publish(new OnUndoArg());
+            //         }
+            //         if (Input.GetKeyDown(KeyCode.Y))
+            //         {
+            //             EventBus.Instance.Publish(new OnRedoArg());
+            //         }
+            //     }
+            // }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                EventBus.Instance.Publish(new OnUndoArg());
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                EventBus.Instance.Publish(new OnRedoArg());
+            }
         }
         void HandleQuickEyeDrop()
         {

@@ -38,6 +38,7 @@ namespace CharacterStudio
         public override void DrawPointerUp(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
             _previousPixelPosition = null;
+            RegisterState();
         }
         public override void DrawOnHover(Vector2 normalizedPixelPosition, Color color)
         {

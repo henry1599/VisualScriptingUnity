@@ -30,6 +30,16 @@ namespace CharacterStudio
         {
             ClearCanvas();
         }
+        public Color[] GetClonedPixelColors()
+        {
+            Color[] clonedColors = new Color[ _pixelColors.Length ];
+            _pixelColors.CopyTo( clonedColors, 0 );
+            return clonedColors;
+        }
+        public void SetPixelColors(Color[] pixelColors)
+        {
+            _pixelColors = pixelColors;
+        }
         public void ClearCanvas()
         {
             for ( int i = 0; i < _pixelColors.Length; i++ )
@@ -181,6 +191,11 @@ namespace CharacterStudio
                     renderer.PixelColors[i] = pixelArray[rI];
                 }
             }
+            renderer.UpdateRenderTexture();
+        }
+        public static void LoadFromState(CSPaintingRenderer renderer, CSState state)
+        {
+            renderer.SetPixelColors(state.PixelColors);
             renderer.UpdateRenderTexture();
         }
     }

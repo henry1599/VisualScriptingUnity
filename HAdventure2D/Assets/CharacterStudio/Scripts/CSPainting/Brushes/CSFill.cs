@@ -25,6 +25,7 @@ namespace CharacterStudio
 
         public override void DrawPointerUp(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
+            RegisterState();
         }
 
         public override void DrawPreview(Vector2 normalizedPixelPosition, Color color)

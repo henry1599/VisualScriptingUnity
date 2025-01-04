@@ -311,6 +311,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unquestionablegames.serializables": {
+      "version": "https://github.com/ChrisHargrove/Serializables.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "388a71ceb5647a2b48641e934ef6d505b4333c8b"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

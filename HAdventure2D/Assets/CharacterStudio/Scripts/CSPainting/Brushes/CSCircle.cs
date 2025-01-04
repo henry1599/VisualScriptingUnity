@@ -42,6 +42,7 @@ namespace CharacterStudio
                 CSPaintingRenderer.CopyTo( GetRenderer(eCanvasType.Preview), GetRenderer(eCanvasType.Main) );
                 GetRenderer(eCanvasType.Preview).ClearCanvas();
                 GetRenderer(eCanvasType.Hover).ClearCanvas();
+                RegisterState();
                 _isDrawing = false;
             }
         }
