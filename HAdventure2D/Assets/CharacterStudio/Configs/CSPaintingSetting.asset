@@ -31,7 +31,7 @@ MonoBehaviour:
     - Key: 4
       Value: {fileID: 21300000, guid: bc5264ba2b27ef3468127fd14c2b11be, type: 3}
     - Key: 7
-      Value: {fileID: 21300000, guid: 20ae3f27ac1b9f74dac4caa33e7c4e14, type: 3}
+      Value: {fileID: 21300000, guid: 19df4b395b77ee2498976902bb96fcfb, type: 3}
   BrushCursorsDict:
     _serializedList:
     - Key: 6

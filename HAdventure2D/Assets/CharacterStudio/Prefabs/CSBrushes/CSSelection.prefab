@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tooltip:
     Title: Selection Tool
-    Description: Select a rectangular area
+    Description: Select a rectangular area (Experimental - not too perfect)
   Shortcut:
     Key: 118
     Callback:
