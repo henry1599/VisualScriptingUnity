@@ -112,8 +112,6 @@ namespace CharacterStudio
         }
         public void Unsetup()
         {
-            if (!IsSetup)
-                return;
             EventBus.Instance.Unsubscribe( _pointerDownSubscription );
             EventBus.Instance.Unsubscribe( _pointerMoveSubscription );
             EventBus.Instance.Unsubscribe( _pointerUpSubscription );
@@ -134,9 +132,20 @@ namespace CharacterStudio
             {
                 Destroy(_brushContainer.GetChild(i).gameObject);
             }
+            brushCount = _brushUIContainer.childCount;
+            for (int i = brushCount - 1; i >= 0; i--)
+            {
+                Destroy(_brushUIContainer.GetChild(i).gameObject);
+            }
+            _brushes.Clear();
             _canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
             _canvasGroup.interactable = false;
+
+            _paintingHover.ClearCanvas();
+            _paintingPreview.ClearCanvas();
+            _paintingRenderer.ClearCanvas();
+            _backgroundRenderer.ClearCanvas();
             IsSetup = false;
         }
         private void Update()

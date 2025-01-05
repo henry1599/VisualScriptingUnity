@@ -1,21 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CharacterStudio
 {
-    public class PopupConfirmBack : MonoBehaviour
+    public class PopupConfirmBack : PopupBase
     {
-        // Start is called before the first frame update
-        void Start()
+        public override ePopupType PopupType => ePopupType.CSP_ConfirmBack;
+        [SerializeField] Button _okButton;
+        void Awake()
         {
-        
+            _okButton.onClick.AddListener(OnOkButtonClicked);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnOkButtonClicked()
         {
-        
+            CSPaintingManager.Instance.Unsetup();
+            CharacterStudioMain.Instance.Setup();
+            EventBus.Instance.Publish(new HidePopupArg(PopupType));
         }
     }
 }

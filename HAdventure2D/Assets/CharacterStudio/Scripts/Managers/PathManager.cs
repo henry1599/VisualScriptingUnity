@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CharacterStudio
 {
-    public class PathConfig : MonoBehaviour
+    public class PathManager : MonoBehaviour
     {
         // Start is called before the first frame update
         void Start()

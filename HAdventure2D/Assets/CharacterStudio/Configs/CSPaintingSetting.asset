@@ -29,6 +29,9 @@ MonoBehaviour:
   - {r: 1, g: 0.47450984, b: 0.80643344, a: 1}
   Brushes:
     _serializedList:
+    - Key: 7
+      Value: {fileID: 2651763976187395186, guid: 86debf27a1af351429ed56c5c95d1c01,
+        type: 3}
     - Key: 0
       Value: {fileID: 632774436301549500, guid: 37fc836a7edc5b24798f45897c22bf75,
         type: 3}
@@ -49,9 +52,6 @@ MonoBehaviour:
         type: 3}
     - Key: 6
       Value: {fileID: 5728656650456777403, guid: 6ebed9c2c7aaea348b19333af77b986f,
-        type: 3}
-    - Key: 7
-      Value: {fileID: 2651763976187395186, guid: 86debf27a1af351429ed56c5c95d1c01,
         type: 3}
   BrushIconsDict:
     _serializedList:

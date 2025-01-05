@@ -21,7 +21,10 @@ namespace CharacterStudio
         public void OnPointerDown( PointerEventData eventData )
         {
             if ( eventData.button != PointerEventData.InputButton.Left )
+            {
+                EventBus.Instance?.Publish( new PointerUpArgs( this, eventData ) );
                 return;
+            }
             EventBus.Instance?.Publish( new PointerDownArgs( this, eventData ) );
         }
         public void OnPointerMove( PointerEventData eventData )
