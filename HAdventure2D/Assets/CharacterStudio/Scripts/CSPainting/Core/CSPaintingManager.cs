@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace CharacterStudio
 {
@@ -11,6 +12,7 @@ namespace CharacterStudio
     {
         [Header("Setting")]
         [SerializeField] private CSPaintingSetting _paintingSetting;
+        [SerializeField] private CharacterDatabase _characterDatabase;
         [Space(5)]
 
 
@@ -22,6 +24,7 @@ namespace CharacterStudio
         [Foldout("Renderers"), SerializeField] private CSPaintingRenderer _paintingPreview;
         [Foldout("Renderers"), SerializeField] private CSPaintingRenderer _paintingHover;
         [Foldout("Renderers"), SerializeField] private CSPaintingBackgroundRenderer _backgroundRenderer;
+        [Foldout("Renderers"), SerializeField] private Image _guideLineRenderer;
         [SerializeField] private Transform _brushContainer;
         [SerializeField] private Transform _brushUIContainer;
         [SerializeField] private FlexibleColorPicker _colorPicker;
@@ -50,8 +53,13 @@ namespace CharacterStudio
         public CSPaintingSetting Setting => _paintingSetting;
         public Color CuurentColor => _colorPicker.color;
         public CSBrush ActiveBrush => _activeBrush;
+        public bool IsSetup {get; private set;} = false;
 
         protected override bool Awake()
+        {
+            return base.Awake();
+        }
+        public void SetupFromStudio(eCharacterPart part)
         {
             _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>( OnPointerHover );
             _pointerDownSubscription = EventBus.Instance.Subscribe<PointerDownArgs>( OnPointerDown );
@@ -65,28 +73,16 @@ namespace CharacterStudio
 
             _backgroundRenderer.Setup( _paintingSetting );
             Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
-            return base.Awake();
-        }
-
-        private void Update()
-        {
-            if ( Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl ) )
+            Texture2D texture = _characterDatabase.GetDefaultPartTexture(part);
+            if (texture == null)
             {
-                float mouseVScroll = Input.mouseScrollDelta.y;
-                if ( mouseVScroll < 0 )
-                {
-                    _activeBrush?.DecreaseSize();
-                }
-                else if ( mouseVScroll > 0 )
-                {
-                    _activeBrush?.IncreaseSize();
-                }
+                Debug.LogError("Texture not found");
+                return;
             }
-        }
+            _guideLineRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
 
 
-        void Start()
-        {
+            
             foreach (var brushPrefab in _paintingSetting.GetAllBrushes())
             {
                 CSBrush brush = Instantiate( brushPrefab, _brushContainer );
@@ -100,10 +96,13 @@ namespace CharacterStudio
             }
             SelectBrush(_paintingSetting.DefaultBrush);
             SetCurrentColor(_colorPicker.StartingColor);
+
+            IsSetup = true;
         }
-        protected override void OnDestroy()
+        public void Unsetup()
         {
-            base.OnDestroy();
+            if (!IsSetup)
+                return;
             EventBus.Instance.Unsubscribe( _pointerDownSubscription );
             EventBus.Instance.Unsubscribe( _pointerMoveSubscription );
             EventBus.Instance.Unsubscribe( _pointerUpSubscription );
@@ -114,6 +113,34 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe( _colorPickedSubscription );
             EventBus.Instance.Unsubscribe( _undoSubscription );
             EventBus.Instance.Unsubscribe( _redoSubscription );
+            _activeBrush?.Unsetup();
+            foreach (var brush in _brushes.Values)
+            {
+                brush.Unsetup();
+            }
+            int brushCount = _brushContainer.childCount;
+            for (int i = brushCount - 1; i >= 0; i--)
+            {
+                Destroy(_brushContainer.GetChild(i).gameObject);
+            }
+            IsSetup = false;
+        }
+        private void Update()
+        {
+            if ( !IsSetup )
+                return;
+            if ( Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl ) )
+            {
+                float mouseVScroll = Input.mouseScrollDelta.y;
+                if ( mouseVScroll < 0 )
+                {
+                    _activeBrush?.DecreaseSize();
+                }
+                else if ( mouseVScroll > 0 )
+                {
+                    _activeBrush?.IncreaseSize();
+                }
+            }
         }
 
         private void OnUndo(OnUndoArg arg)

@@ -12,6 +12,8 @@ namespace CharacterStudio
 
         private void Update()
         {
+            if (!CSPaintingManager.Instance.IsSetup)
+                return;
             HandleMouseControl();
             HandleQuickEyeDrop();
             HandleUndoRedohortcut();
