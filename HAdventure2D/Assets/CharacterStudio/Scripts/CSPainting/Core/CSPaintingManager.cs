@@ -13,6 +13,7 @@ namespace CharacterStudio
         [Header("Setting")]
         [SerializeField] private CSPaintingSetting _paintingSetting;
         [SerializeField] private CharacterDatabase _characterDatabase;
+        [SerializeField] private CanvasGroup _canvasGroup;
         [Space(5)]
 
 
@@ -61,6 +62,10 @@ namespace CharacterStudio
         }
         public void SetupFromStudio(eCharacterPart part)
         {
+            _canvasGroup.alpha = 1;
+            _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
+
             _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>( OnPointerHover );
             _pointerDownSubscription = EventBus.Instance.Subscribe<PointerDownArgs>( OnPointerDown );
             _pointerUpSubscription = EventBus.Instance.Subscribe<PointerUpArgs>( OnPointerUp );
@@ -123,6 +128,9 @@ namespace CharacterStudio
             {
                 Destroy(_brushContainer.GetChild(i).gameObject);
             }
+            _canvasGroup.alpha = 0;
+            _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
             IsSetup = false;
         }
         private void Update()

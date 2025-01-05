@@ -29,28 +29,45 @@ namespace CharacterStudio
 
 
         [Header("UI")]
+        [SerializeField] CanvasGroup _canvasGroup;
         [SerializeField] private List<eCharacterPart> _availableParts;
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private Transform _itemContainer;
         [SerializeField] private UIItem _itemPrefab;
         [SerializeField] private Button _rightPanelBackButton;
+        [SerializeField] private Button _addNewPartButton;
         [ReadOnly, SerializeField] List<eCharacterPart> _actualCategories = new List<eCharacterPart>();
         private eStudioState _studioState;
+        private eCharacterPart _selectedCategory;
         private List<UIItem> _partItems = new List<UIItem>();
         private EventSubscription<ItemClickArg> _itemClickSubscription;
 
         void Awake()
         {
             _itemClickSubscription = EventBus.Instance.Subscribe<ItemClickArg>(OnItemClick);
+            _addNewPartButton.onClick.AddListener(OnAddNewPartButtonClicked);
             UpdateState(eStudioState.Category);
             ReloadCategories();
 
             _rightPanelBackButton.onClick.AddListener(OnBackButtonClicked);
         }
-
         private void OnDestroy()
         {
             EventBus.Instance.Unsubscribe( _itemClickSubscription );
+        }
+
+
+        private void OnAddNewPartButtonClicked()
+        {
+            eCharacterPart part = _selectedCategory;
+            if (part == eCharacterPart.None)
+            {
+                return;
+            }
+            _canvasGroup.alpha = 0;
+            _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
+            CSPaintingManager.Instance.SetupFromStudio(part);
         }
 
         private void OnBackButtonClicked()
@@ -70,6 +87,7 @@ namespace CharacterStudio
         {
             _studioState = state;
             _rightPanelBackButton.gameObject.SetActive(state == eStudioState.Item);
+            _addNewPartButton.gameObject.SetActive(state == eStudioState.Item);
         }
         private void OnItemClick(ItemClickArg arg)
         {
@@ -86,6 +104,7 @@ namespace CharacterStudio
         }
         void ReloadCategories()
         {
+            _selectedCategory = eCharacterPart.None;
             // * Get categories
             var characterDatabaseKeys = _characterDatabase.Data.Keys;
             _actualCategories = characterDatabaseKeys.Intersect(_availableParts).ToList();
@@ -113,6 +132,7 @@ namespace CharacterStudio
         }
         public void ReloadItems(eCharacterPart category)
         {
+            _selectedCategory = category;
             // * Set title
             _titleText.text = _characterDatabase.Categories[category].DisplayName;
 
