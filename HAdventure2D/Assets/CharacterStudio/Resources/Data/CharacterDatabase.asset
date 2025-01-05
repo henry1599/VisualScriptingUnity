@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 071330d85f023e547ae98ef1ec93386e, type: 3}
   m_Name: CharacterDatabase
   m_EditorClassIdentifier: 
-  CatgoryIconPath: /CharacterStudio/Base/Categories/
+  CatgoryIconPath: /CharacterStudio/Base/Set_01/Categories/
+  Size: 32
   Paths:
-  - /CharacterStudio/Base/BaseTextures/
+  - /CharacterStudio/Base/Set_01/BaseTextures/
   Categories:
     _serializedList:
     - Key: 2

@@ -6,6 +6,7 @@ using System.Linq;
 using NaughtyAttributes;
 using System;
 using UnityEngine.UI;
+using UnityEngine.TextCore.Text;
 
 namespace CharacterStudio
 {
@@ -19,7 +20,7 @@ namespace CharacterStudio
         Category,
         Item
     }
-    public class CharacterStudioMain : MonoBehaviour
+    public class CharacterStudioMain : MonoSingleton<CharacterStudioMain>
     {
         [Header("DATABASE")]
         [SerializeField] private MapDatabase _mapDatabase;
@@ -42,8 +43,20 @@ namespace CharacterStudio
         private List<UIItem> _partItems = new List<UIItem>();
         private EventSubscription<ItemClickArg> _itemClickSubscription;
 
-        void Awake()
+        protected override bool Awake()
         {
+            Setup();
+            return base.Awake();
+        }
+        protected override void OnDestroy()
+        {
+            Unsetup();
+        }
+        public void Setup()
+        {
+            _canvasGroup.alpha = 1;
+            _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
             _itemClickSubscription = EventBus.Instance.Subscribe<ItemClickArg>(OnItemClick);
             _addNewPartButton.onClick.AddListener(OnAddNewPartButtonClicked);
             UpdateState(eStudioState.Category);
@@ -51,11 +64,15 @@ namespace CharacterStudio
 
             _rightPanelBackButton.onClick.AddListener(OnBackButtonClicked);
         }
-        private void OnDestroy()
+        public void Unsetup()
         {
+            _canvasGroup.alpha = 0;
+            _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
             EventBus.Instance.Unsubscribe( _itemClickSubscription );
+            _addNewPartButton.onClick.RemoveAllListeners();
+            _rightPanelBackButton.onClick.RemoveAllListeners();
         }
-
 
         private void OnAddNewPartButtonClicked()
         {

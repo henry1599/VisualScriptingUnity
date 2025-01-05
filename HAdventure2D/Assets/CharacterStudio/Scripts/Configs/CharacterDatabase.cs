@@ -27,6 +27,14 @@ namespace CharacterStudio
         public SerializedDictionary<eCharacterPart, int> SortedData;
         [SerializedDictionary( "Part", "Default Part" )]
         public SerializedDictionary<eCharacterPart, string> DefaultParts;
+        public string GetCategoryDisplayName(eCharacterPart part)
+        {
+            if (Categories.ContainsKey(part))
+            {
+                return Categories[part].DisplayName;
+            }
+            return part.ToString();
+        }
         public Texture2D GetDefaultPartTexture(eCharacterPart part)
         {
             if (DefaultParts.ContainsKey(part))

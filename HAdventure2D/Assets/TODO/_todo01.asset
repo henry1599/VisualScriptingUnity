@@ -28,14 +28,13 @@ MonoBehaviour:
     to change size)\n\t(v) Implement rectangle tool\n\t(v) Implement circle tool\n\t(v)
     Implement color palette and color picker hue field\n\t(v) Implement fill tool\n\t(v)
     Implement zoom/move view\n\t(v) Implement selection tool\n\t(v) Implement undo/redo\n\t(v)
-    Implement Line tool\n\t+ Implement tool bar menu for painting, including:\n\t\t.
-    Undo, Redo\n\t\t. Export\n\t\t. Go back to character studio\n\t+ Implement pixel
-    perfect for pen tool\n\t+ Implement layer system\n\t+ Implement export sprites/layers
-    function\n\t\n\t# COMPATIBLE SYSTEM\n\t+ Implement hint background if enter painting
-    mode from Character editor\n\t+ Implement auto apply/save system to newly created
-    part\n\t\n- Fix selection bug when moving outside screen\n- Add restriction feature
-    on build\n\t+ Export sprite library can only be active in Editor\n\t+ Auto slicer
-    can only be active in Editor\n- Add more animations:\n\t+ Jump-up\n\t+ Jump-down\n\t+
-    Climb\n\t+ Attack-sword-01 (RHand) (cond - has sword)\n\t+ Attack-sword-02 (RHand)
-    (cond - has sword)\n\t+ Attack-sword-03 (RHand) (cond - has sword)\n\t+ Special-sword-01
-    (use 2 hand) (cond - has sword)\n\t+ Block (LHand) (cond - has shield)"
+    Implement Line tool\n\t+ Implement pixel perfect for pen tool\n\t+ Implement
+    layer system\n\t+ Implement export sprites/layers function\n\t\n\t# COMPATIBLE
+    SYSTEM\n\t+ Implement hint background if enter painting mode from Character editor\n\t+
+    Implement auto apply/save system to newly created part\n\t\n- Fix selection bug
+    when moving outside screen\n- Add restriction feature on build\n\t+ Export sprite
+    library can only be active in Editor\n\t+ Auto slicer can only be active in Editor\n-
+    Add more animations:\n\t+ Jump-up\n\t+ Jump-down\n\t+ Climb\n\t+ Attack-sword-01
+    (RHand) (cond - has sword)\n\t+ Attack-sword-02 (RHand) (cond - has sword)\n\t+
+    Attack-sword-03 (RHand) (cond - has sword)\n\t+ Special-sword-01 (use 2 hand)
+    (cond - has sword)\n\t+ Block (LHand) (cond - has shield)"

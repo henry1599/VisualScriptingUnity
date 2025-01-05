@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AnimationDatabase
   m_EditorClassIdentifier: 
   Paths:
-  - /CharacterStudio/Base/AnimationMap/
+  - /CharacterStudio/Base/Set_01/AnimationMap/
   AnimationInterval: 0.1
   Data:
     _serializedList:

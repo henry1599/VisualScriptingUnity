@@ -10,6 +10,8 @@ namespace CharacterStudio
         ExportSeparatedSprites,
         ExportSpriteSheet,
         ExportSpriteLibrary,
+        CSP_Save,
+        CSP_ConfirmBack
     }
     public interface IPopup
     {

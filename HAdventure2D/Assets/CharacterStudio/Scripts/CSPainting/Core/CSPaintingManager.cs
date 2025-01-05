@@ -55,6 +55,7 @@ namespace CharacterStudio
         public Color CuurentColor => _colorPicker.color;
         public CSBrush ActiveBrush => _activeBrush;
         public bool IsSetup {get; private set;} = false;
+        public eCharacterPart ChosenPart {get; private set;}
 
         protected override bool Awake()
         {
@@ -62,6 +63,7 @@ namespace CharacterStudio
         }
         public void SetupFromStudio(eCharacterPart part)
         {
+            ChosenPart = part;
             _canvasGroup.alpha = 1;
             _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
@@ -103,6 +105,10 @@ namespace CharacterStudio
             SetCurrentColor(_colorPicker.StartingColor);
 
             IsSetup = true;
+        }
+        public string GetPartDisplayName()
+        {
+            return _characterDatabase.GetCategoryDisplayName(ChosenPart);
         }
         public void Unsetup()
         {
