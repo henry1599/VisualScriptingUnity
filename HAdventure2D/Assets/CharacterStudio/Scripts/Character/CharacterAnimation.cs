@@ -653,20 +653,24 @@ namespace CharacterStudio
         }
         public void SetFrameIndex(int frameIndex)
         {
-            if (_currentAnimationTextures.Count == 0)
+            try
             {
-                return;
+                if (_currentAnimationTextures.Count == 0)
+                {
+                    return;
+                }
+                if (!_currentAnimationTextures.ContainsKey(_currentAnimation))
+                {
+                    return;
+                }
+                if (!_currentAnimationTextures[_currentAnimation].ContainsKey(_spriteRenderers.Keys.First()))
+                {
+                    return;
+                }
+                this.frameIndex = Mathf.Clamp(frameIndex, 0, _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count - 1);
+                UpdateVisual(this.frameIndex);
             }
-            if (!_currentAnimationTextures.ContainsKey(_currentAnimation))
-            {
-                return;
-            }
-            if (!_currentAnimationTextures[_currentAnimation].ContainsKey(_spriteRenderers.Keys.First()))
-            {
-                return;
-            }
-            this.frameIndex = Mathf.Clamp(frameIndex, 0, _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count - 1);
-            UpdateVisual(this.frameIndex);
+            catch (Exception) { }
         }
         void UpdateVisual(int frameIndex)
         {

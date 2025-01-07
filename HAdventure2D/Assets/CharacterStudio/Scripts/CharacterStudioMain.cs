@@ -26,6 +26,7 @@ namespace CharacterStudio
         [SerializeField] private MapDatabase _mapDatabase;
         [SerializeField] private AnimationDatabase _animationDatabase;
         [SerializeField] private CharacterDatabase _characterDatabase;
+        [SerializeField] private AnimationPanel _animationPanel;
         [Space(5)]
 
 

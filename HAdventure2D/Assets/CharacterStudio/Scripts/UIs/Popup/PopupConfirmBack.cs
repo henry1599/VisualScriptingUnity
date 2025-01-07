@@ -17,8 +17,7 @@ namespace CharacterStudio
 
         private void OnOkButtonClicked()
         {
-            CSPaintingManager.Instance.Unsetup();
-            CharacterStudioMain.Instance.Setup();
+            EventBus.Instance.Publish(new OnChangeLayoutArg(eLayoutType.Character));
             EventBus.Instance.Publish(new HidePopupArg(PopupType));
         }
     }

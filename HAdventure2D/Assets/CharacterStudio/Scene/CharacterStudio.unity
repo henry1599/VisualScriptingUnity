@@ -813,6 +813,7 @@ MonoBehaviour:
   _mapDatabase: {fileID: 11400000, guid: f4585b04a3bc102419c99be69afe97b9, type: 2}
   _animationDatabase: {fileID: 11400000, guid: c737942189d3b8c49ad22e35cb54f4b8, type: 2}
   _characterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
+  _animationPanel: {fileID: 2362080749080264050}
   _canvasGroup: {fileID: 115287696}
   _availableParts: 020000000600000007000000
   _titleText: {fileID: 812217167}
