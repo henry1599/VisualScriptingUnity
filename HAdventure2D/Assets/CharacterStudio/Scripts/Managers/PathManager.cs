@@ -1,21 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace CharacterStudio
 {
-    public class PathManager : MonoBehaviour
+    public class PathManager : MonoSingleton<PathManager>
     {
-        // Start is called before the first frame update
-        void Start()
+        public readonly string SAVE_DATA_FILE_NAME = "UserSaveData.csd";
+        public readonly string SAVE_DATA_FOLDER_NAME = "SaveData";
+        public string GetSaveDataFolderPath()
         {
-        
+            string saveFolder = Path.Combine( Application.dataPath, SAVE_DATA_FOLDER_NAME );
+            if ( !Directory.Exists( saveFolder ) )
+            {
+                Directory.CreateDirectory( saveFolder );
+            }
+            return saveFolder;
         }
-
-        // Update is called once per frame
-        void Update()
+        public string GetSaveDataFilePath()
         {
-        
+            string savePath = Path.Combine( GetSaveDataFolderPath(), SAVE_DATA_FILE_NAME );
+            return savePath;
         }
     }
 }
