@@ -42,15 +42,13 @@ namespace CharacterStudio
         private eCharacterPart _selectedCategory;
         private List<UIItem> _partItems = new List<UIItem>();
         private EventSubscription<ItemClickArg> _itemClickSubscription;
+        public bool IsSetup {get; private set;}
+
+        public eCharacterPart SelectedCategory => _selectedCategory;
 
         protected override bool Awake()
         {
-            Setup();
             return base.Awake();
-        }
-        protected override void OnDestroy()
-        {
-            Unsetup();
         }
         public void Setup()
         {
@@ -63,6 +61,8 @@ namespace CharacterStudio
             ReloadCategories();
 
             _rightPanelBackButton.onClick.AddListener(OnBackButtonClicked);
+            CharacterAnimation.Instance.Setup();
+            IsSetup = true;
         }
         public void Unsetup()
         {
@@ -72,6 +72,7 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe( _itemClickSubscription );
             _addNewPartButton.onClick.RemoveAllListeners();
             _rightPanelBackButton.onClick.RemoveAllListeners();
+            IsSetup = false;
         }
 
         private void OnAddNewPartButtonClicked()
@@ -84,7 +85,7 @@ namespace CharacterStudio
             _canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
             _canvasGroup.interactable = false;
-            CSPaintingManager.Instance.SetupFromStudio(part);
+            EventBus.Instance.Publish(new OnChangeLayoutArg(eLayoutType.Painting));
         }
 
         private void OnBackButtonClicked()

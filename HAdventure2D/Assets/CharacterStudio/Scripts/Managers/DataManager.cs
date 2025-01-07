@@ -7,6 +7,7 @@ namespace CharacterStudio
 {
     public class DataManager : MonoSingleton<DataManager>
     {
+        public static readonly string SAVEDATA_KEY = "U53rS4v3D4t4";
         public UserSaveData SaveData { get; private set; } = null;
         protected override bool Awake()
         {
@@ -19,16 +20,12 @@ namespace CharacterStudio
             {
                 SaveData = new UserSaveData();
             }
-            string savePath = PathManager.Instance.GetSaveDataFilePath();
-            SaveData.SaveToPath( savePath );
+            SaveData.Save();
         }
         public void Load()
         {
-            string savePath = PathManager.Instance.GetSaveDataFilePath();
-            if ( File.Exists( savePath ) )
-            {
-                SaveData = UserSaveData.LoadFromPath( savePath );
-            }
+            SaveData = UserSaveData.Load();
+            Save();
         }
     }
 }

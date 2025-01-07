@@ -18,11 +18,20 @@ namespace CharacterStudio
     {
         public string CatgoryIconPath;
         public int Size = 32;
-        public List<string> Paths;
         [SerializedDictionary("Part", "Category Data")]
         public SerializedDictionary<eCharacterPart, CategoryData> Categories;
         [SerializedDictionary("Part", "Character Data")]
-        public SerializedDictionary<eCharacterPart, CharacterData> Data;
+        public SerializedDictionary<eCharacterPart, CharacterData> Data
+        {
+            get
+            {
+                if (_data == null)
+                {
+                    LoadExternal();
+                }
+                return _data;
+            }
+        } SerializedDictionary<eCharacterPart, CharacterData> _data;
         [SerializedDictionary("Part", "Sorted Data")]
         public SerializedDictionary<eCharacterPart, int> SortedData;
         [SerializedDictionary( "Part", "Default Part" )]
@@ -77,56 +86,62 @@ namespace CharacterStudio
             }
             return false;
         }
+        public void LoadExternal()
+        {
+            _data = new SerializedDictionary<eCharacterPart, CharacterData>();
+            List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
+            foreach (var part in allParts)
+            {
+                string rootPathFolder = DataManager.Instance.SaveData.DataFolderPath;
+                string partPath = Path.Combine(rootPathFolder, part.ToString());
+                CharacterData characterData = new CharacterData
+                {
+                    TextureDict = new SerializedDictionary<string, Texture2D>()
+                };
+                if (Directory.Exists(partPath))
+                {
+                    string[] files = Directory.GetFiles(partPath);
+                    foreach (var file in files)
+                    {
+                        if (file.EndsWith(".png"))
+                        {
+                            string id = Path.GetFileNameWithoutExtension(file);
+                            byte[] fileData = File.ReadAllBytes(file);
+                            Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                            tex.LoadImage(fileData);
+                            tex.filterMode = FilterMode.Point;
+                            characterData.TextureDict.TryAdd(id, tex);
+                        }
+                    }
+                    _data.TryAdd(part, characterData);
+                }
+            }
+        }
 #if UNITY_EDITOR
         [Button("Load Data")]
         public void LoadData()
         {
-            Data = new SerializedDictionary<eCharacterPart, CharacterData>();
             Categories = new SerializedDictionary<eCharacterPart, CategoryData>();
             List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
-            foreach (var path in Paths)
+            foreach (var part in allParts)
             {
-                foreach (var part in allParts)
+                CategoryData categoryData = new CategoryData();
+                string categoryFilePath = Application.dataPath + CatgoryIconPath + part.ToString() + ".png";
+                if (File.Exists(categoryFilePath))
                 {
-                    CharacterData characterData = new CharacterData();
-                    CategoryData categoryData = new CategoryData();
-                    characterData.TextureDict = new SerializedDictionary<string, Texture2D>();
-                    string categoryFilePath = Application.dataPath + CatgoryIconPath + part.ToString() + ".png";
-                    if (File.Exists(categoryFilePath))
+                    string pathFromAssets = "Assets" + categoryFilePath.Substring(Application.dataPath.Length);
+                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
+                    categoryData.Icon = tex;
+                    categoryData.Part = part;
+                    categoryData.DisplayName = part.ToString();
+                    if (Categories.ContainsKey(part))
                     {
-                        string pathFromAssets = "Assets" + categoryFilePath.Substring(Application.dataPath.Length);
-                        Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
-                        categoryData.Icon = tex;
-                        categoryData.Part = part;
-                        categoryData.DisplayName = part.ToString();
-                        if (Categories.ContainsKey(part))
-                        {
-                            Categories[part].Part = part;
-                            Categories[part].Icon = categoryData.Icon;
-                        }
-                        else
-                        {
-                            Categories.TryAdd(part, categoryData);
-                        }
+                        Categories[part].Part = part;
+                        Categories[part].Icon = categoryData.Icon;
                     }
-
-
-
-                    string rootPathFolder = Application.dataPath + path + part.ToString() + "/Data/";
-                    if (Directory.Exists(rootPathFolder))
+                    else
                     {
-                        string[] files = Directory.GetFiles(rootPathFolder);
-                        foreach (var file in files)
-                        {
-                            if (file.EndsWith(".png"))
-                            {
-                                string pathFromAssets = "Assets" + file.Substring(Application.dataPath.Length);
-                                string id = Path.GetFileNameWithoutExtension(file);
-                                Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
-                                characterData.TextureDict.TryAdd(id, tex);
-                            }
-                        }
-                        Data.TryAdd(part, characterData);
+                        Categories.TryAdd(part, categoryData);
                     }
                 }
             }

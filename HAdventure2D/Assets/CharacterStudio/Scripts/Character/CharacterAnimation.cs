@@ -126,8 +126,9 @@ namespace CharacterStudio
                 }
             }
         }
-        void Start()
+        public void Setup()
         {
+            _characterDatabase.LoadExternal();
             _changePartSubscription = EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
             _changeAnimationSubscription = EventBus.Instance.Subscribe<ChangeAnimationArg>(OnChangeAnimation);
             _exportSeparatedSpritesSubscription = EventBus.Instance.Subscribe<SeparatedSpritesExportArg>(OnExportSeparatedSprites);
@@ -621,6 +622,10 @@ namespace CharacterStudio
         }
         void Update()
         {
+            if (!CharacterStudioMain.Instance.IsSetup)
+            {
+                return;
+            }
             if (!_isSetup)
             {
                 return;

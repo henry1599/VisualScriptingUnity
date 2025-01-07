@@ -6,22 +6,27 @@ namespace CharacterStudio
 {
     public class UserSaveData
     {
-        public string DataFolderPath;
-        public byte[] ToBinary()
+        public string DataFolderPath = "";
+        public void Save()
         {
-            return System.Text.Encoding.UTF8.GetBytes( DataFolderPath );
+            PlayerPrefs.SetString( DataManager.SAVEDATA_KEY, ToJson() );
         }
-        public string SaveToPath( string path )
+        public static UserSaveData Load()
         {
-            System.IO.File.WriteAllBytes( path, ToBinary() );
-            return path;
+            string json = PlayerPrefs.GetString( DataManager.SAVEDATA_KEY, "" );
+            if ( string.IsNullOrEmpty( json ) )
+            {
+                return new UserSaveData();
+            }
+            return FromJson( json );
         }
-        public static UserSaveData LoadFromPath( string path )
+        public string ToJson()
         {
-            UserSaveData data = new UserSaveData();
-            byte[] bytes = System.IO.File.ReadAllBytes( path );
-            data.DataFolderPath = System.Text.Encoding.UTF8.GetString( bytes );
-            return data;
+            return JsonUtility.ToJson( this );
+        }
+        public static UserSaveData FromJson( string json )
+        {
+            return JsonUtility.FromJson<UserSaveData>( json );
         }
     }
 }

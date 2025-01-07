@@ -61,8 +61,9 @@ namespace CharacterStudio
         {
             return base.Awake();
         }
-        public void SetupFromStudio(eCharacterPart part)
+        public void Setup()
         {
+            var part = CharacterStudioMain.Instance.SelectedCategory;   
             ChosenPart = part;
             _canvasGroup.alpha = 1;
             _canvasGroup.blocksRaycasts = true;

@@ -42,6 +42,8 @@ namespace CharacterStudio
         }
         public void ClearCanvas()
         {
+            if (_pixelColors == null)
+                return;
             for ( int i = 0; i < _pixelColors.Length; i++ )
             {
                 _pixelColors[ i ] = Color.clear;
