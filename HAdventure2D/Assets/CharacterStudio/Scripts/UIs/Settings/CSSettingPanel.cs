@@ -25,9 +25,12 @@ namespace CharacterStudio
         }
         public void Setup()
         {
-            _canvasGroup.alpha = 1;
-            _canvasGroup.blocksRaycasts = true;
-            _canvasGroup.interactable = true;
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = 1;
+                _canvasGroup.blocksRaycasts = true;
+                _canvasGroup.interactable = true;
+            }
             _choosePathButton.onClick.AddListener( OnClickChoosePath );
             _removeButton.onClick.AddListener( OnClickRemove );
             _backButton.onClick.AddListener(OnBackButtonClicked);
@@ -41,9 +44,12 @@ namespace CharacterStudio
 
         public void Unsetup()
         {
-            _canvasGroup.alpha = 0;
-            _canvasGroup.blocksRaycasts = false;
-            _canvasGroup.interactable = false;
+            if ( _canvasGroup != null )
+            {
+                _canvasGroup.alpha = 0;
+                _canvasGroup.blocksRaycasts = false;
+                _canvasGroup.interactable = false;
+            }
             // DataManager.Instance.Save();
             _choosePathButton.onClick.RemoveAllListeners();
             _removeButton.onClick.RemoveAllListeners();
@@ -52,17 +58,7 @@ namespace CharacterStudio
 
         private void OnClickChoosePath()
         {
-// #if UNITY_EDITOR
-//             string selectedPath = EditorUtility.OpenFolderPanel( "Choose DATA folder", Application.dataPath, "" );
-//             if ( !string.IsNullOrEmpty( selectedPath ) )
-//             {
-//                 DataManager.Instance.SaveData.DataFolderPath = selectedPath;
-//                 DataManager.Instance.Save();
-//                 UpdatePathText();
-//             }
-// #else
             FileBrowser.ShowSaveDialog( OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: Application.dataPath, title: "Choose DATA folder" );
-// #endif
         }
 
         private void OnBrowseCancel()
