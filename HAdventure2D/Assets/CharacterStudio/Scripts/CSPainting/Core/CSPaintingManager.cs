@@ -12,7 +12,6 @@ namespace CharacterStudio
     {
         [Header("Setting")]
         [SerializeField] private CSPaintingSetting _paintingSetting;
-        [SerializeField] private CharacterDatabase _characterDatabase;
         [SerializeField] private CanvasGroup _canvasGroup;
         [Space(5)]
 
@@ -81,7 +80,7 @@ namespace CharacterStudio
 
             _backgroundRenderer.Setup( _paintingSetting );
             Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
-            Texture2D texture = _characterDatabase.GetDefaultPartTexture(part);
+            Texture2D texture = DataManager.Instance.CharacterDatabase.GetDefaultPartTexture(part);
             if (texture == null)
             {
                 Debug.LogError("Texture not found");
@@ -109,7 +108,7 @@ namespace CharacterStudio
         }
         public string GetPartDisplayName()
         {
-            return _characterDatabase.GetCategoryDisplayName(ChosenPart);
+            return DataManager.Instance.CharacterDatabase.GetCategoryDisplayName(ChosenPart);
         }
         public void Unsetup()
         {

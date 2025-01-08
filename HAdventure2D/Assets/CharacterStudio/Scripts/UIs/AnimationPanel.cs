@@ -11,7 +11,6 @@ namespace CharacterStudio
     public class AnimationPanel : MonoBehaviour
     {
         [SerializeField] TMP_Dropdown _animationDropdown;
-        [SerializeField] AnimationDatabase _animationDatabase;
 
         [Header("CONTROL")]
         [SerializeField] Toggle _playButton;
@@ -37,7 +36,7 @@ namespace CharacterStudio
         EventSubscription<AnimationUpdateArg> _animationUpdateSubscription;
         public void SetupAnimationData()
         {
-            _animationList = new List<eCharacterAnimation>(_animationDatabase.Data.Keys);
+            _animationList = new List<eCharacterAnimation>(DataManager.Instance.AnimationDatabase.Data.Keys);
             List<string> animations = _animationList.Select(x => x.ToString()).ToList();
             _animationDropdown.ClearOptions();
             _animationDropdown.AddOptions(animations);
@@ -120,7 +119,7 @@ namespace CharacterStudio
                 Destroy(_keyFrameFrontContainer.GetChild(i).gameObject);
             }
 
-            int frameCount = _animationDatabase.GetAnimationFrameCount(arg.AnimationType);
+            int frameCount = DataManager.Instance.AnimationDatabase.GetAnimationFrameCount(arg.AnimationType);
             // * Minus to left and right of _sliderRect
             
 

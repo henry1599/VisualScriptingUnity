@@ -23,9 +23,6 @@ namespace CharacterStudio
     public class CharacterStudioMain : MonoSingleton<CharacterStudioMain>
     {
         [Header("DATABASE")]
-        [SerializeField] private MapDatabase _mapDatabase;
-        [SerializeField] private AnimationDatabase _animationDatabase;
-        [SerializeField] private CharacterDatabase _characterDatabase;
         [SerializeField] private AnimationPanel _animationPanel;
         [Space(5)]
 
@@ -125,7 +122,7 @@ namespace CharacterStudio
         {
             _selectedCategory = eCharacterPart.None;
             // * Get categories
-            var characterDatabaseKeys = _characterDatabase.Data.Keys;
+            var characterDatabaseKeys = DataManager.Instance.CharacterDatabase.Data.Keys;
             _actualCategories = characterDatabaseKeys.Intersect(_availableParts).ToList();
 
             // * Set title
@@ -144,16 +141,16 @@ namespace CharacterStudio
                 UIItem item = Instantiate(_itemPrefab, _itemContainer);
                 TooltipData tooltip = new TooltipData()
                 {
-                    Description = $"Enter {_characterDatabase.Categories[category].DisplayName} selection"
+                    Description = $"Enter {DataManager.Instance.CharacterDatabase.Categories[category].DisplayName} selection"
                 };
-                item.SetupCategory(_characterDatabase.Categories[category].Icon, category, tooltip);
+                item.SetupCategory(DataManager.Instance.CharacterDatabase.Categories[category].Icon, category, tooltip);
             }
         }
         public void ReloadItems(eCharacterPart category)
         {
             _selectedCategory = category;
             // * Set title
-            _titleText.text = _characterDatabase.Categories[category].DisplayName;
+            _titleText.text = DataManager.Instance.CharacterDatabase.Categories[category].DisplayName;
 
             // * Clear items object
             int count = _itemContainer.childCount;
@@ -163,7 +160,7 @@ namespace CharacterStudio
             }
 
             // * Create items
-            foreach (var item in _characterDatabase.Data[category].TextureDict)
+            foreach (var item in DataManager.Instance.CharacterDatabase.Data[category].TextureDict)
             {
                 UIItem uiItem = Instantiate(_itemPrefab, _itemContainer);
                 bool selected = false;

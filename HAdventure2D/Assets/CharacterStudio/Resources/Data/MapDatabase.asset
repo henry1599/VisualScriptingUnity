@@ -12,11 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861e2a04f7280f64a91c5b38f43c7ac8, type: 3}
   m_Name: MapDatabase
   m_EditorClassIdentifier: 
-  Data:
-    _serializedList:
-    - Key: 2
-      Value: {fileID: 2800000, guid: c6f8899ccd493ee4c8336ba2a2b141a1, type: 3}
-    - Key: 6
-      Value: {fileID: 2800000, guid: cb0dac79c35e4bb459291bdb97251900, type: 3}
-    - Key: 7
-      Value: {fileID: 2800000, guid: 2ae58137de6c31644a72193458a5c86b, type: 3}

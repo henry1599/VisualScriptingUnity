@@ -810,9 +810,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 453ce9143b303ad4cbed8a0a40d894a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapDatabase: {fileID: 11400000, guid: f4585b04a3bc102419c99be69afe97b9, type: 2}
-  _animationDatabase: {fileID: 11400000, guid: c737942189d3b8c49ad22e35cb54f4b8, type: 2}
-  _characterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
   _animationPanel: {fileID: 2362080749080264050}
   _canvasGroup: {fileID: 115287696}
   _availableParts: 020000000600000007000000
@@ -1758,9 +1755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteContainer: {fileID: 288232500}
-  _animationDatabase: {fileID: 11400000, guid: c737942189d3b8c49ad22e35cb54f4b8, type: 2}
-  _characterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
-  _mapDatabase: {fileID: 11400000, guid: f4585b04a3bc102419c99be69afe97b9, type: 2}
   _currentAnimation: 1
   size: 32
   IsPlaying: 1
@@ -2208,6 +2202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6cd876eaa3ed5c47879ae01f5b30d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapDatabase: {fileID: 11400000, guid: f4585b04a3bc102419c99be69afe97b9, type: 2}
+  AnimationDatabase: {fileID: 11400000, guid: c737942189d3b8c49ad22e35cb54f4b8, type: 2}
+  CharacterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
 --- !u!1 &389095242
 GameObject:
   m_ObjectHideFlags: 0
@@ -10246,7 +10243,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animationDropdown: {fileID: 7043730687077033877}
-  _animationDatabase: {fileID: 11400000, guid: c737942189d3b8c49ad22e35cb54f4b8, type: 2}
   _playButton: {fileID: 4306484634253494274}
   _playButtonImage: {fileID: 4908102346481967053}
   _playSprite: {fileID: 21300000, guid: 14651bd1ac67f804abd4ae2faeed9e70, type: 3}

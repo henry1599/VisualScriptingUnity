@@ -15,7 +15,13 @@ namespace CharacterStudio
 
         public override void Unsetup()
         {
-            CSPaintingManager.Instance?.Unsetup();
+            try
+            {
+                CSPaintingManager.Instance?.Unsetup();
+            }
+            catch (System.Exception)
+            {
+            }
         }
     }
 }

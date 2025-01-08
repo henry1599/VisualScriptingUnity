@@ -15,7 +15,13 @@ namespace CharacterStudio
 
         public override void Unsetup()
         {
-            CharacterStudioMain.Instance?.Unsetup();
+            try
+            {
+                CharacterStudioMain.Instance?.Unsetup();
+            }
+            catch (System.Exception)
+            {
+            }
         }
     }
 }

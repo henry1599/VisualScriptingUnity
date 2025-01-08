@@ -18,8 +18,7 @@ namespace CharacterStudio
     {
         public List<string> Paths;
         public float AnimationInterval = 0.15f;
-        [SerializedDictionary("Animation", "Data")]
-        public SerializedDictionary<eCharacterAnimation, AnimationData> Data;
+        public Dictionary<eCharacterAnimation, AnimationData> Data;
         public List<Texture2D> GetAnimations(eCharacterAnimation animation, eCharacterPart part)
         {
             if (Data.ContainsKey(animation))
@@ -39,56 +38,61 @@ namespace CharacterStudio
             }
             return 0;
         }
-#if UNITY_EDITOR
-        [Button("Load Animations")]
-        public void LoadAnimations()
+        public void LoadExternalData()
         {
-            Data = new SerializedDictionary<eCharacterAnimation, AnimationData>();
+            Data = new Dictionary<eCharacterAnimation, AnimationData>();
             List<eCharacterAnimation> allAnimations = Enum.GetValues(typeof(eCharacterAnimation)).Cast<eCharacterAnimation>().ToList();
             List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
-            foreach (var path in Paths)
+            foreach (var anim in allAnimations)
             {
-                foreach (var anim in allAnimations)
+                AnimationData data = new AnimationData
                 {
-                    AnimationData data = new AnimationData();
-                    data.AnimationsByPart = new SerializedDictionary<eCharacterPart, AnimationDataList>();
-                    foreach (var part in allParts)
+                    AnimationsByPart = new Dictionary<eCharacterPart, AnimationDataList>()
+                };
+                foreach (var part in allParts)
+                {
+                    string rootPathFolder = Path.Combine(
+                        DataManager.Instance.SaveData.DataFolderPath,
+                        "Core",
+                        "AnimationMap",
+                        anim.ToString(),
+                        part.ToString()
+                    );
+                    if (Directory.Exists(rootPathFolder))
                     {
-                        string rootPathFolder = Application.dataPath + path + anim.ToString() + "/" + part.ToString() + "/";
-                        if (Directory.Exists(rootPathFolder))
+                        data.AnimationsByPart[part] = new AnimationDataList
                         {
-                            data.AnimationsByPart[part] = new AnimationDataList();
-                            data.AnimationsByPart[part].Textures = new List<Texture2D>();
-                            string[] files = Directory.GetFiles(rootPathFolder);
-                            foreach (var file in files)
+                            Textures = new List<Texture2D>()
+                        };
+                        string[] files = Directory.GetFiles(rootPathFolder);
+                        foreach (var file in files)
+                        {
+                            if (file.EndsWith(".png"))
                             {
-                                if (file.EndsWith(".png"))
-                                {
-                                    string pathFromAssets = "Assets" + file.Substring(Application.dataPath.Length);
-                                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
-                                    data.AnimationsByPart[part].Textures.Add(tex);
-                                }
+                                byte[] fileData = File.ReadAllBytes(file);
+                                Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                                tex.LoadImage(fileData);
+                                tex.filterMode = FilterMode.Point;
+                                data.AnimationsByPart[part].Textures.Add(tex);
                             }
-                            if (Data.ContainsKey(anim))
-                            {
-                                Data[anim] = data;
-                            }
-                            else
-                            {
-                                Data.Add(anim, data);
-                            }
+                        }
+                        if (Data.ContainsKey(anim))
+                        {
+                            Data[anim] = data;
+                        }
+                        else
+                        {
+                            Data.Add(anim, data);
                         }
                     }
                 }
             }
         }
-#endif
     }
     [Serializable]
     public class AnimationData
     {
-        [SerializedDictionary("Part", "Data")]
-        public SerializedDictionary<eCharacterPart, AnimationDataList> AnimationsByPart;
+        public Dictionary<eCharacterPart, AnimationDataList> AnimationsByPart;
     }
     [Serializable]
     public class AnimationDataList

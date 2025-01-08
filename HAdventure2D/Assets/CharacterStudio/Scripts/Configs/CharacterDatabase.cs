@@ -18,24 +18,12 @@ namespace CharacterStudio
     {
         public string CatgoryIconPath;
         public int Size = 32;
-        [SerializedDictionary("Part", "Category Data")]
-        public SerializedDictionary<eCharacterPart, CategoryData> Categories;
-        [SerializedDictionary("Part", "Character Data")]
-        public SerializedDictionary<eCharacterPart, CharacterData> Data
-        {
-            get
-            {
-                if (_data == null)
-                {
-                    LoadExternal();
-                }
-                return _data;
-            }
-        } SerializedDictionary<eCharacterPart, CharacterData> _data;
+        public Dictionary<eCharacterPart, CategoryData> Categories = new Dictionary<eCharacterPart, CategoryData>();
+        public Dictionary<eCharacterPart, CharacterData> Data = new Dictionary<eCharacterPart, CharacterData>();
         [SerializedDictionary("Part", "Sorted Data")]
-        public SerializedDictionary<eCharacterPart, int> SortedData;
-        [SerializedDictionary( "Part", "Default Part" )]
-        public SerializedDictionary<eCharacterPart, string> DefaultParts;
+        public SerializedDictionary<eCharacterPart, int> SortedData; // stored as json
+        [SerializedDictionary( "Part", "Default Part" )] 
+        public SerializedDictionary<eCharacterPart, string> DefaultParts; // stored as json
         public string GetCategoryDisplayName(eCharacterPart part)
         {
             if (Categories.ContainsKey(part))
@@ -86,9 +74,9 @@ namespace CharacterStudio
             }
             return false;
         }
-        public void LoadExternal()
+        public void LoadExternalData()
         {
-            _data = new SerializedDictionary<eCharacterPart, CharacterData>();
+            Data = new Dictionary<eCharacterPart, CharacterData>();
             List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
             foreach (var part in allParts)
             {
@@ -96,7 +84,7 @@ namespace CharacterStudio
                 string partPath = Path.Combine(rootPathFolder, part.ToString());
                 CharacterData characterData = new CharacterData
                 {
-                    TextureDict = new SerializedDictionary<string, Texture2D>()
+                    TextureDict = new Dictionary<string, Texture2D>()
                 };
                 if (Directory.Exists(partPath))
                 {
@@ -113,40 +101,45 @@ namespace CharacterStudio
                             characterData.TextureDict.TryAdd(id, tex);
                         }
                     }
-                    _data.TryAdd(part, characterData);
+                    Data.TryAdd(part, characterData);
                 }
             }
         }
-#if UNITY_EDITOR
-        [Button("Load Data")]
-        public void LoadData()
+        public void LoadExternalCategories()
         {
-            Categories = new SerializedDictionary<eCharacterPart, CategoryData>();
+            Categories = new Dictionary<eCharacterPart, CategoryData>();
             List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
             foreach (var part in allParts)
             {
                 CategoryData categoryData = new CategoryData();
-                string categoryFilePath = Application.dataPath + CatgoryIconPath + part.ToString() + ".png";
+                string rootPathFolder = DataManager.Instance.SaveData.DataFolderPath;
+                string categoryFilePath = Path.Combine(rootPathFolder, "Core", "Categories", part.ToString() + ".png");
+                // string categoryFilePath = Application.dataPath + CatgoryIconPath + part.ToString() + ".png";
                 if (File.Exists(categoryFilePath))
                 {
-                    string pathFromAssets = "Assets" + categoryFilePath.Substring(Application.dataPath.Length);
-                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pathFromAssets);
-                    categoryData.Icon = tex;
-                    categoryData.Part = part;
-                    categoryData.DisplayName = part.ToString();
-                    if (Categories.ContainsKey(part))
+                    if (categoryFilePath.EndsWith(".png"))
                     {
-                        Categories[part].Part = part;
-                        Categories[part].Icon = categoryData.Icon;
-                    }
-                    else
-                    {
-                        Categories.TryAdd(part, categoryData);
+                        byte[] fileData = File.ReadAllBytes(categoryFilePath);
+                        Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                        tex.LoadImage(fileData);
+                        tex.filterMode = FilterMode.Point;
+
+                        categoryData.Icon = tex;
+                        categoryData.Part = part;
+                        categoryData.DisplayName = part.ToString();
+                        if (Categories.ContainsKey(part))
+                        {
+                            Categories[part].Part = part;
+                            Categories[part].Icon = categoryData.Icon;
+                        }
+                        else
+                        {
+                            Categories.TryAdd(part, categoryData);
+                        }
                     }
                 }
             }
         }
-#endif
     }
     [Serializable]
     public class CategoryData
@@ -158,7 +151,6 @@ namespace CharacterStudio
     [Serializable]
     public class CharacterData
     {
-        [SerializedDictionary("Id", "Texture")]
-        public SerializedDictionary<string, Texture2D> TextureDict;
+        public Dictionary<string, Texture2D> TextureDict;
     }
 }

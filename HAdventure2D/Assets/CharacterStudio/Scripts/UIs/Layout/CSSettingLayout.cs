@@ -16,7 +16,13 @@ namespace CharacterStudio
 
         public override void Unsetup()
         {
-            settingPanel.Unsetup();
+            try
+            {
+                settingPanel.Unsetup();
+            }
+            catch (System.Exception)
+            {
+            }
         }
     }
 }

@@ -24,9 +24,6 @@ namespace CharacterStudio
     public class CharacterAnimation : MonoSingleton<CharacterAnimation>
     {
         [SerializeField] Transform _spriteContainer;
-        [SerializeField] AnimationDatabase _animationDatabase;
-        [SerializeField] CharacterDatabase _characterDatabase;
-        [SerializeField] MapDatabase _mapDatabase;
         [SerializeField] eCharacterAnimation _currentAnimation;
         [SerializeField] int size = 32;
 
@@ -77,7 +74,7 @@ namespace CharacterStudio
             _currentAnimation = newAnimation;
             frameIndex = 0;
 
-            if (!_animationDatabase.Data.TryGetValue(newAnimation, out AnimationData animationData))
+            if (!DataManager.Instance.AnimationDatabase.Data.TryGetValue(newAnimation, out AnimationData animationData))
             {
                 Debug.LogError("Animation not found in database: " + newAnimation);
                 return;
@@ -88,13 +85,13 @@ namespace CharacterStudio
                 GameObject spriteObject = new GameObject(part.ToString());
                 spriteObject.transform.SetParent(_spriteContainer);
                 SpriteRenderer spriteRenderer = spriteObject.AddComponent<SpriteRenderer>();
-                spriteRenderer.sortingOrder = _characterDatabase.SortedData[part];
+                spriteRenderer.sortingOrder = DataManager.Instance.CharacterDatabase.SortedData[part];
                 _spriteRenderers.TryAdd(part, spriteRenderer);
                 _currentAnimationTexturesMap.TryAdd(newAnimation, new Dictionary<eCharacterPart, List<Texture2D>>());
                 _currentAnimationTexturesMap[newAnimation].TryAdd(part, data.Textures);
             }
             _currentAnimationTextures = new ();
-            _animationInterval = _animationDatabase.AnimationInterval;
+            _animationInterval = DataManager.Instance.AnimationDatabase.AnimationInterval;
             _counter = _animationInterval;
 
             _isSetup = true;
@@ -105,8 +102,8 @@ namespace CharacterStudio
             {
                 _currentAnimationTextures.TryAdd(_currentAnimation, new Dictionary<eCharacterPart, List<Texture2D>>());
             }
-            Texture2D baseTexture = _characterDatabase.Data[part].TextureDict[id];
-            var map = CSUtils.LoadMappedColors(_mapDatabase.Data[part], baseTexture);
+            Texture2D baseTexture = DataManager.Instance.CharacterDatabase.Data[part].TextureDict[id];
+            var map = CSUtils.LoadMappedColors(DataManager.Instance.MapDatabase.Data[part], baseTexture);
             var data = _currentAnimationTexturesMap[_currentAnimation];
             if (!data.TryGetValue(part, out List<Texture2D> textures))
             {
@@ -128,7 +125,6 @@ namespace CharacterStudio
         }
         public void Setup()
         {
-            _characterDatabase.LoadExternal();
             _changePartSubscription = EventBus.Instance.Subscribe<ChangePartArg>(OnChangePart);
             _changeAnimationSubscription = EventBus.Instance.Subscribe<ChangeAnimationArg>(OnChangeAnimation);
             _exportSeparatedSpritesSubscription = EventBus.Instance.Subscribe<SeparatedSpritesExportArg>(OnExportSeparatedSprites);
@@ -144,7 +140,7 @@ namespace CharacterStudio
 
         private void OnResetPart( ResetPartArg arg )
         {
-            foreach (var (part, id) in _characterDatabase.DefaultParts )
+            foreach (var (part, id) in DataManager.Instance.CharacterDatabase.DefaultParts )
             {
                 Select( part, id );
             }
@@ -153,7 +149,7 @@ namespace CharacterStudio
 
         private void OnChangePartRandomly( ChangePartRandomlyArg arg )
         {
-            List<(string id, eCharacterPart part)> randomParts = _characterDatabase.GetRandomAll();
+            List<(string id, eCharacterPart part)> randomParts = DataManager.Instance.CharacterDatabase.GetRandomAll();
             foreach ( var (id, part) in randomParts )
             {
                 Select( part, id );
@@ -348,22 +344,22 @@ namespace CharacterStudio
         {
             SeparatedSpriteResult result = new SeparatedSpriteResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
-            List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.ToList();
+            List<eCharacterAnimation> allAnimations = DataManager.Instance.AnimationDatabase.Data.Keys.ToList();
             Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
 
             // * Load mapped colors for each parts
-            foreach (var (part, data) in _characterDatabase.Data)
+            foreach (var (part, data) in DataManager.Instance.CharacterDatabase.Data)
             {
                 Texture2D baseTexture = data.TextureDict[_characterSelection[part]];
                 sBaseTexture.TryAdd(part, baseTexture);
-                map.TryAdd(part, CSUtils.LoadMappedColors(_mapDatabase.Data[part], baseTexture));
+                map.TryAdd(part, CSUtils.LoadMappedColors(DataManager.Instance.MapDatabase.Data[part], baseTexture));
             }
 
             result.Sprites = new Dictionary<string, Texture2D>();
             // * Generate textures for each animation
             foreach (var animation in allAnimations)
             {
-                if (!_animationDatabase.Data.TryGetValue(animation, out AnimationData animationData))
+                if (!DataManager.Instance.AnimationDatabase.Data.TryGetValue(animation, out AnimationData animationData))
                 {
                     Debug.LogError("Animation not found in database: " + animation);
                     return result;
@@ -380,7 +376,7 @@ namespace CharacterStudio
                             return result;
                         }
                         Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[i], partMap);
-                        sortedPart.Add((_characterDatabase.SortedData[part], generatedTexture));
+                        sortedPart.Add((DataManager.Instance.CharacterDatabase.SortedData[part], generatedTexture));
                     }
                     sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
@@ -411,21 +407,21 @@ namespace CharacterStudio
             SpriteSheetResult result = new SpriteSheetResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
             // For some reason, the order of the animations is reversed
-            List<eCharacterAnimation> allAnimations = _animationDatabase.Data.Keys.Reverse().ToList();
+            List<eCharacterAnimation> allAnimations = DataManager.Instance.AnimationDatabase.Data.Keys.Reverse().ToList();
             Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
 
             // Load mapped colors for each part
-            foreach ( var (part, data) in _characterDatabase.Data )
+            foreach ( var (part, data) in DataManager.Instance.CharacterDatabase.Data )
             {
                 Texture2D baseTexture = data.TextureDict[ _characterSelection[ part ] ];
                 sBaseTexture.TryAdd( part, baseTexture );
-                map.TryAdd( part, CSUtils.LoadMappedColors( _mapDatabase.Data[ part ], baseTexture ) );
+                map.TryAdd( part, CSUtils.LoadMappedColors( DataManager.Instance.MapDatabase.Data[ part ], baseTexture ) );
             }
 
             // Calculate the dimensions of the sprite sheet
-            int maxFrameCount = allAnimations.Max( animation => _animationDatabase.Data[ animation ].AnimationsByPart.First().Value.Textures.Count );
-            int maxCellWidth = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.width ) );
-            int maxCellHeight = _characterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.height ) );
+            int maxFrameCount = allAnimations.Max( animation => DataManager.Instance.AnimationDatabase.Data[ animation ].AnimationsByPart.First().Value.Textures.Count );
+            int maxCellWidth = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.width ) );
+            int maxCellHeight = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.height ) );
             maxCellWidth = maxCellWidth * this.size / maxCellWidth;
             maxCellHeight = maxCellHeight * this.size / maxCellHeight;
             int sheetWidth = maxCellWidth * maxFrameCount;
@@ -444,7 +440,7 @@ namespace CharacterStudio
             for ( int animIndex = 0; animIndex < allAnimations.Count; animIndex++ )
             {
                 var animation = allAnimations[ animIndex ];
-                if ( !_animationDatabase.Data.TryGetValue( animation, out AnimationData animationData ) )
+                if ( !DataManager.Instance.AnimationDatabase.Data.TryGetValue( animation, out AnimationData animationData ) )
                 {
                     Debug.LogError( "Animation not found in database: " + animation );
                     return result;
@@ -462,7 +458,7 @@ namespace CharacterStudio
                             return result;
                         }
                         Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], partMap );
-                        sortedPart.Add( (_characterDatabase.SortedData[ part ], generatedTexture) );
+                        sortedPart.Add( (DataManager.Instance.CharacterDatabase.SortedData[ part ], generatedTexture) );
                     }
                     sortedPart = sortedPart.OrderBy( x => x.sortingLayer ).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures( sortedPart.Select( x => x.texture ).ToList() );
@@ -576,7 +572,7 @@ namespace CharacterStudio
             {
                 return;
             }
-            if ( !_characterDatabase.IsValid( part, id ) )
+            if ( !DataManager.Instance.CharacterDatabase.IsValid( part, id ) )
             {
                 return;
             }
@@ -615,7 +611,7 @@ namespace CharacterStudio
         }
         void SelectDefault()
         {
-            foreach (var (part, id) in _characterDatabase.DefaultParts)
+            foreach (var (part, id) in DataManager.Instance.CharacterDatabase.DefaultParts)
             {
                 Select(part, id);
             }
