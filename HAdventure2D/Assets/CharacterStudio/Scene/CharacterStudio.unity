@@ -7433,7 +7433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _paintingSetting: {fileID: 11400000, guid: a067a74a0838b12458f01f2f27a61ece, type: 2}
-  _characterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
   _canvasGroup: {fileID: 1403701602}
   _csImage: {fileID: 998277327}
   _paintingRenderer: {fileID: 998277328}

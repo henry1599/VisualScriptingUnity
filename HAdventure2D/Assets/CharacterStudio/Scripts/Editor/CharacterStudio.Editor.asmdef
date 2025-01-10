@@ -1,0 +1,16 @@
+{
+    "name": "CharacterStudio.Editor",
+    "rootNamespace": "CharacterStudio.Editor",
+    "references": [
+        "GUID:f467d2265c4ffc3438dc51f89b41c352"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

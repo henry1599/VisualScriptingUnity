@@ -153,4 +153,43 @@ namespace CharacterStudio
     {
         public Dictionary<string, Texture2D> TextureDict;
     }
+    [Serializable]
+    public class DefaultPartData
+    {
+        public eCharacterPart Part;
+        public string DefaultPart;
+    }
+    [Serializable]
+    public class DefaultPartDataList : CSJson
+    {
+        public List<DefaultPartData> DefaultParts;
+        // Example json
+        // {
+        //     "DefaultParts": [
+        //         {
+        //             "Part": 1,
+        //             "DefaultPart": "Helmet_1"
+        //         },
+        //  {
+
+    }
+    [Serializable]
+    public class SortedData
+    {
+        public eCharacterPart Part;
+        public int Order;
+    }
+    [Serializable]
+    public class SortedDataList : CSJson
+    {
+        public List<SortedData> SortedData;
+        // Example json
+        // {
+        //     "SortedData": [
+        //         {
+        //             "Part": 1,
+        //             "Order": 1
+        //         },
+        //  {
+    }
 }
