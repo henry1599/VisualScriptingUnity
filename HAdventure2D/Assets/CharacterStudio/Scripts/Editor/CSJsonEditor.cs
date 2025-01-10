@@ -9,13 +9,13 @@ namespace CharacterStudio.Editor
 {
     public class CSJsonEditor : EditorWindow
     {
-        public SortedDataList SortedDataList;
-
         private bool isPrettyPrint = false;
         private string filePath = "";
         private Type selectedType;
         private string[] typeNames;
+        private string[] fullyQualifiedTypeNames;
         private int selectedIndex = 0;
+        private object selectedInstance;
 
         [MenuItem( "Window/Json Data Editor" )]
         static void Init()
@@ -25,22 +25,22 @@ namespace CharacterStudio.Editor
 
         private void OnEnable()
         {
-            // Find all types that inherit from CSJsonable
+            // Find all types that inherit from CSJson
             var types = Assembly.GetAssembly( typeof( CSJson ) ).GetTypes()
                 .Where( t => t.IsSubclassOf( typeof( CSJson ) ) && !t.IsAbstract )
                 .ToArray();
 
             typeNames = types.Select( t => t.Name ).ToArray();
+            fullyQualifiedTypeNames = types.Select( t => t.AssemblyQualifiedName ).ToArray();
         }
 
         private void OnGUI()
         {
-
             #region Select CSJsonable Type
 
             GUILayout.Label( "Select CSJsonable Type:" );
             selectedIndex = EditorGUILayout.Popup( selectedIndex, typeNames );
-            selectedType = Type.GetType( typeNames[ selectedIndex ] );
+            selectedType = Type.GetType( fullyQualifiedTypeNames[ selectedIndex ] );
 
             #endregion
 
@@ -74,12 +74,22 @@ namespace CharacterStudio.Editor
             #region Handle Data Box
 
             GUILayout.BeginVertical( "Box" );
-            if ( SortedDataList != null )
+            if ( selectedInstance != null )
             {
                 GUILayout.Label( filePath );
                 SerializedObject serializedObject = new SerializedObject( this );
-                SerializedProperty serializedProperty = serializedObject.FindProperty( "SortedDataList" );
-                EditorGUILayout.PropertyField( serializedProperty, true );
+
+                // Get fields of the selected type
+                var fields = selectedType.GetFields( BindingFlags.Public | BindingFlags.Instance );
+                foreach ( var field in fields )
+                {
+                    var fieldValue = field.GetValue( selectedInstance );
+                    if ( fieldValue != null )
+                    {
+                        EditorGUILayout.LabelField( field.Name, fieldValue.ToString() );
+                    }
+                }
+
                 serializedObject.ApplyModifiedProperties();
             }
             GUILayout.EndVertical();
@@ -96,7 +106,7 @@ namespace CharacterStudio.Editor
             if ( !string.IsNullOrEmpty( filePath ) )
             {
                 string dataAsJson = File.ReadAllText( filePath );
-                SortedDataList = JsonUtility.FromJson<SortedDataList>( dataAsJson );
+                selectedInstance = JsonUtility.FromJson( dataAsJson, selectedType );
             }
         }
 
@@ -106,7 +116,7 @@ namespace CharacterStudio.Editor
 
             if ( !string.IsNullOrEmpty( filePath ) )
             {
-                string dataAsJson = JsonUtility.ToJson( SortedDataList, isPrettyPrint );
+                string dataAsJson = JsonUtility.ToJson( selectedInstance, isPrettyPrint );
                 File.WriteAllText( filePath, dataAsJson );
             }
         }
@@ -114,7 +124,7 @@ namespace CharacterStudio.Editor
         private void CreateNewData()
         {
             filePath = "";
-            SortedDataList = new SortedDataList();
+            selectedInstance = Activator.CreateInstance( selectedType );
         }
     }
 }
