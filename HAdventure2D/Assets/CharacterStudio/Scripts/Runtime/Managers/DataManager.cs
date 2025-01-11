@@ -21,6 +21,8 @@ namespace CharacterStudio
             
             CharacterDatabase.LoadExternalCategories();
             CharacterDatabase.LoadExternalData();
+            CharacterDatabase.LoadSortedData();
+            CharacterDatabase.LoadDefaultParts();
             AnimationDatabase.LoadExternalData();
             MapDatabase.LoadExternalData();
             return base.Awake();

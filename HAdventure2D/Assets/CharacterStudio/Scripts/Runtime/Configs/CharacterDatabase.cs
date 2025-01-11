@@ -16,14 +16,11 @@ namespace CharacterStudio
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "CharacterStudio/Character Database")]
     public class CharacterDatabase : ScriptableObject
     {
-        public string CatgoryIconPath;
         public int Size = 32;
         public Dictionary<eCharacterPart, CategoryData> Categories = new Dictionary<eCharacterPart, CategoryData>();
         public Dictionary<eCharacterPart, CharacterData> Data = new Dictionary<eCharacterPart, CharacterData>();
-        [SerializedDictionary("Part", "Sorted Data")]
-        public SerializedDictionary<eCharacterPart, int> SortedData; // stored as json
-        [SerializedDictionary( "Part", "Default Part" )] 
-        public SerializedDictionary<eCharacterPart, string> DefaultParts; // stored as json
+        public Dictionary<eCharacterPart, int> SortedData; // stored as json
+        public Dictionary<eCharacterPart, string> DefaultParts; // stored as json
         public string GetCategoryDisplayName(eCharacterPart part)
         {
             if (Categories.ContainsKey(part))
@@ -73,6 +70,44 @@ namespace CharacterStudio
                 return Data[ part ].TextureDict.ContainsKey( id );
             }
             return false;
+        }
+        public void LoadSortedData()
+        {
+            SortedData = new SerializedDictionary<eCharacterPart, int>();
+            string json = Path.Combine(
+                DataManager.Instance.SaveData.DataFolderPath,
+                "SortedDataList.json"
+            );
+            if ( !string.IsNullOrEmpty( json ) )
+            {
+                var data = new SortedDataList();
+                if ( data.FromJsonPath( json ) )
+                {
+                    foreach ( var item in data.SortedData )
+                    {
+                        SortedData.Add( item.Part, item.Order );
+                    }
+                }
+            }
+        }
+        public void LoadDefaultParts()
+        {
+            DefaultParts = new SerializedDictionary<eCharacterPart, string>();
+            string json = Path.Combine(
+                DataManager.Instance.SaveData.DataFolderPath,
+                "DefaultPartDataList.json"
+            );
+            if ( !string.IsNullOrEmpty( json ) )
+            {
+                var data = new DefaultPartDataList();
+                if ( data.FromJsonPath( json ) )
+                {
+                    foreach ( var item in data.DefaultParts )
+                    {
+                        DefaultParts.Add( item.Part, item.DefaultPart );
+                    }
+                }
+            }
         }
         public void LoadExternalData()
         {
@@ -152,44 +187,5 @@ namespace CharacterStudio
     public class CharacterData
     {
         public Dictionary<string, Texture2D> TextureDict;
-    }
-    [Serializable]
-    public class DefaultPartData
-    {
-        public eCharacterPart Part;
-        public string DefaultPart;
-    }
-    [Serializable]
-    public class DefaultPartDataList : CSJson
-    {
-        public List<DefaultPartData> DefaultParts;
-        // Example json
-        // {
-        //     "DefaultParts": [
-        //         {
-        //             "Part": 1,
-        //             "DefaultPart": "Helmet_1"
-        //         },
-        //  {
-
-    }
-    [Serializable]
-    public class SortedData
-    {
-        public eCharacterPart Part;
-        public int Order;
-    }
-    [Serializable]
-    public class SortedDataList : CSJson
-    {
-        public List<SortedData> SortedData;
-        // Example json
-        // {
-        //     "SortedData": [
-        //         {
-        //             "Part": 1,
-        //             "Order": 1
-        //         },
-        //  {
     }
 }
