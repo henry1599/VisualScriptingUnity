@@ -35,9 +35,9 @@ MonoBehaviour:
     when moving outside screen\n*** ADD WORKFLOW FOR GETTING DATA FROM OUTSIDE THE
     PROJECT ***\n(v) Add workflow to load basetexture outside of project\n(v) Add
     workflow to load map data outside of project\n(v) Add workflow to load animation
-    map data outside of project\n- Add option for custom scriptable object to export
-    to Json\n- Add worlfow to load default parts and sorting order from json outside
-    of project\n- Add setting popup require before launching character studio\n-
+    map data outside of project\n(v) Add option for custom scriptable object to export
+    to Json\n(v) Add worlfow to load default parts and sorting order from json outside
+    of project\n(v) Add setting popup require before launching character studio\n-
     Add setting button in character studio and painting\n- Restructure for Set01\n-
     Add Set02\n- Add more animations:\n\t+ Jump-up\n\t+ Jump-down\n\t+ Climb\n\t+
     Attack-sword-01 (RHand) (cond - has sword)\n\t+ Attack-sword-02 (RHand) (cond

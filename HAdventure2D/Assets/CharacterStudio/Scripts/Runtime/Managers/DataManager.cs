@@ -17,14 +17,7 @@ namespace CharacterStudio
         public UserSaveData SaveData { get; private set; } = null;
         protected override bool Awake()
         {
-            Load();
-            
-            CharacterDatabase.LoadExternalCategories();
-            CharacterDatabase.LoadExternalData();
-            CharacterDatabase.LoadSortedData();
-            CharacterDatabase.LoadDefaultParts();
-            AnimationDatabase.LoadExternalData();
-            MapDatabase.LoadExternalData();
+            DontDestroyOnLoad(gameObject);
             return base.Awake();
         }
         public void Save()
@@ -39,6 +32,15 @@ namespace CharacterStudio
         {
             SaveData = UserSaveData.Load();
             Save();
+        }
+        public void InitConfigs()
+        {
+            CharacterDatabase.LoadExternalCategories();
+            CharacterDatabase.LoadExternalData();
+            CharacterDatabase.LoadSortedData();
+            CharacterDatabase.LoadDefaultParts();
+            AnimationDatabase.LoadExternalData();
+            MapDatabase.LoadExternalData();
         }
     }
 }
