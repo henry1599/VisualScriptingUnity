@@ -39,6 +39,7 @@ namespace CharacterStudio
 
             Texture2D texture = new Texture2D( 2, 2 );
             texture.LoadImage( textureBytes );
+            texture.filterMode = FilterMode.Point;
             return texture;
         }
     }

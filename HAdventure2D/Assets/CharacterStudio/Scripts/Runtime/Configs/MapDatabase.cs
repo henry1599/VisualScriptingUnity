@@ -18,13 +18,12 @@ namespace CharacterStudio
                     DataManager.Instance.SaveData.DataFolderPath,
                     "Core",
                     "BaseTextures",
-                    part.ToString() + ".png"
+                    part.ToString() + ".csi"
                 );
                 if (File.Exists(path))
                 {
-                    byte[] fileData = File.ReadAllBytes(path);
-                    Texture2D texture = new Texture2D(2, 2);
-                    texture.LoadImage(fileData);
+                    Texture2D texture = CSIFile.LoadCsiFile( path );
+                    texture.filterMode = FilterMode.Point;
                     Data[part] = texture;
                 }
             }

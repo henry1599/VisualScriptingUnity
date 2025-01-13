@@ -126,12 +126,10 @@ namespace CharacterStudio
                     string[] files = Directory.GetFiles(partPath);
                     foreach (var file in files)
                     {
-                        if (file.EndsWith(".png"))
+                        if (file.EndsWith(".csi"))
                         {
                             string id = Path.GetFileNameWithoutExtension(file);
-                            byte[] fileData = File.ReadAllBytes(file);
-                            Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                            tex.LoadImage(fileData);
+                            Texture2D tex = CSIFile.LoadCsiFile( file );
                             tex.filterMode = FilterMode.Point;
                             characterData.TextureDict.TryAdd(id, tex);
                         }
@@ -148,15 +146,12 @@ namespace CharacterStudio
             {
                 CategoryData categoryData = new CategoryData();
                 string rootPathFolder = DataManager.Instance.SaveData.DataFolderPath;
-                string categoryFilePath = Path.Combine(rootPathFolder, "Core", "Categories", part.ToString() + ".png");
-                // string categoryFilePath = Application.dataPath + CatgoryIconPath + part.ToString() + ".png";
+                string categoryFilePath = Path.Combine(rootPathFolder, "Core", "Categories", part.ToString() + ".csi");
                 if (File.Exists(categoryFilePath))
                 {
-                    if (categoryFilePath.EndsWith(".png"))
+                    if (categoryFilePath.EndsWith(".csi"))
                     {
-                        byte[] fileData = File.ReadAllBytes(categoryFilePath);
-                        Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                        tex.LoadImage(fileData);
+                        Texture2D tex = CSIFile.LoadCsiFile( categoryFilePath );
                         tex.filterMode = FilterMode.Point;
 
                         categoryData.Icon = tex;

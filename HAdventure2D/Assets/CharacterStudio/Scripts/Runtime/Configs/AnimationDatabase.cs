@@ -67,11 +67,9 @@ namespace CharacterStudio
                         string[] files = Directory.GetFiles(rootPathFolder);
                         foreach (var file in files)
                         {
-                            if (file.EndsWith(".png"))
+                            if (file.EndsWith(".csi"))
                             {
-                                byte[] fileData = File.ReadAllBytes(file);
-                                Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                                tex.LoadImage(fileData);
+                                Texture2D tex = CSIFile.LoadCsiFile( file );
                                 tex.filterMode = FilterMode.Point;
                                 data.AnimationsByPart[part].Textures.Add(tex);
                             }
