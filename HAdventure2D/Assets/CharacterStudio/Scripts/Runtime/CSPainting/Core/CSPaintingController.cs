@@ -63,13 +63,16 @@ namespace CharacterStudio
                 HandleMoveView();
             }
             float mouseScrollY = Input.mouseScrollDelta.y;
-            if ( mouseScrollY < 0 )
+            if ( !Input.GetKey( KeyCode.LeftControl ) && !Input.GetKey( KeyCode.RightControl ) )
             {
-                HandleZoom( false );
-            }
-            else if ( mouseScrollY > 0 )
-            {
-                HandleZoom( true );
+                if ( mouseScrollY < 0 )
+                {
+                    HandleZoom( false );
+                }
+                else if ( mouseScrollY > 0 )
+                {
+                    HandleZoom( true );
+                }
             }
         }
         void HandleMoveView()
