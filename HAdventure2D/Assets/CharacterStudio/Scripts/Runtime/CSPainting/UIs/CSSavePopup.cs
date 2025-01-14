@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -32,7 +33,17 @@ namespace CharacterStudio
 
         private void OnSaveButtonClicked()
         {
+            var category = CharacterStudioMain.Instance.SelectedCategory;
+            string dataFolder = DataManager.Instance.SaveData.DataFolderPath;
+            string path = Path.Combine(
+                dataFolder,
+                category.ToString(),
+                _nameInputField.text + ".csi"
+            );
+            Texture2D texture = CSPaintingManager.Instance.GetPaintingTexture();
+            CSIFile.SaveAsCsiFile( texture, path );
+            DataManager.Instance.InitConfigs();
+            EventBus.Instance.Publish( new HidePopupArg( PopupType ) );
         }
-
     }
 }

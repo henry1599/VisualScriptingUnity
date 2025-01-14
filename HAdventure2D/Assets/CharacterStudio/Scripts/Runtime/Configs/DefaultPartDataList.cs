@@ -15,14 +15,5 @@ namespace CharacterStudio
     public class DefaultPartDataList : CSJson
     {
         public List<DefaultPartData> DefaultParts;
-        // Example json
-        // {
-        //     "DefaultParts": [
-        //         {
-        //             "Part": 1,
-        //             "DefaultPart": "Helmet_1"
-        //         },
-        //  {
-
     }
 }

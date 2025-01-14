@@ -110,6 +110,10 @@ namespace CharacterStudio
         {
             return DataManager.Instance.CharacterDatabase.GetCategoryDisplayName(ChosenPart);
         }
+        public Texture2D GetPaintingTexture()
+        {
+            return _paintingRenderer.DrawingTexture;
+        }
         public void Unsetup()
         {
             EventBus.Instance.Unsubscribe( _pointerDownSubscription );
