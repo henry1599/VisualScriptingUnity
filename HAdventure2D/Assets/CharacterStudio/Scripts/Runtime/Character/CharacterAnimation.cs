@@ -7,17 +7,9 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor.U2D.Sprites;
-#endif
-using UnityEngine.U2D.Animation;
-
-
-
-
-
-
-#if UNITY_EDITOR
 using UnityEditor;
 #endif
+using UnityEngine.U2D.Animation;
 
 namespace CharacterStudio
 {
@@ -25,7 +17,7 @@ namespace CharacterStudio
     {
         [SerializeField] Transform _spriteContainer;
         [SerializeField] eCharacterAnimation _currentAnimation;
-        [SerializeField] int size = 32;
+        [SerializeField] int size = 48;
 
         private int frameIndex
         {
@@ -504,6 +496,10 @@ namespace CharacterStudio
             if ( texture == null || percentage <= 0 || percentage > 1 )
             {
                 throw new ArgumentException( "Invalid texture or percentage" );
+            }
+            if ( percentage == 1 )
+            {
+                return texture;
             }
 
             int newWidth = Mathf.RoundToInt( texture.width * percentage );
