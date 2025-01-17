@@ -16,7 +16,6 @@ namespace CharacterStudio
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "CharacterStudio/Character Database")]
     public class CharacterDatabase : ScriptableObject
     {
-        public int Size = 32;
         public Dictionary<eCharacterPart, CategoryData> Categories = new Dictionary<eCharacterPart, CategoryData>();
         public Dictionary<eCharacterPart, CharacterData> Data = new Dictionary<eCharacterPart, CharacterData>();
         public Dictionary<eCharacterPart, int> SortedData; // stored as json
@@ -85,7 +84,7 @@ namespace CharacterStudio
                 {
                     foreach ( var item in data.SortedData )
                     {
-                        SortedData.Add( item.Part, item.Order );
+                        SortedData.TryAdd( item.Part, item.Order );
                     }
                 }
             }

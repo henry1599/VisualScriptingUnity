@@ -16,20 +16,8 @@ namespace CharacterStudio
     [CreateAssetMenu(fileName = "AnimationDatabase", menuName = "CharacterStudio/Animation Database")]
     public class AnimationDatabase : ScriptableObject
     {
-        public List<string> Paths;
         public float AnimationInterval = 0.15f;
         public Dictionary<eCharacterAnimation, AnimationData> Data;
-        public List<Texture2D> GetAnimations(eCharacterAnimation animation, eCharacterPart part)
-        {
-            if (Data.ContainsKey(animation))
-            {
-                if (Data[animation].AnimationsByPart.ContainsKey(part))
-                {
-                    return Data[animation].AnimationsByPart[part].Textures;
-                }
-            }
-            return null;
-        }
         public int GetAnimationFrameCount(eCharacterAnimation animation)
         {
             if (Data.ContainsKey(animation))

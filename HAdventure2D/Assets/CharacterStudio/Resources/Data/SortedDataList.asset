@@ -22,7 +22,7 @@ MonoBehaviour:
   - Part: 3
     Order: -999
   - Part: 4
-    Order: -999
+    Order: 12
   - Part: 5
     Order: -999
   - Part: 6
