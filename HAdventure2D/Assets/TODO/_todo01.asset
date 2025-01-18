@@ -38,8 +38,8 @@ MonoBehaviour:
     map data outside of project\n(v) Add option for custom scriptable object to export
     to Json\n(v) Add worlfow to load default parts and sorting order from json outside
     of project\n(v) Add setting popup require before launching character studio\n(v)
-    Add setting button in character studio and painting\n(v) Restructure for Set01\n-
-    Update mapping for smear\n- Re-export category image into 48x48\n- Add features
+    Add setting button in character studio and painting\n(v) Restructure for Set01\n(v)
+    Update mapping for smear\n(v) Re-export category image into 48x48\n- Add features
     by the following:\n\t+ Show an edit button at the bottom-right of the item that
     is created by user.\n\t+ After pressing edit:\n\t\t* Use the chosen parts and
     the default (Body, LHand, RHand), generate a proper sprite animation (Need an

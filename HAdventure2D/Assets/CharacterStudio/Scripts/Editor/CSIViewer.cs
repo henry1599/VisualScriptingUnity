@@ -76,6 +76,7 @@ namespace CharacterStudio.Editor
             if ( !string.IsNullOrEmpty( selectedTexturePath ) )
             {
                 EditorGUILayout.LabelField( "Selected Texture Path:", selectedTexturePath );
+                EditorGUILayout.LabelField( "Texture Size:", $"{selectedTexture.width}x{selectedTexture.height}" );
             }
         }
 

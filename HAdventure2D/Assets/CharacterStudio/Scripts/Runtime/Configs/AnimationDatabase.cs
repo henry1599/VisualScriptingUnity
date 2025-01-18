@@ -16,8 +16,33 @@ namespace CharacterStudio
     [CreateAssetMenu(fileName = "AnimationDatabase", menuName = "CharacterStudio/Animation Database")]
     public class AnimationDatabase : ScriptableObject
     {
-        public float AnimationInterval = 0.15f;
+        private readonly (string displayText, float multiplier)[] ANIMATION_INTERVALS = new (string displayText, float multiplier)[] {
+            ("0.125", 8f),
+            ("0.25", 4f),
+            ("0.5", 2f),
+            ("1", 1f),
+            ("2", 0.5f),
+            ("4", 0.25f),
+        };
+        public float BaseAnimationSpeed = 0.1f;
         public Dictionary<eCharacterAnimation, AnimationData> Data;
+        private int index = 3;
+        private void Awake() 
+        {
+            index = 3;
+        }
+        public void ToggleSpeed()
+        {
+            index = (index + 1) % ANIMATION_INTERVALS.Length;
+        }
+        public float GetAnimationInterval()
+        {
+            return ANIMATION_INTERVALS[index].multiplier * BaseAnimationSpeed;
+        }
+        public string GetAnimationText()
+        {
+            return ANIMATION_INTERVALS[index].displayText;
+        }
         public int GetAnimationFrameCount(eCharacterAnimation animation)
         {
             if (Data.ContainsKey(animation))

@@ -83,10 +83,13 @@ namespace CharacterStudio
                 _currentAnimationTexturesMap[newAnimation].TryAdd(part, data.Textures);
             }
             _currentAnimationTextures = new ();
-            _animationInterval = DataManager.Instance.AnimationDatabase.AnimationInterval;
+            UpdateInterval();
             _counter = _animationInterval;
-
             _isSetup = true;
+        }
+        public void UpdateInterval()
+        {
+            _animationInterval = DataManager.Instance.AnimationDatabase.GetAnimationInterval();
         }
         public void UpdateTexture(eCharacterPart part, string id)
         {

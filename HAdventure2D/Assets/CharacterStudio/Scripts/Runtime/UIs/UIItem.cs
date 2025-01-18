@@ -8,7 +8,7 @@ namespace CharacterStudio
 {
     public class UIItem : MonoBehaviour
     {
-        private const int ICON_SIZE = 48;
+        private const int ICON_SIZE = 32;
         [SerializeField] Image _iconImage;
         [SerializeField] Button _button;
 

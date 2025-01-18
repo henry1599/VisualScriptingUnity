@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,6 +37,8 @@ namespace CharacterStudio
         [Header( "RIGHT" )]
         [BoxGroup( " Buttons " ), SerializeField] Button _zoomInButton;
         [BoxGroup( " Buttons " ), SerializeField] Button _zoomOutButton;
+        [BoxGroup( " Buttons " ), SerializeField] Button _speedupButton;
+        [BoxGroup( " Text " ), SerializeField] TMP_Text _speedText;
 
 
         [Header("SETTING")]
@@ -65,6 +68,7 @@ namespace CharacterStudio
             _toggleBackgroundButton.onValueChanged.AddListener( OnToggleBackgroundButtonClicked );
             _zoomInButton.onClick.AddListener( OnZoomInButtonClicked );
             _zoomOutButton.onClick.AddListener( OnZoomOutButtonClicked );
+            _speedupButton.onClick.AddListener( OnSpeedupButtonClicked );
 
 
             _showButton.isOn = showStatus;
@@ -75,6 +79,8 @@ namespace CharacterStudio
             currentZoom = _defaultZoom;
             return base.Awake();
         }
+
+
         protected override void OnDestroy()
         {
             _showButton.onValueChanged.RemoveListener( OnShowButtonClicked );
@@ -86,6 +92,14 @@ namespace CharacterStudio
             _toggleBackgroundButton.onValueChanged.RemoveListener( OnToggleBackgroundButtonClicked );
             _zoomInButton.onClick.RemoveListener( OnZoomInButtonClicked );
             _zoomOutButton.onClick.RemoveListener( OnZoomOutButtonClicked );
+            _speedupButton.onClick.RemoveListener( OnSpeedupButtonClicked );
+        }
+        private void OnSpeedupButtonClicked()
+        {
+            DataManager.Instance.AnimationDatabase.ToggleSpeed();
+            string speedStr = DataManager.Instance.AnimationDatabase.GetAnimationText();
+            _speedText.text = $"{speedStr}";
+            CharacterAnimation.Instance.UpdateInterval();
         }
 
         private void OnShowButtonClicked( bool value )
