@@ -17,19 +17,16 @@ namespace CharacterStudio
     public class AnimationDatabase : ScriptableObject
     {
         private readonly (string displayText, float multiplier)[] ANIMATION_INTERVALS = new (string displayText, float multiplier)[] {
-            ("0.125", 8f),
-            ("0.25", 4f),
-            ("0.5", 2f),
             ("1", 1f),
             ("2", 0.5f),
             ("4", 0.25f),
         };
         public float BaseAnimationSpeed = 0.1f;
         public Dictionary<eCharacterAnimation, AnimationData> Data;
-        private int index = 3;
+        private int index = 0;
         private void Awake() 
         {
-            index = 3;
+            index = 0;
         }
         public void ToggleSpeed()
         {
@@ -37,6 +34,10 @@ namespace CharacterStudio
         }
         public float GetAnimationInterval()
         {
+            if (index < 0 || index >= ANIMATION_INTERVALS.Length)
+            {
+                index = 0;
+            }
             return ANIMATION_INTERVALS[index].multiplier * BaseAnimationSpeed;
         }
         public string GetAnimationText()
@@ -78,6 +79,13 @@ namespace CharacterStudio
                             Textures = new List<Texture2D>()
                         };
                         string[] files = Directory.GetFiles(rootPathFolder);
+                        // Sort files by the number right behind the part name
+                        Array.Sort(files, (x, y) =>
+                        {
+                            int xNumber = ExtractNumberFromFileName(x);
+                            int yNumber = ExtractNumberFromFileName(y);
+                            return xNumber.CompareTo(yNumber);
+                        });
                         foreach (var file in files)
                         {
                             if (file.EndsWith(".csi"))
@@ -98,6 +106,12 @@ namespace CharacterStudio
                     }
                 }
             }
+        }
+        private int ExtractNumberFromFileName(string fileName)
+        {
+            string nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            string numberPart = new string(nameWithoutExtension.SkipWhile(c => !char.IsDigit(c)).TakeWhile(char.IsDigit).ToArray());
+            return int.TryParse(numberPart, out int number) ? number : 0;
         }
     }
     [Serializable]

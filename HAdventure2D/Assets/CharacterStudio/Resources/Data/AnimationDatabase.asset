@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e207be65271bb18469f1191a32fb1806, type: 3}
   m_Name: AnimationDatabase
   m_EditorClassIdentifier: 
-  Paths: []
-  AnimationInterval: 0.15
+  BaseAnimationSpeed: 0.1
