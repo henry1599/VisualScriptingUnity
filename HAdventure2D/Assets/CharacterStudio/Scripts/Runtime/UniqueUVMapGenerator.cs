@@ -4,10 +4,11 @@ public class UniqueUVMapGenerator : MonoBehaviour
 {
     public int textureSize = 48; // Size of the texture (48x48)
 
-    void Start()
+    [ContextMenu("Generate UV Map")]
+    public void Test()
     {
         Texture2D texture = GenerateUVMap(textureSize);
-        SaveTextureAsPNG(texture, Application.dataPath + "/UVMap_48x48.png");
+        SaveTextureAsPNG(texture, Application.dataPath + "/UVMap.png");
     }
 
     Texture2D GenerateUVMap(int size)
