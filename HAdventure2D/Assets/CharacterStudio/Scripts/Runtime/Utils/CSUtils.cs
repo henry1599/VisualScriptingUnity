@@ -8,6 +8,11 @@ namespace CharacterStudio
 {
     public static class CSUtils
     {
+        public static int GetFileCount( string folderPath, string extension )
+        {
+            string[] files = System.IO.Directory.GetFiles( folderPath, extension, System.IO.SearchOption.AllDirectories );
+            return files.Length;
+        }
         public static T SafeAddComponent<T>( this GameObject go ) where T : Component
         {
             T component = go.GetComponent<T>();

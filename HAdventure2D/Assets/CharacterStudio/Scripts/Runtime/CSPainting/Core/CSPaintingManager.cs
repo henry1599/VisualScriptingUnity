@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -49,6 +50,7 @@ namespace CharacterStudio
         EventSubscription<OnColorPickedArgs> _colorPickedSubscription;
         EventSubscription<OnUndoArg> _undoSubscription;
         EventSubscription<OnRedoArg> _redoSubscription;
+        EventSubscription<SavePaintingArg> _savePaintingSubscription;
 
         public CSPaintingSetting Setting => _paintingSetting;
         public Color CuurentColor => _colorPicker.color;
@@ -77,6 +79,7 @@ namespace CharacterStudio
             _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>( OnColorPicked );
             _undoSubscription = EventBus.Instance.Subscribe<OnUndoArg>( OnUndo );
             _redoSubscription = EventBus.Instance.Subscribe<OnRedoArg>( OnRedo );
+            _savePaintingSubscription = EventBus.Instance.Subscribe<SavePaintingArg>( OnSavePainting );
 
             _backgroundRenderer.Setup( _paintingSetting );
             Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
@@ -106,6 +109,25 @@ namespace CharacterStudio
 
             IsSetup = true;
         }
+
+        private void OnSavePainting(SavePaintingArg arg)
+        {
+            Texture2D paintingTexture = GetPaintingTexture();
+            string folderPath = Path.Combine(
+                DataManager.Instance.SaveData.DataFolderPath,
+                ChosenPart.ToString()
+            );
+            int fileCount = CSUtils.GetFileCount(folderPath, "*.csi");
+            string path = Path.Combine(
+                DataManager.Instance.SaveData.DataFolderPath,
+                ChosenPart.ToString(),
+                $"{ChosenPart.ToString()}{fileCount + 1}.csi"
+            );
+            CSIFile.SaveAsCsiFile(paintingTexture, path);
+            Debug.Log($"Painting saved to: {path}");
+            DataManager.Instance.InitConfigs();
+        }
+
         public string GetPartDisplayName()
         {
             return DataManager.Instance.CharacterDatabase.GetCategoryDisplayName(ChosenPart);
@@ -126,6 +148,7 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe( _colorPickedSubscription );
             EventBus.Instance.Unsubscribe( _undoSubscription );
             EventBus.Instance.Unsubscribe( _redoSubscription );
+            EventBus.Instance.Unsubscribe( _savePaintingSubscription );
             _activeBrush?.Unsetup();
             foreach (var brush in _brushes.Values)
             {

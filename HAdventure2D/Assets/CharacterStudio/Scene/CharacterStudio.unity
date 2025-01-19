@@ -9558,6 +9558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _toolbarItemPrefabs:
   - {fileID: 7005664889055780372, guid: 87f7d3a1964e3094ba85db5054fe2515, type: 3}
+  - {fileID: 8415317688926689681, guid: 2f3715ec18bca704e83c73f29f6b76dd, type: 3}
   _itemContainer: {fileID: 353873698}
   _separattor: {fileID: 5852063389143952352, guid: c3e4475cadd42514e91985fe1fd479f2,
     type: 3}

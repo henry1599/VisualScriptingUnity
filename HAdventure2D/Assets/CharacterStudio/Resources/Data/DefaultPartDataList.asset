@@ -19,3 +19,5 @@ MonoBehaviour:
     DefaultPart: RHand_01
   - Part: 7
     DefaultPart: LHand_01
+  - Part: 4
+    DefaultPart: Sword1

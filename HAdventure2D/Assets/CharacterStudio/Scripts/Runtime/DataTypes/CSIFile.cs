@@ -37,7 +37,7 @@ namespace CharacterStudio
             byte[] textureBytes = new byte[ fileBytes.Length - headerLength ];
             System.Buffer.BlockCopy( fileBytes, headerLength, textureBytes, 0, textureBytes.Length );
 
-            Texture2D texture = new Texture2D( 2, 2 );
+            Texture2D texture = new Texture2D( 2, 2, TextureFormat.RGBA32, false );
             texture.LoadImage( textureBytes );
             texture.filterMode = FilterMode.Point;
             return texture;

@@ -23,6 +23,7 @@ namespace CharacterStudio
         public void SetupCategory(Texture2D icon, eCharacterPart part, TooltipData tooltip)
         {
             Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
+            icon.filterMode = FilterMode.Point;
             this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = string.Empty;
@@ -38,6 +39,7 @@ namespace CharacterStudio
         public void SetupId( Texture2D icon, eCharacterPart part, string id, bool selected = false)
         {
             Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
+            icon.filterMode = FilterMode.Point;
             this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = id;
