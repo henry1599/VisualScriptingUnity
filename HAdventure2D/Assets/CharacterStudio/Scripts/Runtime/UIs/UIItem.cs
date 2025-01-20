@@ -11,6 +11,7 @@ namespace CharacterStudio
         private const int ICON_SIZE = 32;
         [SerializeField] Image _iconImage;
         [SerializeField] Button _button;
+        [SerializeField] Button _removeButton;
 
         [Header( "Background" )]
         [SerializeField] Image _backgroundImage;
@@ -22,6 +23,7 @@ namespace CharacterStudio
         EventSubscription<PartChangedArg> _itemClickSubscription;
         public void SetupCategory(Texture2D icon, eCharacterPart part, TooltipData tooltip)
         {
+            _removeButton.gameObject.SetActive( false );
             Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
             icon.filterMode = FilterMode.Point;
             this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
@@ -38,16 +40,24 @@ namespace CharacterStudio
         }
         public void SetupId( Texture2D icon, eCharacterPart part, string id, bool selected = false)
         {
+            _removeButton.gameObject.SetActive( true );
             Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
             icon.filterMode = FilterMode.Point;
             this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = id;
             this._button.onClick.AddListener(OnClicked);
+            this._removeButton.onClick.AddListener( OnRemoveClicked );
 
             Color color = selected ? _selectedColor : _defaultColor;
             _backgroundImage.color = color;
         }
+
+        private void OnRemoveClicked()
+        {
+
+        }
+
         private void Awake()
         {
             _itemClickSubscription = EventBus.Instance.Subscribe<PartChangedArg>( OnChangePart );

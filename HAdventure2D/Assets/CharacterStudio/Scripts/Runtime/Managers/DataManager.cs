@@ -31,7 +31,47 @@ namespace CharacterStudio
         public void Load()
         {
             SaveData = UserSaveData.Load();
+            ValidateData();
             Save();
+        }
+        public void AddCustomPart( eCharacterPart part, string path )
+        {
+            if ( SaveData == null )
+            {
+                Load();
+            }
+            if ( SaveData.CustomParts.DataDict.TryGetValue( part, out UserResourceData val ) )
+            {
+                if ( !val.Paths.Contains( path ) )
+                {
+                    val.Paths.Add( path );
+                }
+            }
+            else
+            {
+                SaveData.CustomParts.DataDict[ part ] = new UserResourceData
+                {
+                    Paths = new List<string> { path }
+                };
+            }
+        }
+        public void RemoveCustomPart(eCharacterPart part, string path)
+        {
+            if ( SaveData == null )
+            {
+                Load();
+            }
+            if ( SaveData.CustomParts.DataDict.TryGetValue( part, out UserResourceData val ) )
+            {
+                val.Paths.Remove( path );
+            }
+        }
+        public void ValidateData()
+        {
+            foreach ( var part in SaveData.CustomParts.DataDict.Keys )
+            {
+                SaveData.CustomParts.DataDict[ part ].Paths.RemoveAll( x => !File.Exists( x ) );
+            }
         }
         public void InitConfigs()
         {

@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CharacterStudio
 {
+    [Serializable]
     public class UserSaveData
     {
         public string DataFolderPath = "";
+        public UserResourceDataDict CustomParts = new UserResourceDataDict();
+
         public void Save()
         {
             PlayerPrefs.SetString( DataManager.SAVEDATA_KEY, ToJson() );
@@ -27,6 +31,24 @@ namespace CharacterStudio
         public static UserSaveData FromJson( string json )
         {
             return JsonUtility.FromJson<UserSaveData>( json );
+        }
+    }
+    [Serializable]
+    public class UserResourceDataDict
+    {
+        public Dictionary<eCharacterPart, UserResourceData> DataDict;
+        public UserResourceDataDict()
+        {
+            DataDict = new Dictionary<eCharacterPart, UserResourceData>();
+        }
+    }
+    [Serializable]
+    public class UserResourceData
+    {
+        public List<string> Paths;
+        public UserResourceData()
+        {
+            Paths = new List<string>();
         }
     }
 }
