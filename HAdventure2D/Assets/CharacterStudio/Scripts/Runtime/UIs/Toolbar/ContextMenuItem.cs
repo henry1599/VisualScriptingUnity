@@ -11,16 +11,17 @@ namespace CharacterStudio
     {
         [SerializeField] private TMP_Text _text;
         [SerializeField] private Button _button;
-        public void Setup(string text, UnityEvent action, TooltipData tooltip)
+        public void Setup(ToolbarContextMenuItem item)
         {
-            _button.onClick.AddListener(() => action?.Invoke());
-            _text.text = text;
+            _button.interactable = !item.EditorExclusive;
+            _button.onClick.AddListener(() => item.OnClick?.Invoke());
+            _text.text = item.Text;
             Tooltipable tooltipable = gameObject.GetComponent<Tooltipable>();
             if (tooltipable == null)
             {
                 tooltipable = gameObject.AddComponent<Tooltipable>();
             }
-            tooltipable.Data = tooltip;
+            tooltipable.Data = item.Tooltip;
         }
         private void OnDestroy()
         {

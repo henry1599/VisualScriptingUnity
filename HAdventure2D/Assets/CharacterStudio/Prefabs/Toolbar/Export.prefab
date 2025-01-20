@@ -154,7 +154,10 @@ MonoBehaviour:
   _itemContainer: {fileID: 6457734093969080981}
   _item: {fileID: 6150638163356159211, guid: 0797967bec8b1b94a9ebe5df2c693ba8, type: 3}
   ContextMenuList:
-  - Text: Sprite Sheet
+  - EditorExclusive: 0
+    EditorExclusiveMessage: Unity Editor only
+    EditorExclusiveMessageTooltip: This feature can only work in Unity Editor
+    Text: Sprite Sheet
     Tooltip:
       Title: Export spritesheet
       Description: Export a spritesheet with slice options
@@ -173,7 +176,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - Text: Sprites
+  - EditorExclusive: 0
+    EditorExclusiveMessage: Unity Editor only
+    EditorExclusiveMessageTooltip: This feature can only work in Unity Editor
+    Text: Sprites
     Tooltip:
       Title: Export sprites
       Description: Export every single sprites to different folders
@@ -192,7 +198,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - Text: Sprite Library
+  - EditorExclusive: 1
+    EditorExclusiveMessage: Unity Editor only
+    EditorExclusiveMessageTooltip: This feature can only work in Unity Editor
+    Text: Sprite Library
     Tooltip:
       Title: Export sprite library
       Description: Export a spritesheet and a fully set-up sprite library in the

@@ -25,7 +25,7 @@ namespace CharacterStudio
 
             titleText.text = data.Title;
             descriptionText.text = data.Description;
-            float widthPerCharacter = 20;
+            float widthPerCharacter = 10f;
             float width = Mathf.Max(titleText.textInfo.characterCount, descriptionText.textInfo.characterCount) * widthPerCharacter;
             float height = Mathf.Max(titleText.preferredHeight + descriptionText.preferredHeight, 100);
             rectTransform.sizeDelta = new Vector2(width, height);

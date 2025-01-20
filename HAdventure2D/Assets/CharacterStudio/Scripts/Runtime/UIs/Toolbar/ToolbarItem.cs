@@ -36,9 +36,14 @@ namespace CharacterStudio
             float width = 0;
             foreach (var item in ContextMenuList)
             {
+                if (item.EditorExclusive )
+                {
+                    item.Text += $" ({item.EditorExclusiveMessage})";
+                    item.Tooltip.Description += $"\n~ {item.EditorExclusiveMessageTooltip} ~";
+                }
                 width = Mathf.Max(width, GetTextLength(item.Text));
                 var contextMenuItem = Instantiate(_item, _itemContainer).GetComponent<ContextMenuItem>();
-                contextMenuItem.Setup(item.Text, item.OnClick, item.Tooltip);
+                contextMenuItem.Setup(item);
             }
             RectTransform rectTransform = _itemContainer.GetComponent<RectTransform>();
             var size = rectTransform.sizeDelta;
