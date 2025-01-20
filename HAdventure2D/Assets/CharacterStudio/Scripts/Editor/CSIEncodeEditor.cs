@@ -91,10 +91,10 @@ namespace CharacterStudio.Editor
 
             foreach ( string file in files )
             {
-                Texture2D texture = CSIFile.LoadCsiFile( file );
-                if ( texture != null )
+                CSIFileData data = CSIFile.LoadCsiFile( file );
+                if ( data.Texture != null )
                 {
-                    byte[] pngData = texture.EncodeToPNG();
+                    byte[] pngData = data.Texture.EncodeToPNG();
                     string pngFilePath = Path.ChangeExtension( file, ".png" );
                     File.WriteAllBytes( pngFilePath, pngData );
                 }

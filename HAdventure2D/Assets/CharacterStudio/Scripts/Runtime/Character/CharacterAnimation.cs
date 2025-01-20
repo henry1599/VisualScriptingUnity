@@ -97,7 +97,7 @@ namespace CharacterStudio
             {
                 _currentAnimationTextures.TryAdd(_currentAnimation, new Dictionary<eCharacterPart, List<Texture2D>>());
             }
-            Texture2D baseTexture = DataManager.Instance.CharacterDatabase.Data[part].TextureDict[id];
+            Texture2D baseTexture = DataManager.Instance.CharacterDatabase.Data[part].TextureDict[id].Texture;
             var map = CSUtils.LoadMappedColors(DataManager.Instance.MapDatabase.Data[part], baseTexture);
             var data = _currentAnimationTexturesMap[_currentAnimation];
             if (!data.TryGetValue(part, out List<Texture2D> textures))
@@ -345,7 +345,7 @@ namespace CharacterStudio
             // * Load mapped colors for each parts
             foreach (var (part, data) in DataManager.Instance.CharacterDatabase.Data)
             {
-                Texture2D baseTexture = data.TextureDict[_characterSelection[part]];
+                Texture2D baseTexture = data.TextureDict[_characterSelection[part]].Texture;
                 sBaseTexture.TryAdd(part, baseTexture);
                 map.TryAdd(part, CSUtils.LoadMappedColors(DataManager.Instance.MapDatabase.Data[part], baseTexture));
             }
@@ -408,15 +408,15 @@ namespace CharacterStudio
             // Load mapped colors for each part
             foreach ( var (part, data) in DataManager.Instance.CharacterDatabase.Data )
             {
-                Texture2D baseTexture = data.TextureDict[ _characterSelection[ part ] ];
+                Texture2D baseTexture = data.TextureDict[ _characterSelection[ part ] ].Texture;
                 sBaseTexture.TryAdd( part, baseTexture );
                 map.TryAdd( part, CSUtils.LoadMappedColors( DataManager.Instance.MapDatabase.Data[ part ], baseTexture ) );
             }
 
             // Calculate the dimensions of the sprite sheet
             int maxFrameCount = allAnimations.Max( animation => DataManager.Instance.AnimationDatabase.Data[ animation ].AnimationsByPart.First().Value.Textures.Count );
-            int maxCellWidth = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.width ) );
-            int maxCellHeight = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( texture => texture.height ) );
+            int maxCellWidth = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( dataTex => dataTex.Texture.width ) );
+            int maxCellHeight = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( dataTex => dataTex.Texture.height ) );
             maxCellWidth = maxCellWidth * this.size / maxCellWidth;
             maxCellHeight = maxCellHeight * this.size / maxCellHeight;
             int sheetWidth = maxCellWidth * maxFrameCount;

@@ -86,10 +86,10 @@ namespace CharacterStudio.Editor
             string[] csiFiles = Directory.GetFiles( folderPath, "*.csi", SearchOption.AllDirectories );
             foreach ( string csiFile in csiFiles )
             {
-                Texture2D texture = CSIFile.LoadCsiFile( csiFile );
-                if ( texture != null )
+                CSIFileData data = CSIFile.LoadCsiFile( csiFile );
+                if ( data.Texture != null )
                 {
-                    decodedTextures.Add( texture );
+                    decodedTextures.Add( data.Texture );
                 }
             }
         }

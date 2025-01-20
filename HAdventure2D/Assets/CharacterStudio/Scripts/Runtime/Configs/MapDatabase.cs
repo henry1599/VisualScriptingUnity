@@ -22,9 +22,9 @@ namespace CharacterStudio
                 );
                 if (File.Exists(path))
                 {
-                    Texture2D texture = CSIFile.LoadCsiFile( path );
-                    texture.filterMode = FilterMode.Point;
-                    Data[part] = texture;
+                    CSIFileData texData = CSIFile.LoadCsiFile( path );
+                    texData.Texture.filterMode = FilterMode.Point;
+                    Data[part] = texData.Texture;
                 }
             }
         }

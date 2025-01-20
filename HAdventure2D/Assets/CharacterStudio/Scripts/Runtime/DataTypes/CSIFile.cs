@@ -31,7 +31,7 @@ namespace CharacterStudio
             File.WriteAllBytes( outputPath, encodedData );
         }
 
-        public static Texture2D LoadCsiFile( string filePath )
+        public static CSIFileData LoadCsiFile( string filePath )
         {
             byte[] fileBytes = File.ReadAllBytes( filePath );
             byte[] headerBytes = System.Text.Encoding.UTF8.GetBytes( Header );
@@ -48,7 +48,18 @@ namespace CharacterStudio
             Texture2D texture = new Texture2D( 2, 2, TextureFormat.RGBA32, false );
             texture.LoadImage( textureBytes );
             texture.filterMode = FilterMode.Point;
-            return texture;
+            return new CSIFileData( texture, isDefault == 0 );
+        }
+    }
+
+    public class CSIFileData
+    {
+        public Texture2D Texture;
+        public bool IsDefault;
+        public CSIFileData( Texture2D texture, bool isDefault )
+        {
+            Texture = texture;
+            IsDefault = isDefault;
         }
     }
 }

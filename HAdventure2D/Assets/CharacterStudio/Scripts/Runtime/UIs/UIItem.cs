@@ -21,12 +21,12 @@ namespace CharacterStudio
         string id = string.Empty;
 
         EventSubscription<PartChangedArg> _itemClickSubscription;
-        public void SetupCategory(Texture2D icon, eCharacterPart part, TooltipData tooltip)
+        public void SetupCategory( Texture2D icon, eCharacterPart part, TooltipData tooltip)
         {
             _removeButton.gameObject.SetActive( false );
-            Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
+            Rect rect = CSUtils.GetIconRect( icon, ICON_SIZE);
             icon.filterMode = FilterMode.Point;
-            this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
+            this._iconImage.sprite = Sprite.Create( icon, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = string.Empty;
             this._button.onClick.AddListener(OnClicked);
@@ -38,12 +38,12 @@ namespace CharacterStudio
             }
             tooltipable.Data = tooltip;
         }
-        public void SetupId( Texture2D icon, eCharacterPart part, string id, bool selected = false)
+        public void SetupId( CSIFileData csiData, eCharacterPart part, string id, bool selected = false)
         {
-            _removeButton.gameObject.SetActive( true );
-            Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
-            icon.filterMode = FilterMode.Point;
-            this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
+            _removeButton.gameObject.SetActive( !csiData.IsDefault );
+            Rect rect = CSUtils.GetIconRect( csiData.Texture, ICON_SIZE);
+            csiData.Texture.filterMode = FilterMode.Point;
+            this._iconImage.sprite = Sprite.Create( csiData.Texture, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = id;
             this._button.onClick.AddListener(OnClicked);

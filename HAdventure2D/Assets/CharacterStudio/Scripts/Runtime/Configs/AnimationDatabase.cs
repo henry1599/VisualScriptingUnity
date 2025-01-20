@@ -90,9 +90,9 @@ namespace CharacterStudio
                         {
                             if (file.EndsWith(".csi"))
                             {
-                                Texture2D tex = CSIFile.LoadCsiFile( file );
-                                tex.filterMode = FilterMode.Point;
-                                data.AnimationsByPart[part].Textures.Add(tex);
+                                CSIFileData texData = CSIFile.LoadCsiFile( file );
+                                texData.Texture.filterMode = FilterMode.Point;
+                                data.AnimationsByPart[part].Textures.Add( texData.Texture );
                             }
                         }
                         if (Data.ContainsKey(anim))

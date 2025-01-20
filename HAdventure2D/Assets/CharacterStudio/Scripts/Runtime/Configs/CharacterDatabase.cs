@@ -34,7 +34,7 @@ namespace CharacterStudio
             {
                 if (Data.ContainsKey(part) && Data[part].TextureDict.ContainsKey(DefaultParts[part]))
                 {
-                    return Data[part].TextureDict[DefaultParts[part]];
+                    return Data[part].TextureDict[DefaultParts[part]].Texture;
                 }
             }
             return null;
@@ -118,7 +118,7 @@ namespace CharacterStudio
                 string partPath = Path.Combine(rootPathFolder, part.ToString());
                 CharacterData characterData = new CharacterData
                 {
-                    TextureDict = new Dictionary<string, Texture2D>()
+                    TextureDict = new Dictionary<string, CSIFileData>()
                 };
                 if (Directory.Exists(partPath))
                 {
@@ -128,9 +128,9 @@ namespace CharacterStudio
                         if (file.EndsWith(".csi"))
                         {
                             string id = Path.GetFileNameWithoutExtension(file);
-                            Texture2D tex = CSIFile.LoadCsiFile( file );
-                            tex.filterMode = FilterMode.Point;
-                            characterData.TextureDict.TryAdd(id, tex);
+                            CSIFileData texData = CSIFile.LoadCsiFile( file );
+                            texData.Texture.filterMode = FilterMode.Point;
+                            characterData.TextureDict.TryAdd(id, texData);
                         }
                     }
                     Data.TryAdd(part, characterData);
@@ -150,10 +150,10 @@ namespace CharacterStudio
                 {
                     if (categoryFilePath.EndsWith(".csi"))
                     {
-                        Texture2D tex = CSIFile.LoadCsiFile( categoryFilePath );
-                        tex.filterMode = FilterMode.Point;
+                        CSIFileData texData = CSIFile.LoadCsiFile( categoryFilePath );
+                        texData.Texture.filterMode = FilterMode.Point;
 
-                        categoryData.Icon = tex;
+                        categoryData.Icon = texData.Texture;
                         categoryData.Part = part;
                         categoryData.DisplayName = part.ToString();
                         if (Categories.ContainsKey(part))
@@ -180,6 +180,6 @@ namespace CharacterStudio
     [Serializable]
     public class CharacterData
     {
-        public Dictionary<string, Texture2D> TextureDict;
+        public Dictionary<string, CSIFileData> TextureDict;
     }
 }
