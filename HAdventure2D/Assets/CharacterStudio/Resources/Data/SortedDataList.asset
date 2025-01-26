@@ -20,7 +20,7 @@ MonoBehaviour:
   - Part: 2
     Order: 10
   - Part: 3
-    Order: -999
+    Order: 11
   - Part: 4
     Order: 12
   - Part: 5
@@ -33,3 +33,5 @@ MonoBehaviour:
     Order: -999
   - Part: 9
     Order: -999
+  - Part: 10
+    Order: 7

@@ -21,3 +21,7 @@ MonoBehaviour:
     DefaultPart: LHand_01
   - Part: 4
     DefaultPart: Sword1
+  - Part: 3
+    DefaultPart: FHair_01
+  - Part: 10
+    DefaultPart: BHair_01

@@ -5,13 +5,14 @@ namespace CharacterStudio
         None = 0,
         Helmet = 1,
         Body = 2,
-        Hair = 3,
+        FHair = 3,
         Sword = 4,
         Shield = 5,
         RHand = 6,
         LHand = 7,
         Shirt = 8,
         Pants = 9,
+        BHair = 10
     }
     public enum eCharacterAnimation
     {
