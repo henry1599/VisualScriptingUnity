@@ -87,6 +87,10 @@ namespace CharacterStudio
             _counter = _animationInterval;
             _isSetup = true;
         }
+        void ReloadAnimation()
+        {
+            SetAnimation(_currentAnimation);
+        }
         public void UpdateInterval()
         {
             _animationInterval = DataManager.Instance.AnimationDatabase.GetAnimationInterval();
@@ -117,6 +121,21 @@ namespace CharacterStudio
                     _currentAnimationTextures[_currentAnimation][part].Add(generatedTexture);
                 }
             }
+        }
+        public void ClearTexture(eCharacterPart part)
+        {
+            if (_currentAnimationTextures.ContainsKey(_currentAnimation))
+            {
+                if (_currentAnimationTextures[_currentAnimation].ContainsKey(part))
+                {
+                    _currentAnimationTextures[_currentAnimation].Remove(part);
+                }
+            }
+            if (_spriteRenderers.ContainsKey(part))
+            {
+                _spriteRenderers[part].sprite = null;
+            }
+            ReloadAnimation();
         }
         public void Setup()
         {
@@ -288,10 +307,6 @@ namespace CharacterStudio
             }
             AssetDatabase.Refresh();
 #endif
-        }
-        private void CreateSpriteLibrary(List<(string animName, int animFrameCount)> frameData, string path)
-        {
-
         }
         private void SliceSpriteSheet(List<(eCharacterAnimation anim, int animFrameCount)> frameData, string path, int cellSize)
         {
@@ -569,6 +584,9 @@ namespace CharacterStudio
         {
             if (string.IsNullOrEmpty( id ) )
             {
+                _characterSelection.Remove( part );
+                ClearTexture( part );
+                EventBus.Instance.Publish( new PartChangedArg( part, string.Empty ) );
                 return;
             }
             if ( !DataManager.Instance.CharacterDatabase.IsValid( part, id ) )

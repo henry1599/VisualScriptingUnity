@@ -817,6 +817,8 @@ MonoBehaviour:
   _itemContainer: {fileID: 1016294816}
   _itemPrefab: {fileID: 1716082099012202500, guid: 7151e87fd8426a8409a5b2d30bd05d40,
     type: 3}
+  _removeItemPrefab: {fileID: 1716082099012202500, guid: 68002c1e3d306804d85732d919302845,
+    type: 3}
   _rightPanelBackButton: {fileID: 1670540453}
   _addNewPartButton: {fileID: 613083839}
   _actualCategories: 

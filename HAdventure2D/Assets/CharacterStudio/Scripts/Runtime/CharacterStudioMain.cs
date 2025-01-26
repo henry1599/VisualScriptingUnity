@@ -33,6 +33,7 @@ namespace CharacterStudio
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private Transform _itemContainer;
         [SerializeField] private UIItem _itemPrefab;
+        [SerializeField] private UIItem _removeItemPrefab;
         [SerializeField] private Button _rightPanelBackButton;
         [SerializeField] private Button _addNewPartButton;
         [ReadOnly, SerializeField] List<eCharacterPart> _actualCategories = new List<eCharacterPart>();
@@ -159,11 +160,19 @@ namespace CharacterStudio
                 Destroy(_itemContainer.GetChild(i).gameObject);
             }
 
+            UIItem uiRemoveItem = Instantiate(_removeItemPrefab, _itemContainer);
+            bool selected = false;
+            if (CharacterAnimation.Instance != null)
+            {
+                selected = !CharacterAnimation.Instance.CharacterSelection.ContainsKey( category );
+            }
+            uiRemoveItem.SetupId(null, category, string.Empty, selected );
+
             // * Create items
             foreach (var item in DataManager.Instance.CharacterDatabase.Data[category].TextureDict)
             {
                 UIItem uiItem = Instantiate(_itemPrefab, _itemContainer);
-                bool selected = false;
+                selected = false;
                 if (CharacterAnimation.Instance != null)
                 {
                     selected = CharacterAnimation.Instance.CharacterSelection.ContainsKey( category ) && CharacterAnimation.Instance.CharacterSelection[ category ] == item.Key;
