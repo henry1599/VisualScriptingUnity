@@ -167,6 +167,15 @@ namespace CharacterStudio
         {
             foreach (var (part, id) in DataManager.Instance.CharacterDatabase.DefaultParts )
             {
+                if ( CharacterStudioMain.Instance.GetLockParts().Contains( part ) )
+                {
+                    continue;
+                }
+                if ( CharacterStudioMain.Instance.EmptyPartsAsStart.Contains( part ) )
+                {
+                    Select( part, string.Empty );
+                    continue;
+                }
                 Select( part, id );
             }
             ApplySelection();

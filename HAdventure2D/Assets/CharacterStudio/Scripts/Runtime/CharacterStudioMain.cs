@@ -43,7 +43,7 @@ namespace CharacterStudio
         private List<UIItem> _partItems = new List<UIItem>();
         private EventSubscription<ItemClickArg> _itemClickSubscription;
         public bool IsSetup {get; private set;}
-
+        public List<eCharacterPart> EmptyPartsAsStart => _emptyPartsAsStart;
         public eCharacterPart SelectedCategory => _selectedCategory;
 
         protected override bool Awake()
