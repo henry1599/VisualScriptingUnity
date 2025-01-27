@@ -79,6 +79,7 @@ namespace CharacterStudio
             CharacterDatabase.LoadExternalData();
             CharacterDatabase.LoadSortedData();
             CharacterDatabase.LoadDefaultParts();
+            CharacterDatabase.LoadInstructionData();
             AnimationDatabase.LoadExternalData();
             MapDatabase.LoadExternalData();
         }

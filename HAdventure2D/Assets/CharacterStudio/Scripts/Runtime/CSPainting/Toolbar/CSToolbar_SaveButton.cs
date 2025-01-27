@@ -10,6 +10,7 @@ namespace CharacterStudio
         public void OnSaveButtonClicked()
         {
             EventBus.Instance.Publish(new SavePaintingArg());
+            EventBus.Instance.Publish(new ShowPopupArg(ePopupType.CSP_SaveSuccess));
         }
     }
 

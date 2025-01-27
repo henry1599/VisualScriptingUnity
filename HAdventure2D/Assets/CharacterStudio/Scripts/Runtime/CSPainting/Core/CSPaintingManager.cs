@@ -83,7 +83,7 @@ namespace CharacterStudio
 
             _backgroundRenderer.Setup( _paintingSetting );
             Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
-            Texture2D texture = DataManager.Instance.CharacterDatabase.GetDefaultPartTexture(part);
+            Texture2D texture = DataManager.Instance.CharacterDatabase.GetInstructionTexture(part);
             if (texture == null)
             {
                 Debug.LogError("Texture not found");

@@ -40,7 +40,7 @@ MonoBehaviour:
     of project\n(v) Add setting popup require before launching character studio\n(v)
     Add setting button in character studio and painting\n(v) Restructure for Set01\n(v)
     Update mapping for smear\n(v) Re-export category image into 48x48\n- Add drawing
-    instruction\n- Add feature for lock random part\n(v) Add helment\n- Add shirt\n-
+    instruction\n(v) Add feature for lock random part\n(v) Add helment\n- Add shirt\n-
     Add pant\n- Add color capability\n- Add features by the following:\n\t+ Show
     an edit button at the bottom-right of the item that is created by user.\n\t+
     After pressing edit:\n\t\t* Use the chosen parts and the default (Body, LHand,

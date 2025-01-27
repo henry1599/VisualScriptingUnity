@@ -18,6 +18,7 @@ namespace CharacterStudio
     {
         public Dictionary<eCharacterPart, CategoryData> Categories = new Dictionary<eCharacterPart, CategoryData>();
         public Dictionary<eCharacterPart, CharacterData> Data = new Dictionary<eCharacterPart, CharacterData>();
+        public Dictionary<eCharacterPart, CSIFileData> Instruction = new Dictionary<eCharacterPart, CSIFileData>();
         public Dictionary<eCharacterPart, int> SortedData; // stored as json
         public Dictionary<eCharacterPart, string> DefaultParts; // stored as json
         public string GetCategoryDisplayName(eCharacterPart part)
@@ -39,6 +40,14 @@ namespace CharacterStudio
             }
             return null;
         }
+        public Texture2D GetInstructionTexture(eCharacterPart part)
+        {
+            if (Instruction.ContainsKey(part))
+            {
+                return Instruction[part].Texture;
+            }
+            return null;
+        }
         public List<eCharacterPart> GetSortedPart(List<eCharacterPart> parts)
         {
             return parts.OrderBy(x => SortedData[x]).ToList();
@@ -55,10 +64,18 @@ namespace CharacterStudio
         public List<(string id, eCharacterPart part)> GetRandomAll()
         {
             List<(string id, eCharacterPart part)> result = new List<(string id, eCharacterPart part)>();
+            List<eCharacterPart> mandatoryParts = new List<eCharacterPart>
+            {
+                eCharacterPart.Body,
+                eCharacterPart.LHand,
+                eCharacterPart.RHand,
+            };
             foreach ( var part in Data.Keys )
             {
                 var keys = Data[ part ].TextureDict.Keys.ToList();
-                result.Add( (keys[ UnityEngine.Random.Range( 0, keys.Count ) ], part) );
+                int rand = UnityEngine.Random.Range( -1, keys.Count );
+                string id = rand < 0 && !mandatoryParts.Contains(part) ? string.Empty : keys[ Mathf.Clamp( rand, 0, keys.Count - 1 ) ];
+                result.Add( (id, part) );
             }
             return result;
         }
@@ -104,6 +121,35 @@ namespace CharacterStudio
                     foreach ( var item in data.DefaultParts )
                     {
                         DefaultParts.Add( item.Part, item.DefaultPart );
+                    }
+                }
+            }
+        }
+        public string GetItemPath(eCharacterPart part, string id)
+        {
+            string rootPathFolder = DataManager.Instance.SaveData.DataFolderPath;
+            string partPath = Path.Combine(rootPathFolder, part.ToString(), id + ".csi");
+            if (File.Exists(partPath))
+            {
+                return partPath;
+            }
+            return string.Empty;
+        }
+        public void LoadInstructionData()
+        {
+            Instruction = new Dictionary<eCharacterPart, CSIFileData>();
+            List<eCharacterPart> allParts = Enum.GetValues(typeof(eCharacterPart)).Cast<eCharacterPart>().ToList();
+            foreach (var part in allParts)
+            {
+                string rootPathFolder = DataManager.Instance.SaveData.DataFolderPath;
+                string instructionFilePath = Path.Combine(rootPathFolder, "Core", "Instructions", part.ToString() + ".csi");
+                if (File.Exists(instructionFilePath))
+                {
+                    if (instructionFilePath.EndsWith(".csi"))
+                    {
+                        CSIFileData texData = CSIFile.LoadCsiFile( instructionFilePath );
+                        texData.Texture.filterMode = FilterMode.Point;
+                        Instruction.TryAdd(part, texData);
                     }
                 }
             }

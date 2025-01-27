@@ -24,6 +24,7 @@ namespace CharacterStudio
     {
         [Header("DATABASE")]
         [SerializeField] private AnimationPanel _animationPanel;
+        [SerializeField] private CharacterDatabase _characterDatabase;
         [Space(5)]
 
 
@@ -37,6 +38,7 @@ namespace CharacterStudio
         [SerializeField] private UIItem _removeItemPrefab;
         [SerializeField] private Button _rightPanelBackButton;
         [SerializeField] private Button _addNewPartButton;
+        [SerializeField] private TMP_Text _chosenItemPathText;
         [ReadOnly, SerializeField] List<eCharacterPart> _actualCategories = new List<eCharacterPart>();
         private eStudioState _studioState;
         private eCharacterPart _selectedCategory;
@@ -132,6 +134,7 @@ namespace CharacterStudio
                     break;
                 case eStudioState.Item:
                     EventBus.Instance.Publish(new ChangePartArg(arg.Part, arg.Id));
+                    _chosenItemPathText.text = _characterDatabase.GetItemPath(arg.Part, arg.Id);
                     break;
             }
         }
