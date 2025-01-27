@@ -812,7 +812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animationPanel: {fileID: 2362080749080264050}
   _canvasGroup: {fileID: 115287696}
-  _availableParts: 02000000060000000700000004000000030000000a000000
+  _availableParts: 02000000060000000700000004000000030000000a00000001000000
   _titleText: {fileID: 812217167}
   _itemContainer: {fileID: 1016294816}
   _itemPrefab: {fileID: 1716082099012202500, guid: 7151e87fd8426a8409a5b2d30bd05d40,

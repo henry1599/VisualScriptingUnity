@@ -25,3 +25,5 @@ MonoBehaviour:
     DefaultPart: FHair_01
   - Part: 10
     DefaultPart: 
+  - Part: 1
+    DefaultPart: 

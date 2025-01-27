@@ -16,13 +16,13 @@ MonoBehaviour:
   - Part: 0
     Order: -999
   - Part: 1
-    Order: -999
+    Order: 12
   - Part: 2
     Order: 10
   - Part: 3
     Order: 11
   - Part: 4
-    Order: 12
+    Order: 13
   - Part: 5
     Order: -999
   - Part: 6

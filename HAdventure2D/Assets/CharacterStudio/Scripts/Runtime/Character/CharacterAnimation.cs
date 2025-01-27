@@ -32,6 +32,17 @@ namespace CharacterStudio
         private float _animationInterval = 0.15f;
         private bool _isSetup = false;
         public bool IsPlaying = true;
+        public int LongestTextureCount
+        {
+            get
+            {
+                if (_longestTextureCount == 0)
+                {
+                    _longestTextureCount = GetLongestTextureCount();
+                }
+                return _longestTextureCount;
+            }
+        } private int _longestTextureCount = 0;
 
         [SerializeField] private SerializedDictionary<eCharacterPart, string> _characterSelection = new SerializedDictionary<eCharacterPart, string>();
         public SerializedDictionary<eCharacterPart, string> CharacterSelection => _characterSelection;
@@ -617,6 +628,7 @@ namespace CharacterStudio
         }
         private void OnChangeAnimation(ChangeAnimationArg arg)
         {
+            _longestTextureCount = 0;
             SetAnimation(arg.Animation);
             ApplySelection();
         }
@@ -659,10 +671,22 @@ namespace CharacterStudio
             _counter = _animationInterval;
             UpdateVisual(frameIndex);
             frameIndex++;
-            if (frameIndex >= _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count)
+            if (frameIndex >= LongestTextureCount)
             {
                 frameIndex = 0;
             }
+        }
+        int GetLongestTextureCount()
+        {
+            int longest = 0;
+            foreach (var (animation, data) in _currentAnimationTexturesMap)
+            {
+                foreach (var (part, textures) in data)
+                {
+                    longest = Mathf.Max(longest, textures.Count);
+                }
+            }
+            return longest;
         }
         public void SetFrameIndex(int frameIndex)
         {
