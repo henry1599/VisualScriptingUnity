@@ -700,11 +700,11 @@ namespace CharacterStudio
                 {
                     return;
                 }
-                if (!_currentAnimationTextures[_currentAnimation].ContainsKey(_spriteRenderers.Keys.First()))
-                {
-                    return;
-                }
-                this.frameIndex = Mathf.Clamp(frameIndex, 0, _currentAnimationTextures[_currentAnimation][_spriteRenderers.Keys.First()].Count - 1);
+                // if (!_currentAnimationTextures[_currentAnimation].ContainsKey(_spriteRenderers.Keys.First()))
+                // {
+                //     return;
+                // }
+                this.frameIndex = Mathf.Clamp(frameIndex, 0, LongestTextureCount - 1);
                 UpdateVisual(this.frameIndex);
             }
             catch (Exception) { }
