@@ -279,6 +279,11 @@ namespace CharacterStudio
                 Debug.LogError("BrushUI not found");
                 return;
             }
+            if (brushUI.gameObject == null)
+            {
+                Debug.LogError("BrushUI gameObject is null");
+                return;
+            }
             brushUI.OnBrushSelected(new OnBrushSelectedArgs(brushType));
             ReloadBrush();
         }
