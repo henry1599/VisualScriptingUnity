@@ -20,10 +20,10 @@ MonoBehaviour:
   - Part: 7
     DefaultPart: LHand_01
   - Part: 4
-    DefaultPart: 
+    DefaultPart: Sword_01
   - Part: 3
     DefaultPart: FHair_01
   - Part: 10
-    DefaultPart: 
+    DefaultPart: BHair_01
   - Part: 1
-    DefaultPart: 
+    DefaultPart: Helmet_01

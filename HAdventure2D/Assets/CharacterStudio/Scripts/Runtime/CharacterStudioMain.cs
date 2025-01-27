@@ -30,6 +30,7 @@ namespace CharacterStudio
         [Header("UI")]
         [SerializeField] CanvasGroup _canvasGroup;
         [SerializeField] private List<eCharacterPart> _availableParts;
+        [SerializeField] private List<eCharacterPart> _emptyPartsAsStart;
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private Transform _itemContainer;
         [SerializeField] private UIItem _itemPrefab;
@@ -73,7 +74,22 @@ namespace CharacterStudio
             _rightPanelBackButton.onClick.RemoveAllListeners();
             IsSetup = false;
         }
-
+        public List<eCharacterPart> GetLockParts()
+        {
+            List<eCharacterPart> lockParts = new List<eCharacterPart>();
+            foreach (var item in _partItems)
+            {
+                if (item.IsLock)
+                {
+                    lockParts.Add(item.Part);
+                }
+            }
+            return lockParts;
+        }
+        public bool IsEmptyItemAsStarted(eCharacterPart part)
+        {
+            return _emptyPartsAsStart.Contains(part);
+        }
         private void OnAddNewPartButtonClicked()
         {
             eCharacterPart part = _selectedCategory;
@@ -121,6 +137,7 @@ namespace CharacterStudio
         }
         void ReloadCategories()
         {
+            _partItems = new List<UIItem>();
             _selectedCategory = eCharacterPart.None;
             // * Get categories
             var characterDatabaseKeys = DataManager.Instance.CharacterDatabase.Data.Keys;
@@ -145,6 +162,7 @@ namespace CharacterStudio
                     Description = $"Enter {DataManager.Instance.CharacterDatabase.Categories[category].DisplayName} selection"
                 };
                 item.SetupCategory(DataManager.Instance.CharacterDatabase.Categories[category].Icon, category, tooltip);
+                _partItems.Add(item);
             }
         }
         public void ReloadItems(eCharacterPart category)
@@ -164,7 +182,7 @@ namespace CharacterStudio
             bool selected = false;
             if (CharacterAnimation.Instance != null)
             {
-                selected = !CharacterAnimation.Instance.CharacterSelection.ContainsKey( category );
+                selected = _emptyPartsAsStart.Contains(category) && !CharacterAnimation.Instance.CharacterSelection.ContainsKey( category );
             }
             uiRemoveItem.SetupId(null, category, string.Empty, selected );
 
@@ -176,6 +194,10 @@ namespace CharacterStudio
                 if (CharacterAnimation.Instance != null)
                 {
                     selected = CharacterAnimation.Instance.CharacterSelection.ContainsKey( category ) && CharacterAnimation.Instance.CharacterSelection[ category ] == item.Key;
+                }
+                if (_emptyPartsAsStart.Contains(category) && item.Key == string.Empty)
+                {
+                    selected = false;
                 }
                 uiItem.SetupId(item.Value, category, item.Key, selected );
             }

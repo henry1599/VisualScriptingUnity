@@ -175,8 +175,13 @@ namespace CharacterStudio
         private void OnChangePartRandomly( ChangePartRandomlyArg arg )
         {
             List<(string id, eCharacterPart part)> randomParts = DataManager.Instance.CharacterDatabase.GetRandomAll();
+            List<eCharacterPart> lockParts = CharacterStudioMain.Instance.GetLockParts();
             foreach ( var (id, part) in randomParts )
             {
+                if ( lockParts.Contains( part ) )
+                {
+                    continue;
+                }
                 Select( part, id );
             }
             ApplySelection();
@@ -642,7 +647,12 @@ namespace CharacterStudio
         {
             foreach (var (part, id) in DataManager.Instance.CharacterDatabase.DefaultParts)
             {
-                Select(part, id);
+                string selectedId = id;
+                if (CharacterStudioMain.Instance.IsEmptyItemAsStarted(part))
+                {
+                    selectedId = string.Empty;
+                }
+                Select(part, selectedId);
             }
         }
         void Update()
@@ -700,10 +710,6 @@ namespace CharacterStudio
                 {
                     return;
                 }
-                // if (!_currentAnimationTextures[_currentAnimation].ContainsKey(_spriteRenderers.Keys.First()))
-                // {
-                //     return;
-                // }
                 this.frameIndex = Mathf.Clamp(frameIndex, 0, LongestTextureCount - 1);
                 UpdateVisual(this.frameIndex);
             }
