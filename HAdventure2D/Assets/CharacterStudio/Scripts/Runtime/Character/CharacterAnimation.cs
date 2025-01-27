@@ -292,7 +292,7 @@ namespace CharacterStudio
             if ( textureImporter != null )
             {
                 // Apply texture import settings
-                textureImporter.spritePixelsPerUnit = 32;
+                textureImporter.spritePixelsPerUnit = 48;
                 textureImporter.textureType = TextureImporterType.Sprite;
                 textureImporter.spriteImportMode = SpriteImportMode.Single;
                 textureImporter.filterMode = FilterMode.Point;
@@ -318,7 +318,7 @@ namespace CharacterStudio
             if ( textureImporter != null )
             {
                 // Apply texture import settings
-                textureImporter.spritePixelsPerUnit = 32;
+                textureImporter.spritePixelsPerUnit = 48;
                 textureImporter.textureType = TextureImporterType.Sprite;
                 textureImporter.spriteImportMode = SpriteImportMode.Single;
                 textureImporter.filterMode = FilterMode.Point;
@@ -448,6 +448,14 @@ namespace CharacterStudio
             // Load mapped colors for each part
             foreach ( var (part, data) in DataManager.Instance.CharacterDatabase.Data )
             {
+                if ( !_characterSelection.ContainsKey( part ) )
+                {
+                    continue;
+                }
+                if ( !data.TextureDict.ContainsKey( _characterSelection[ part ] ) )
+                {
+                    continue;
+                }
                 Texture2D baseTexture = data.TextureDict[ _characterSelection[ part ] ].Texture;
                 sBaseTexture.TryAdd( part, baseTexture );
                 map.TryAdd( part, CSUtils.LoadMappedColors( DataManager.Instance.MapDatabase.Data[ part ], baseTexture ) );
@@ -490,7 +498,12 @@ namespace CharacterStudio
                         if ( !map.TryGetValue( part, out Dictionary<Color32, Color32> partMap ) )
                         {
                             Debug.LogError( "Map not found for part: " + part );
-                            return result;
+                            // return result;
+                            continue;
+                        }
+                        if ( frameIndex >= data.Textures.Count || frameIndex < 0 )
+                        {
+                            continue;
                         }
                         Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], partMap );
                         sortedPart.Add( (DataManager.Instance.CharacterDatabase.SortedData[ part ], generatedTexture) );
@@ -519,20 +532,28 @@ namespace CharacterStudio
             string fileName = $"{arg.Name}_SpriteSheet";
             Debug.Log( "Exporting: " + path );
             CSUtils.SaveTexture( spriteSheet, path, fileName );
+            try
+            {
 #if UNITY_EDITOR
-            AssetDatabase.Refresh();
-            string fullPath = path + "/" + fileName + ".png";
-            FormatSpritesheet( fullPath );
-            result.SpriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>( fullPath.Substring( fullPath.IndexOf( "Assets" ) ) );
-            result.FrameCount = frameData;
-            result.OutputPath = fullPath;
-            return result;
+                AssetDatabase.Refresh();
+                string fullPath = path + "/" + fileName + ".png";
+                FormatSpritesheet( fullPath );
+                result.SpriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>( fullPath.Substring( fullPath.IndexOf( "Assets" ) ) );
+                result.FrameCount = frameData;
+                result.OutputPath = fullPath;
+                return result;
 #else
-            result.SpriteSheet = spriteSheet;
-            result.FrameCount = frameData;
-            result.OutputPath = path;
-            return result;
+                result.SpriteSheet = spriteSheet;
+                result.FrameCount = frameData;
+                result.OutputPath = path;
+                return result;
 #endif
+            }
+            catch ( Exception e )
+            {
+                // Debug.LogError( e );
+                return result;
+            }
         }
         private Texture2D CropTexture( Texture2D texture, float percentage )
         {

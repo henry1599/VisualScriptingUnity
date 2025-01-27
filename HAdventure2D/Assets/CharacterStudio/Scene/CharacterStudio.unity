@@ -1958,7 +1958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteContainer: {fileID: 288232500}
   _currentAnimation: 1
-  size: 32
+  size: 48
   IsPlaying: 1
   _characterSelection:
     _serializedList: []
