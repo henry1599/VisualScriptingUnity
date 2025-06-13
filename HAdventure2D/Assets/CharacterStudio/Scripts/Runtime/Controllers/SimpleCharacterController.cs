@@ -9,17 +9,19 @@ namespace CharacterStudio
     {
         private SpriteRenderer _spriteRenderer;
         private SpriteResolver _spriteResolver;
-
         private int movementFrame = 0;
         private float animationTimer = 0f;
-        public float movementFrameRate = 0.15f;
 
-        public float interval = 0.1f;
+
+        public float movementFrameRate = 0.1f;
+        public float runFrameRate = 0.05f;
+        public float interval = 0.5f;
         public float moveSpeed = 2.0f;
+        public float runSpeed = 4.0f;
 
         private readonly Dictionary<string, string[]> movementAnimations = new Dictionary<string, string[]>
         {
-            { "Idle", new[] { "Idle_0", "Idle_1", "Idle_2", "Idle_3", "Idle_2", "Idle_1", "Idle_0" } },
+            { "Idle", new[] { "Idle_0", "Idle_1", "Idle_2", "Idle_3", "Idle_3" } },
             { "Walk", new[] { "Walk_0", "Walk_1", "Walk_2", "Walk_3", "Walk_4", "Walk_5", "Walk_6", "Walk_7" } },
             { "Run", new[] { "Run_0", "Run_1", "Run_2", "Run_3", "Run_4", "Run_5", "Run_6", "Run_7" } },
         };
@@ -33,6 +35,8 @@ namespace CharacterStudio
 
         private int currentMovement = 0; // 0: Idle, 1: Walk, 2: Run
         private bool isAttacking = false;
+        private bool isRunning = false;
+        private float frameRate = 0;
 
         private void Awake()
         {
@@ -60,9 +64,10 @@ namespace CharacterStudio
             float v = Input.GetAxisRaw("Vertical");
 
             Vector3 direction = new Vector3(h, v, 0f).normalized;
+            float actualMoveSpeed = isRunning ? runSpeed : moveSpeed;
             if (direction.magnitude > 0.01f)
             {
-                transform.position += direction * moveSpeed * Time.deltaTime;
+                transform.position += direction * actualMoveSpeed * Time.deltaTime;
             }
             if (direction != Vector3.zero)
             {
@@ -74,6 +79,7 @@ namespace CharacterStudio
             if (h != 0 || v != 0)
             {
                 newMovement = Input.GetKey(KeyCode.LeftShift) ? 2 : 1; // Run or Walk
+                isRunning = newMovement == 2;
             }
 
             if (newMovement != currentMovement)
@@ -96,11 +102,12 @@ namespace CharacterStudio
             if (!movementAnimations.TryGetValue(category, out var frames)) return;
 
             animationTimer += Time.deltaTime;
-            if (animationTimer >= movementFrameRate)
+            frameRate = isRunning ? runFrameRate : movementFrameRate;
+            if (animationTimer >= frameRate)
             {
                 animationTimer = 0f;
-                movementFrame = (movementFrame + 1) % frames.Length;
-                SetAnimation(category, frames[movementFrame]);
+                frameRate = (frameRate + 1) % frames.Length;
+                SetAnimation(category, frames[frameRate]);
             }
         }
 

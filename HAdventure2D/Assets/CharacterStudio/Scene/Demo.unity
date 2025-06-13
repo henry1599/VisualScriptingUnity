@@ -361,7 +361,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6737230407413710387, guid: c9e76c75bcab9d44c931303aeb7a7391,
+  m_Sprite: {fileID: 4723107735738678597, guid: c9e76c75bcab9d44c931303aeb7a7391,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementFrameRate: 0.1
-  interval: 0.15
+  interval: 0.5
   moveSpeed: 2
 --- !u!114 &548270456
 MonoBehaviour:
@@ -400,10 +400,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0.14717917
-  m_labelHash: 5.143379e-35
+  m_CategoryHash: 1.0429618e-14
+  m_labelHash: 6.012358e-38
   m_SpriteKey: 0
-  m_SpriteHash: 533246098
+  m_SpriteHash: 163368403
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
