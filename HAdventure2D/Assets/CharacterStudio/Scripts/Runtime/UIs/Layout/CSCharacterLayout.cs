@@ -13,18 +13,10 @@ namespace CharacterStudio
 
         public override void Setup()
         {
-            _settingButton.onClick.AddListener(OnClickSetting);
             CharacterStudioMain.Instance?.Setup();
         }
-
-        private void OnClickSetting()
-        {
-            EventBus.Instance.Publish(new OnChangeLayoutArg(eLayoutType.Setting));
-        }
-
         public override void Unsetup()
         {
-            _settingButton.onClick.RemoveAllListeners();
             try
             {
                 CharacterStudioMain.Instance?.Unsetup();

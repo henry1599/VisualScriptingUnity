@@ -37,6 +37,10 @@ namespace CharacterStudio
             ValidateData();
             Save();
         }
+        public string GetExportedFolderPath()
+        {
+            return DataConfig.GetExportedFolderPath();
+        }
         public void AddCustomPart( eCharacterPart part, string path )
         {
             if ( SaveData == null )

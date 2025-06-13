@@ -89,3 +89,45 @@ MonoBehaviour:
       Value: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
     - Key: 7
       Value: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+  BrushData:
+    BrushDataList:
+    - BrushType: 7
+      Brush: {fileID: 2651763976187395186, guid: 86debf27a1af351429ed56c5c95d1c01,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: 19df4b395b77ee2498976902bb96fcfb, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 0
+      Brush: {fileID: 632774436301549500, guid: 37fc836a7edc5b24798f45897c22bf75,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: cf37e121975b68144a14611466a91975, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 1
+      Brush: {fileID: 8647569157863697876, guid: 45c1fed3bfb9b3f47905955f6baa1106,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: f74abfc2b954c9644ae09ee94c6eb831, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 2
+      Brush: {fileID: -5277434328371454922, guid: 27c18e7af8de84244a591021004114e7,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: 968e94bf008693f478396490497a6197, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 3
+      Brush: {fileID: -2318947894225489941, guid: 60771f0fd370bf847b90ecc823fd4c34,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: 20ae3f27ac1b9f74dac4caa33e7c4e14, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 4
+      Brush: {fileID: -4108840352877906136, guid: ffe2805ae7424294da9a3652392fa700,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: bc5264ba2b27ef3468127fd14c2b11be, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 5
+      Brush: {fileID: 5331799603529936584, guid: 8161570ad1893154792aa19217f3fcc9,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: f58baa4d09575a040bb97b182f1608f5, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 1f8c3b91f09f4784f8ff9a6646d7580a, type: 3}
+    - BrushType: 6
+      Brush: {fileID: 5728656650456777403, guid: 6ebed9c2c7aaea348b19333af77b986f,
+        type: 3}
+      BrushIcon: {fileID: 21300000, guid: 2da0e3e664bcb274da65a2f2eb408684, type: 3}
+      BrushCursor: {fileID: 2800000, guid: 5c0f40173e12ef440b914435fed63850, type: 3}

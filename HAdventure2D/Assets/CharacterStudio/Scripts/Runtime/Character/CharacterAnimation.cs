@@ -13,6 +13,7 @@ using UnityEngine.U2D.Animation;
 
 namespace CharacterStudio
 {
+    
     public class CharacterAnimation : MonoSingleton<CharacterAnimation>
     {
         [SerializeField] Transform _spriteContainer;
@@ -79,7 +80,6 @@ namespace CharacterStudio
 
             if (!DataManager.Instance.AnimationDatabase.Data.TryGetValue(newAnimation, out AnimationData animationData))
             {
-                Debug.LogError("Animation not found in database: " + newAnimation);
                 return;
             }
             EventBus.Instance.Publish(new AnimationUpdateArg(newAnimation));
@@ -228,7 +228,6 @@ namespace CharacterStudio
             Texture2D spriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
             if (spriteSheet == null)
             {
-                Debug.LogError("Failed to load sprite sheet at path: " + assetPath);
                 return result;
             }
 
@@ -396,7 +395,6 @@ namespace CharacterStudio
             {
                 if (!DataManager.Instance.AnimationDatabase.Data.TryGetValue(animation, out AnimationData animationData))
                 {
-                    Debug.LogError("Animation not found in database: " + animation);
                     return result;
                 }
                 int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
@@ -407,7 +405,6 @@ namespace CharacterStudio
                     {
                         if (!map.TryGetValue(part, out Dictionary<Color32, Color32> partMap))
                         {
-                            Debug.LogError("Map not found for part: " + part);
                             return result;
                         }
                         Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[i], partMap);
@@ -485,7 +482,6 @@ namespace CharacterStudio
                 var animation = allAnimations[ animIndex ];
                 if ( !DataManager.Instance.AnimationDatabase.Data.TryGetValue( animation, out AnimationData animationData ) )
                 {
-                    Debug.LogError( "Animation not found in database: " + animation );
                     return result;
                 }
                 int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
@@ -497,7 +493,6 @@ namespace CharacterStudio
                     {
                         if ( !map.TryGetValue( part, out Dictionary<Color32, Color32> partMap ) )
                         {
-                            Debug.LogError( "Map not found for part: " + part );
                             // return result;
                             continue;
                         }

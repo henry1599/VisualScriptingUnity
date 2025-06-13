@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using SimpleFileBrowser;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,15 +12,15 @@ namespace CharacterStudio
         [SerializeField] Button _confirmButton;
         public bool HasDataFolderPath
         {
-            get 
+            get
             {
-                return !string.IsNullOrEmpty( DataManager.Instance?.SaveData?.DataFolderPath );
+                return !string.IsNullOrEmpty(DataManager.Instance?.SaveData?.DataFolderPath);
             }
         }
         public void Setup()
         {
-            _choosePathButton.onClick.AddListener( OnClickChoosePath );
-            _removeButton.onClick.AddListener( OnClickRemove );
+            _choosePathButton.onClick.AddListener(OnClickChoosePath);
+            _removeButton.onClick.AddListener(OnClickRemove);
             _confirmButton.onClick.AddListener(OnConfirmButtonClicked);
             UpdatePathText();
         }
@@ -46,21 +42,7 @@ namespace CharacterStudio
 
         private void OnClickChoosePath()
         {
-            FileBrowser.ShowSaveDialog( OnBrowseSuccess, OnBrowseCancel, FileBrowser.PickMode.Folders, initialPath: Application.dataPath, title: "Choose DATA folder" );
-        }
 
-        private void OnBrowseCancel()
-        {
-        }
-
-        private void OnBrowseSuccess(string[] paths)
-        {
-            if (paths.Length > 0)
-            {
-                DataManager.Instance.SaveData.DataFolderPath = paths[0];
-                DataManager.Instance.Save();
-                UpdatePathText();
-            }
         }
 
         private void OnClickRemove()
