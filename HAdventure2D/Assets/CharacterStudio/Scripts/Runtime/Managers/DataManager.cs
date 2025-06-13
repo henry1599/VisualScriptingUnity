@@ -9,6 +9,7 @@ namespace CharacterStudio
     public class DataManager : MonoSingleton<DataManager>
     {
         [Header("DATABASE")]
+        public DataConfig DataConfig;
         public MapDatabase MapDatabase;
         public AnimationDatabase AnimationDatabase;
         public CharacterDatabase CharacterDatabase;
@@ -17,6 +18,8 @@ namespace CharacterStudio
         public UserSaveData SaveData { get; private set; } = null;
         protected override bool Awake()
         {
+            Load();
+            InitConfigs();
             DontDestroyOnLoad(gameObject);
             return base.Awake();
         }
@@ -30,7 +33,7 @@ namespace CharacterStudio
         }
         public void Load()
         {
-            SaveData = UserSaveData.Load();
+            SaveData = UserSaveData.Load(DataConfig);
             ValidateData();
             Save();
         }

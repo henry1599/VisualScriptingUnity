@@ -15,14 +15,23 @@ namespace CharacterStudio
         {
             PlayerPrefs.SetString( DataManager.SAVEDATA_KEY, ToJson() );
         }
-        public static UserSaveData Load()
+        public static UserSaveData Load(DataConfig dataConfig)
         {
-            string json = PlayerPrefs.GetString( DataManager.SAVEDATA_KEY, "" );
+            string json = PlayerPrefs.GetString( DataManager.SAVEDATA_KEY, "");
+            UserSaveData result = new UserSaveData()
+            {
+                DataFolderPath = dataConfig.GetFolderPath()
+            };
             if ( string.IsNullOrEmpty( json ) )
             {
-                return new UserSaveData();
+                return result;
             }
-            return FromJson( json );
+            result = FromJson( json );
+            if (string.IsNullOrEmpty(result.DataFolderPath))
+            {
+                result.DataFolderPath = dataConfig.GetFolderPath();
+            }
+            return result;
         }
         public string ToJson()
         {
