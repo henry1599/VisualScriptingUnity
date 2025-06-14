@@ -15,19 +15,19 @@ namespace CharacterStudio
         public float moveSpeed = 2.0f;
         public float runSpeed = 4.0f;
         public float jumpForce = 5.0f;
-        public Rigidbody2D rb;
+        private Rigidbody2D rb;
         public float groundCheckDistance = 0.1f;
         public Transform groundCheckTransform;
         public LayerMask groundLayer;
 
         [Space(10)]
         [Header("A N I M A T I O N S")]
-        private SpriteRenderer _spriteRenderer;
-        private SpriteResolver _spriteResolver;
-        private float animationTimer = 0f;
         public float movementFrameRate = 0.1f;
         public float runFrameRate = 0.05f;
         public float interval = 0.5f;
+        private float animationTimer = 0f;
+        private SpriteRenderer _spriteRenderer;
+        private SpriteResolver _spriteResolver;
 
 
         private readonly Dictionary<string, string[]> movementAnimations = new Dictionary<string, string[]>
@@ -35,7 +35,7 @@ namespace CharacterStudio
             { "Idle", new[] { "Idle_0", "Idle_1", "Idle_2", "Idle_3", "Idle_3" } },
             { "Walk", new[] { "Walk_0", "Walk_1", "Walk_2", "Walk_3", "Walk_4", "Walk_5", "Walk_6", "Walk_7" } },
             { "Run", new[] { "Run_0", "Run_1", "Run_2", "Run_3", "Run_4", "Run_5", "Run_6", "Run_7" } },
-            { "Jump", new[] { "Run_1" } }
+            { "Jump", new[] { "Jump_0" } }
         };
 
         private readonly string[][] attackAnimations =
@@ -50,6 +50,8 @@ namespace CharacterStudio
         private bool isRunning = false;
         private int frame = 0;
         private bool isGrounded = false;
+
+
 
         private void Awake()
         {
@@ -72,7 +74,19 @@ namespace CharacterStudio
         }
         private void Update()
         {
+            bool prevGrounded = isGrounded;
             GroundCheck();
+
+            // Handle landing
+            if (!prevGrounded && isGrounded)
+            {
+                currentMovement = 0; // Idle
+                animationTimer = 0f;
+                frame = 0;
+                string category = GetCurrentMovementCategory();
+                SetAnimation(category, movementAnimations[category][0]);
+            }
+
             HandleJumpInput();
             HandleMovementInput();
             HandleAttackInput();
@@ -89,15 +103,17 @@ namespace CharacterStudio
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
                 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                SetAnimation("Run", movementAnimations["Jump"][0]);
+                SetAnimation("Jump", movementAnimations["Jump"][0]);
                 currentMovement = 3; // Jump
                 animationTimer = 0f;
                 frame = 0;
             }
         }
+
+
         private void HandleMovementInput()
         {
-            if (isAttacking) return;
+            if (isAttacking || !isGrounded) return;
 
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
@@ -110,14 +126,14 @@ namespace CharacterStudio
             }
             if (direction != Vector3.zero)
             {
-                _spriteRenderer.flipX = direction.x < 0; // Flip sprite based on horizontal input
+                _spriteRenderer.flipX = direction.x < 0;
             }
 
             int newMovement = 0; // Idle
 
             if (h != 0 || v != 0)
             {
-                newMovement = Input.GetKey(KeyCode.LeftShift) ? 2 : 1; // Run or Walk
+                newMovement = Input.GetKey(KeyCode.LeftShift) ? 2 : 1;
                 isRunning = newMovement == 2;
             }
 
@@ -133,6 +149,7 @@ namespace CharacterStudio
             }
         }
 
+
         private void AnimateMovement()
         {
             if (isAttacking) return;
@@ -140,8 +157,11 @@ namespace CharacterStudio
             string category = GetCurrentMovementCategory();
             if (!movementAnimations.TryGetValue(category, out var frames)) return;
 
+            // Prevent animating jump if it has only 1 frame
+            if (category == "Jump" && frames.Length == 1) return;
+
             animationTimer += Time.deltaTime;
-            var frameRate = isRunning ? runFrameRate : movementFrameRate;
+            float frameRate = (category == "Run") ? runFrameRate : movementFrameRate;
             if (animationTimer >= frameRate)
             {
                 animationTimer = 0f;
@@ -149,6 +169,8 @@ namespace CharacterStudio
                 SetAnimation(category, frames[frame]);
             }
         }
+
+
 
         private string GetCurrentMovementCategory()
         {

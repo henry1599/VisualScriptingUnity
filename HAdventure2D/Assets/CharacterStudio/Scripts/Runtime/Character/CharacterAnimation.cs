@@ -744,6 +744,8 @@ namespace CharacterStudio
         {
             foreach (var (part, spriteRenderer) in _spriteRenderers)
             {
+                if (!_currentAnimationTextures.ContainsKey(_currentAnimation))
+                    continue;
                 if (_currentAnimationTextures[_currentAnimation].TryGetValue(part, out List<Texture2D> textures))
                 {
                     if (textures.Count == 0)
