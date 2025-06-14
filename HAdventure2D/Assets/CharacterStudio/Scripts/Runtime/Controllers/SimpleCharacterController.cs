@@ -5,25 +5,37 @@ using UnityEngine.U2D.Animation;
 
 namespace CharacterStudio
 {
+    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(SpriteResolver))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(CapsuleCollider2D))]
     public class SimpleCharacterController : MonoBehaviour
     {
+        [Header("C O N T R O L S")]
+        public float moveSpeed = 2.0f;
+        public float runSpeed = 4.0f;
+        public float jumpForce = 5.0f;
+        public Rigidbody2D rb;
+        public float groundCheckDistance = 0.1f;
+        public Transform groundCheckTransform;
+        public LayerMask groundLayer;
+
+        [Space(10)]
+        [Header("A N I M A T I O N S")]
         private SpriteRenderer _spriteRenderer;
         private SpriteResolver _spriteResolver;
-        private int movementFrame = 0;
         private float animationTimer = 0f;
-
-
         public float movementFrameRate = 0.1f;
         public float runFrameRate = 0.05f;
         public float interval = 0.5f;
-        public float moveSpeed = 2.0f;
-        public float runSpeed = 4.0f;
+
 
         private readonly Dictionary<string, string[]> movementAnimations = new Dictionary<string, string[]>
         {
             { "Idle", new[] { "Idle_0", "Idle_1", "Idle_2", "Idle_3", "Idle_3" } },
             { "Walk", new[] { "Walk_0", "Walk_1", "Walk_2", "Walk_3", "Walk_4", "Walk_5", "Walk_6", "Walk_7" } },
             { "Run", new[] { "Run_0", "Run_1", "Run_2", "Run_3", "Run_4", "Run_5", "Run_6", "Run_7" } },
+            { "Jump", new[] { "Run_1" } }
         };
 
         private readonly string[][] attackAnimations =
@@ -33,29 +45,56 @@ namespace CharacterStudio
             new[] { "SAttack_03_0", "SAttack_03_1", "SAttack_03_2", "SAttack_03_3", "SAttack_03_4", "SAttack_03_5", "SAttack_03_6", "SAttack_03_7", "SAttack_03_8", "SAttack_03_9", "SAttack_03_10", "SAttack_03_11" },
         };
 
-        private int currentMovement = 0; // 0: Idle, 1: Walk, 2: Run
+        private int currentMovement = 0; // 0: Idle, 1: Walk, 2: Run, 3: Jump
         private bool isAttacking = false;
         private bool isRunning = false;
-        private float frameRate = 0;
+        private int frame = 0;
+        private bool isGrounded = false;
 
         private void Awake()
         {
             _spriteResolver = GetComponent<SpriteResolver>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            rb = GetComponent<Rigidbody2D>();
         }
 
         private void Start()
         {
             SetAnimation("Idle", movementAnimations["Idle"][0]);
         }
-
+        private void OnDrawGizmos()
+        {
+            if (groundCheckTransform != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(groundCheckTransform.position, groundCheckTransform.position + Vector3.down * groundCheckDistance);
+            }
+        }
         private void Update()
         {
+            GroundCheck();
+            HandleJumpInput();
             HandleMovementInput();
             HandleAttackInput();
             AnimateMovement();
         }
-
+        private bool GroundCheck()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(this.groundCheckTransform.position, Vector2.down, groundCheckDistance, groundLayer);
+            isGrounded = hit.collider != null;
+            return isGrounded;
+        }
+        private void HandleJumpInput()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                SetAnimation("Run", movementAnimations["Jump"][0]);
+                currentMovement = 3; // Jump
+                animationTimer = 0f;
+                frame = 0;
+            }
+        }
         private void HandleMovementInput()
         {
             if (isAttacking) return;
@@ -85,8 +124,8 @@ namespace CharacterStudio
             if (newMovement != currentMovement)
             {
                 currentMovement = newMovement;
-                movementFrame = 0;
                 animationTimer = 0f;
+                frame = 0;
 
                 string category = GetCurrentMovementCategory();
                 string[] frames = movementAnimations[category];
@@ -102,12 +141,12 @@ namespace CharacterStudio
             if (!movementAnimations.TryGetValue(category, out var frames)) return;
 
             animationTimer += Time.deltaTime;
-            frameRate = isRunning ? runFrameRate : movementFrameRate;
+            var frameRate = isRunning ? runFrameRate : movementFrameRate;
             if (animationTimer >= frameRate)
             {
                 animationTimer = 0f;
-                frameRate = (frameRate + 1) % frames.Length;
-                SetAnimation(category, frames[frameRate]);
+                frame = (frame + 1) % frames.Length;
+                SetAnimation(category, frames[frame]);
             }
         }
 
@@ -117,6 +156,7 @@ namespace CharacterStudio
             {
                 1 => "Walk",
                 2 => "Run",
+                3 => "Jump",
                 _ => "Idle"
             };
         }
@@ -146,7 +186,7 @@ namespace CharacterStudio
             }
 
             isAttacking = false;
-            movementFrame = 0;
+            frame = 0;
             SetAnimation(GetCurrentMovementCategory(), movementAnimations[GetCurrentMovementCategory()][0]);
         }
 
