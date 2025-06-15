@@ -121,7 +121,7 @@ namespace CharacterStudio
             string path = Path.Combine(
                 DataManager.Instance.SaveData.DataFolderPath,
                 ChosenPart.ToString(),
-                $"{ChosenPart.ToString()}{fileCount + 1}.csi"
+                $"{ChosenPart.ToString()}_{fileCount + 1:00}.csi"
             );
             CSIFile.SaveAsCsiFile(paintingTexture, path);
             Debug.Log($"Painting saved to: {path}");
@@ -165,6 +165,7 @@ namespace CharacterStudio
                 Destroy(_brushUIContainer.GetChild(i).gameObject);
             }
             _brushes.Clear();
+            _brushUIs.Clear();
             _canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
             _canvasGroup.interactable = false;
@@ -279,7 +280,7 @@ namespace CharacterStudio
                 Debug.LogError("BrushUI not found");
                 return;
             }
-            if (brushUI.gameObject == null)
+            if (brushUI == null || brushUI.gameObject == null)
             {
                 Debug.LogError("BrushUI gameObject is null");
                 return;
