@@ -16,7 +16,7 @@ namespace CharacterStudio
         [SerializeField] protected Image _lockIconImage;
         [SerializeField] protected Toggle _locKButtonToggle;
 
-        [Header( "Background" )]
+        [Header("Background")]
         [SerializeField] protected Image _backgroundImage;
         [SerializeField] protected Color _defaultColor;
         [SerializeField] protected Color _selectedColor;
@@ -24,22 +24,22 @@ namespace CharacterStudio
         protected string id = string.Empty;
         bool isCategory = false;
 
-        public bool IsLock {get; private set;} = false;
+        public bool IsLock { get; private set; } = false;
         public eCharacterPart Part => part;
 
         protected EventSubscription<PartChangedArg> _itemClickSubscription;
-        public void SetupCategory( Texture2D icon, eCharacterPart part, TooltipData tooltip)
+        public void SetupCategory(Texture2D icon, eCharacterPart part, TooltipData tooltip)
         {
-            _locKButtonToggle.gameObject.SetActive( true );
-            _removeButton.gameObject.SetActive( false );
-            Rect rect = CSUtils.GetIconRect( icon, ICON_SIZE);
+            _locKButtonToggle.gameObject.SetActive(true);
+            _removeButton.gameObject.SetActive(false);
+            Rect rect = CSUtils.GetIconRect(icon, ICON_SIZE);
             icon.filterMode = FilterMode.Point;
-            this._iconImage.sprite = Sprite.Create( icon, rect, new Vector2(0.5f, 0.5f));
+            this._iconImage.sprite = Sprite.Create(icon, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = string.Empty;
             this.isCategory = true;
             this._button.onClick.AddListener(OnClicked);
-            this._locKButtonToggle.onValueChanged.AddListener( OnLockButtonClicked );
+            this._locKButtonToggle.onValueChanged.AddListener(OnLockButtonClicked);
 
             Tooltipable tooltipable = gameObject.GetComponent<Tooltipable>();
             if (tooltipable == null)
@@ -48,18 +48,18 @@ namespace CharacterStudio
             }
             tooltipable.Data = tooltip;
         }
-        public virtual void SetupId( CSIFileData csiData, eCharacterPart part, string id, bool selected = false)
+        public virtual void SetupId(CSIFileData csiData, eCharacterPart part, string id, bool selected = false)
         {
-            _locKButtonToggle.gameObject.SetActive( false );
-            _removeButton.gameObject.SetActive( !csiData.IsDefault );
-            Rect rect = CSUtils.GetIconRect( csiData.Texture, ICON_SIZE);
+            _locKButtonToggle.gameObject.SetActive(false);
+            _removeButton.gameObject.SetActive(csiData.IsCustom);
+            Rect rect = CSUtils.GetIconRect(csiData.Texture, ICON_SIZE);
             csiData.Texture.filterMode = FilterMode.Point;
-            this._iconImage.sprite = Sprite.Create( csiData.Texture, rect, new Vector2(0.5f, 0.5f));
+            this._iconImage.sprite = Sprite.Create(csiData.Texture, rect, new Vector2(0.5f, 0.5f));
             this.part = part;
             this.id = id;
             this.isCategory = false;
             this._button.onClick.AddListener(OnClicked);
-            this._removeButton.onClick.AddListener( OnRemoveClicked );
+            this._removeButton.onClick.AddListener(OnRemoveClicked);
 
             Color color = selected ? _selectedColor : _defaultColor;
             _backgroundImage.color = color;
@@ -74,23 +74,26 @@ namespace CharacterStudio
 
         protected void OnRemoveClicked()
         {
-
+            EventBus.Instance.Publish(new ItemRemoveArg(part, id));
+            _button.onClick.RemoveListener(OnClicked);
+            _removeButton.onClick.RemoveListener(OnRemoveClicked);
+            Destroy(gameObject);
         }
 
         protected void Awake()
         {
-            _itemClickSubscription = EventBus.Instance.Subscribe<PartChangedArg>( OnChangePart );
+            _itemClickSubscription = EventBus.Instance.Subscribe<PartChangedArg>(OnChangePart);
         }
         protected void OnDestroy()
         {
-            EventBus.Instance.Unsubscribe( _itemClickSubscription );
+            EventBus.Instance.Unsubscribe(_itemClickSubscription);
         }
 
-        protected void OnChangePart( PartChangedArg arg )
+        protected void OnChangePart(PartChangedArg arg)
         {
-            if ( isCategory )
+            if (isCategory)
                 return;
-            if ( arg.Part != part )
+            if (arg.Part != part)
                 return;
             bool isClickOnThisItem = arg.Id == id;
             Color color = isClickOnThisItem ? _selectedColor : _defaultColor;
@@ -100,6 +103,16 @@ namespace CharacterStudio
         public void OnClicked()
         {
             EventBus.Instance.Publish(new ItemClickArg(part, id));
+        }
+    }
+    public class ItemRemoveArg : EventArgs
+    {
+        public eCharacterPart Part { get; private set; }
+        public string Id { get; private set; }
+        public ItemRemoveArg(eCharacterPart part, string id)
+        {
+            Part = part;
+            Id = id;
         }
     }
 }

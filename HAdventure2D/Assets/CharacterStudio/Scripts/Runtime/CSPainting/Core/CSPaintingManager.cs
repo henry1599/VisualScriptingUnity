@@ -123,7 +123,7 @@ namespace CharacterStudio
                 ChosenPart.ToString(),
                 $"{ChosenPart.ToString()}_{fileCount + 1:00}.csi"
             );
-            CSIFile.SaveAsCsiFile(paintingTexture, path);
+            CSIFile.SaveAsCsiFile(paintingTexture, path, true);
             Debug.Log($"Painting saved to: {path}");
             DataManager.Instance.InitConfigs();
         }

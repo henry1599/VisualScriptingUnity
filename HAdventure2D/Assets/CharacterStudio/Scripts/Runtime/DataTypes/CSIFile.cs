@@ -9,25 +9,25 @@ namespace CharacterStudio
     public class CSIFile
     {
         private static readonly string Header = "Ch4ract3r5tud10";
-        private static readonly int IsDefault = 0;
 
-        public static byte[] EncodeTexture2D( Texture2D texture )
+        public static byte[] EncodeTexture2D( Texture2D texture, bool isCustom = false)
         {
-            byte[] textureBytes = texture.EncodeToPNG();
+            int customByte = isCustom ? 1 : 0;
+            byte[] textureBytes = texture.EncodeToPNG() ;
             byte[] headerBytes = System.Text.Encoding.UTF8.GetBytes( Header );
-            byte[] isDefaultBytes = System.BitConverter.GetBytes( IsDefault );
-            byte[] result = new byte[ headerBytes.Length + isDefaultBytes.Length + textureBytes.Length ];
+            byte[] isCustomByte = System.BitConverter.GetBytes(customByte);
+            byte[] result = new byte[ headerBytes.Length + isCustomByte.Length + textureBytes.Length ];
 
             System.Buffer.BlockCopy( headerBytes, 0, result, 0, headerBytes.Length );
-            System.Buffer.BlockCopy( isDefaultBytes, 0, result, headerBytes.Length, isDefaultBytes.Length );
-            System.Buffer.BlockCopy( textureBytes, 0, result, headerBytes.Length + isDefaultBytes.Length, textureBytes.Length );
+            System.Buffer.BlockCopy( isCustomByte, 0, result, headerBytes.Length, isCustomByte.Length );
+            System.Buffer.BlockCopy( textureBytes, 0, result, headerBytes.Length + isCustomByte.Length, textureBytes.Length );
 
             return result;
         }
 
-        public static void SaveAsCsiFile( Texture2D texture, string outputPath )
+        public static void SaveAsCsiFile( Texture2D texture, string outputPath, bool isCustom = false)
         {
-            byte[] encodedData = EncodeTexture2D( texture );
+            byte[] encodedData = EncodeTexture2D( texture, isCustom );
             File.WriteAllBytes( outputPath, encodedData );
         }
 
@@ -40,7 +40,7 @@ namespace CharacterStudio
 
             byte[] isDefaultBytes = new byte[ isDefaultLength ];
             System.Buffer.BlockCopy( fileBytes, headerLength, isDefaultBytes, 0, isDefaultLength );
-            int isDefault = System.BitConverter.ToInt32( isDefaultBytes, 0 );
+            int isCustom = System.BitConverter.ToInt32( isDefaultBytes, 0 );
 
             byte[] textureBytes = new byte[ fileBytes.Length - headerLength - isDefaultLength ];
             System.Buffer.BlockCopy( fileBytes, headerLength + isDefaultLength, textureBytes, 0, textureBytes.Length );
@@ -48,18 +48,18 @@ namespace CharacterStudio
             Texture2D texture = new Texture2D( 2, 2, TextureFormat.RGBA32, false );
             texture.LoadImage( textureBytes );
             texture.filterMode = FilterMode.Point;
-            return new CSIFileData( texture, isDefault == 0 );
+            return new CSIFileData( texture, isCustom == 1 );
         }
     }
 
     public class CSIFileData
     {
         public Texture2D Texture;
-        public bool IsDefault;
-        public CSIFileData( Texture2D texture, bool isDefault )
+        public bool IsCustom;
+        public CSIFileData( Texture2D texture, bool isCustom )
         {
             Texture = texture;
-            IsDefault = isDefault;
+            IsCustom = isCustom;
         }
     }
 }

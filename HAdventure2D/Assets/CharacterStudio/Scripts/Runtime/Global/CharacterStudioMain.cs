@@ -44,6 +44,7 @@ namespace CharacterStudio
         private eCharacterPart _selectedCategory;
         private List<UIItem> _partItems = new List<UIItem>();
         private EventSubscription<ItemClickArg> _itemClickSubscription;
+        private EventSubscription<ItemRemoveArg> _itemRemoveSubscription;
         public bool IsSetup {get; private set;}
         public List<eCharacterPart> EmptyPartsAsStart => _emptyPartsAsStart;
         public eCharacterPart SelectedCategory => _selectedCategory;
@@ -58,6 +59,7 @@ namespace CharacterStudio
             _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
             _itemClickSubscription = EventBus.Instance.Subscribe<ItemClickArg>(OnItemClick);
+            _itemRemoveSubscription = EventBus.Instance.Subscribe<ItemRemoveArg>(OnItemRemove);
             _addNewPartButton.onClick.AddListener(OnAddNewPartButtonClicked);
             UpdateState(eStudioState.Category);
             ReloadCategories();
@@ -66,6 +68,21 @@ namespace CharacterStudio
             CharacterAnimation.Instance.Setup();
             IsSetup = true;
         }
+
+        private void OnItemRemove(ItemRemoveArg arg)
+        {
+            // Find the file and remove it and reload
+            if (_selectedCategory == arg.Part)
+            {
+                _characterDatabase.RemoveItem(arg.Part, arg.Id);
+                ReloadItems(_selectedCategory);
+            }
+            else
+            {
+                Debug.LogWarning($"Trying to remove item from category {arg.Part} but current category is {_selectedCategory}");
+            }
+        }
+
         public void Unsetup()
         {
             _canvasGroup.alpha = 0;

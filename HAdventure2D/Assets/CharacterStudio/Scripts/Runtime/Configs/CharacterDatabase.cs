@@ -21,6 +21,22 @@ namespace CharacterStudio
         public Dictionary<eCharacterPart, CSIFileData> Instruction = new Dictionary<eCharacterPart, CSIFileData>();
         public Dictionary<eCharacterPart, int> SortedData; // stored as json
         public Dictionary<eCharacterPart, string> DefaultParts; // stored as json
+        public void RemoveItem(eCharacterPart part, string id)
+        {
+#if UNITY_EDITOR
+            if (Data.ContainsKey(part) && Data[part].TextureDict.ContainsKey(id))
+            {
+                Data[part].TextureDict.Remove(id);
+
+                string filePath = GetItemPath(part, id);
+                if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    AssetDatabase.Refresh();
+                }
+            }
+#endif
+        }
         public string GetCategoryDisplayName(eCharacterPart part)
         {
             if (Categories.ContainsKey(part))
