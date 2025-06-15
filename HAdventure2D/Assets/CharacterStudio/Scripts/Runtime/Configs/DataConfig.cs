@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -5,12 +6,34 @@ using UnityEngine;
 
 namespace CharacterStudio
 {
+    [Serializable]
+    public class AnimationNameData
+    {
+        public string Id;
+        public string DisplayName;
+    }
     [CreateAssetMenu(fileName = "DataConfig", menuName = "CharacterStudio/Configs/Data Config")]
     public class DataConfig : ScriptableObject
     {
+        public AnimationNameData[] AnimationNames;
         public DefaultAsset[] DataFolder;
         public DefaultAsset ExportedFolder;
         public int SelectedIndex = 0;
+        public string GetDisplayName(string id)
+        {
+            if (AnimationNames == null || AnimationNames.Length == 0)
+            {
+                return string.Empty;
+            }
+            foreach (var animationName in AnimationNames)
+            {
+                if (animationName.Id == id)
+                {
+                    return animationName.DisplayName;
+                }
+            }
+            return string.Empty;
+        }
         public string GetExportedFolderPath()
         {
             if (ExportedFolder == null)

@@ -12,6 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fa708ae3bdb50245a11e1e4506a4a1e, type: 3}
   m_Name: DataConfig
   m_EditorClassIdentifier: 
+  AnimationNames:
+  - Id: Death
+    DisplayName: Death
+  - Id: Hurt
+    DisplayName: Hurt
+  - Id: Idle
+    DisplayName: Idle
+  - Id: Jump
+    DisplayName: Jump
+  - Id: Run
+    DisplayName: Run
+  - Id: Walk
+    DisplayName: Walk
+  - Id: SAttack_01
+    DisplayName: Melee 01
+  - Id: SAttack_02
+    DisplayName: Melee 02
+  - Id: SAttack_03
+    DisplayName: Melee 03
   DataFolder:
   - {fileID: 102900000, guid: ecf980752e9745f48adae84acc70ba88, type: 3}
   ExportedFolder: {fileID: 102900000, guid: 113d2179ba31d594b95fe064f465594e, type: 3}
