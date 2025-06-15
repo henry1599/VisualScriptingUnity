@@ -18,6 +18,7 @@ namespace CharacterStudio
         public AnimationNameData[] AnimationNames;
         public DefaultAsset[] DataFolder;
         public DefaultAsset ExportedFolder;
+        public DefaultAsset SaveLoadFolder;
         public int SelectedIndex = 0;
         public string GetDisplayName(string id)
         {
@@ -33,6 +34,26 @@ namespace CharacterStudio
                 }
             }
             return string.Empty;
+        }
+        public string GetSaveLoadFolderPath()
+        {
+            if (SaveLoadFolder == null)
+            {
+                Debug.LogWarning("SaveLoad folder is not set.");
+                return null;
+            }
+            string path = AssetDatabase.GetAssetPath(SaveLoadFolder);
+            if (string.IsNullOrEmpty(path))
+            {
+                Debug.LogWarning("SaveLoad folder path is empty.");
+                return null;
+            }
+            if (!AssetDatabase.IsValidFolder(path))
+            {
+                Debug.LogWarning("SaveLoad folder path is not a valid folder.");
+                return null;
+            }
+            return path;
         }
         public string GetExportedFolderPath()
         {

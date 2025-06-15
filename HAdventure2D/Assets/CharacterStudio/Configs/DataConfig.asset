@@ -34,4 +34,5 @@ MonoBehaviour:
   DataFolder:
   - {fileID: 102900000, guid: ecf980752e9745f48adae84acc70ba88, type: 3}
   ExportedFolder: {fileID: 102900000, guid: 113d2179ba31d594b95fe064f465594e, type: 3}
+  SaveLoadFolder: {fileID: 102900000, guid: a3389d296dadb1242b0cabacc5c8226d, type: 3}
   SelectedIndex: 0

@@ -13,6 +13,8 @@ namespace CharacterStudio
         CSP_Save,
         CSP_ConfirmBack,
         CSP_SaveSuccess,
+        Save_Your_Work,
+        Load_Your_Work,
     }
     public interface IPopup
     {

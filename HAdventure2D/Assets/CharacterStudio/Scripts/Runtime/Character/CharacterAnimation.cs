@@ -98,6 +98,42 @@ namespace CharacterStudio
             _counter = _animationInterval;
             _isSetup = true;
         }
+        public Texture2D GenerateIcon()
+        {
+            eCharacterAnimation previousAnimation = _currentAnimation;
+            SetAnimation(eCharacterAnimation.Idle);
+
+            if (_currentAnimationTextures.Count == 0 || !_currentAnimationTextures.ContainsKey(_currentAnimation))
+                return null;
+
+            var texturesByPart = _currentAnimationTextures[_currentAnimation];
+            if (texturesByPart == null || texturesByPart.Count == 0)
+                return null;
+
+            List<(int sortingOrder, Texture2D texture)> sortedTextures = new List<(int, Texture2D)>();
+            foreach (var (part, textures) in texturesByPart)
+            {
+                if (textures == null || textures.Count == 0)
+                    continue;
+
+                int sortingOrder = 0;
+                DataManager.Instance.CharacterDatabase.SortedData.TryGetValue(part, out sortingOrder);
+                sortedTextures.Add((sortingOrder, textures[0]));
+            }
+
+            sortedTextures = sortedTextures.OrderBy(x => x.sortingOrder).ToList();
+
+            Texture2D iconTexture = AssembleTextures(sortedTextures.Select(x => x.texture).ToList());
+            if (iconTexture == null)
+                return null;
+
+            iconTexture = CropTexture(iconTexture, (float)size / (float)iconTexture.width);
+
+            SetAnimation(previousAnimation);
+
+            return iconTexture;
+        }
+
         void ReloadAnimation()
         {
             SetAnimation(_currentAnimation);

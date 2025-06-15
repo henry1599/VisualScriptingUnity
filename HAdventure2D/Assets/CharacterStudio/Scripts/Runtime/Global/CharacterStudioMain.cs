@@ -1,12 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
 using NaughtyAttributes;
-using System;
 using UnityEngine.UI;
-using UnityEngine.TextCore.Text;
 
 namespace CharacterStudio
 {
@@ -89,6 +86,7 @@ namespace CharacterStudio
             _canvasGroup.blocksRaycasts = false;
             _canvasGroup.interactable = false;
             EventBus.Instance.Unsubscribe( _itemClickSubscription );
+            EventBus.Instance.Unsubscribe(_itemRemoveSubscription);
             _addNewPartButton.onClick.RemoveAllListeners();
             _rightPanelBackButton.onClick.RemoveAllListeners();
             IsSetup = false;

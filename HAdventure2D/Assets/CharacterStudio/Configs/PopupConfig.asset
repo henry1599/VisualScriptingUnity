@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PopupPrefabs:
     _serializedList:
+    - Key: 7
+      Value: {fileID: 5097780685997028281, guid: cf2c110d5cfa1064cb1f4efc62bd11f9,
+        type: 3}
     - Key: 1
       Value: {fileID: 5097780685997028281, guid: 523f50ed25d47fa478f6429b9a181435,
         type: 3}
