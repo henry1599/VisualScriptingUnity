@@ -52,6 +52,7 @@ namespace CharacterStudio
 
         private void OnSaveButtonClicked()
         {
+#if UNITY_EDITOR
             var savePath = DataManager.Instance.DataConfig.GetSaveLoadFolderPath();
             var selection = ProgressSaveData.ToProgress(CharacterAnimation.Instance.CharacterSelection);
             Texture2D icon = CharacterAnimation.Instance.GenerateIcon();
@@ -79,7 +80,6 @@ namespace CharacterStudio
                 File.WriteAllBytes(iconPath, icon.EncodeToPNG());
                 Debug.Log($"Saved character selection to {filePath} and icon to {iconPath}");
                 EventBus.Instance.Publish(new HidePopupArg(PopupType));
-#if UNITY_EDITOR
                 AssetDatabase.Refresh();
                 // Set filter mode to Point using TextureImporter
                 string assetIconPath = iconPath.Substring(iconPath.IndexOf("Assets"));
@@ -89,7 +89,6 @@ namespace CharacterStudio
                     importer.filterMode = FilterMode.Point;
                     importer.SaveAndReimport();
                 }
-#endif
             }
             catch (Exception e)
             {
@@ -97,6 +96,7 @@ namespace CharacterStudio
             }
 
             EventBus.Instance.Publish(new HidePopupArg(PopupType));
+#endif
         }
     }
 }

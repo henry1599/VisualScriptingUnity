@@ -50,10 +50,10 @@ namespace CharacterStudio
         }
         void DeleteData(string folderName)
         {
+#if UNITY_EDITOR
             string folderPath = DataManager.Instance.DataConfig.GetSaveLoadFolderPath();
             string fullPath = System.IO.Path.Combine(folderPath, folderName);
             AssetDatabase.DeleteAsset(fullPath);
-#if UNITY_EDITOR
             AssetDatabase.Refresh();
 #endif
         }

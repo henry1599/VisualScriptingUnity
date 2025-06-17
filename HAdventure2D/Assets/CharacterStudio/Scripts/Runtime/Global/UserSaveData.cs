@@ -17,6 +17,7 @@ namespace CharacterStudio
         }
         public static UserSaveData Load(DataConfig dataConfig)
         {
+#if UNITY_EDITOR
             string json = PlayerPrefs.GetString( DataManager.SAVEDATA_KEY, "");
             UserSaveData result = new UserSaveData()
             {
@@ -32,6 +33,9 @@ namespace CharacterStudio
                 result.DataFolderPath = dataConfig.GetFolderPath();
             }
             return result;
+#else
+            return null;
+#endif
         }
         public string ToJson()
         {

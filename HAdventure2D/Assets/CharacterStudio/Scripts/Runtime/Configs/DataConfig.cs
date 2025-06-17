@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace CharacterStudio
@@ -16,9 +18,12 @@ namespace CharacterStudio
     public class DataConfig : ScriptableObject
     {
         public AnimationNameData[] AnimationNames;
+
+#if UNITY_EDITOR
         public DefaultAsset[] DataFolder;
         public DefaultAsset ExportedFolder;
         public DefaultAsset SaveLoadFolder;
+#endif
         public int SelectedIndex = 0;
         public string GetDisplayName(string id)
         {
@@ -35,6 +40,7 @@ namespace CharacterStudio
             }
             return string.Empty;
         }
+#if UNITY_EDITOR
         public string GetSaveLoadFolderPath()
         {
             if (SaveLoadFolder == null)
@@ -100,5 +106,6 @@ namespace CharacterStudio
             }
             return path;
         }
+#endif
     }
 }

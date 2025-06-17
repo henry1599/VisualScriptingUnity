@@ -39,7 +39,11 @@ namespace CharacterStudio
         }
         public string GetExportedFolderPath()
         {
+#if UNITY_EDITOR
             return DataConfig.GetExportedFolderPath();
+#else
+            return null;
+#endif
         }
         public void AddCustomPart( eCharacterPart part, string path )
         {
