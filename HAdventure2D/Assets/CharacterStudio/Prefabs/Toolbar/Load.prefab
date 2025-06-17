@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 1546166024218039277}
   - component: {fileID: 9017213318032016028}
   - component: {fileID: 8133190384651932765}
-  - component: {fileID: 6202265288993495959}
   - component: {fileID: 8719304122659588319}
+  - component: {fileID: 5069837872515491283}
   m_Layer: 5
   m_Name: Load
   m_TagString: Untagged
@@ -123,9 +123,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CharacterStudio.ToolbarItem, CharacterStudio.Runtime
-        m_MethodName: 
+      - m_Target: {fileID: 5069837872515491283}
+        m_TargetAssemblyTypeName: CharacterStudio.LoadToolbarItem, CharacterStudio.Runtime
+        m_MethodName: OnLoadButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -135,94 +135,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6202265288993495959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6627954077632371439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 848ffbe648d1ba84b818490f43c872a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 2
-  HasContextMenu: 0
-  Text: Export
-  _itemContainer: {fileID: 0}
-  _item: {fileID: 6150638163356159211, guid: 0797967bec8b1b94a9ebe5df2c693ba8, type: 3}
-  ContextMenuList:
-  - EditorExclusive: 0
-    EditorExclusiveMessage: Unity Editor only
-    EditorExclusiveMessageTooltip: This feature can only work in Unity Editor
-    Text: Sprite Sheet
-    Tooltip:
-      Title: Export spritesheet
-      Description: Export a spritesheet with slice options
-    OnClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6202265288993495959}
-          m_TargetAssemblyTypeName: CharacterStudio.ExportToolbarItem, CharacterStudio.Runtime
-          m_MethodName: OnSpriteSheetButtonClicked
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - EditorExclusive: 0
-    EditorExclusiveMessage: Unity Editor only
-    EditorExclusiveMessageTooltip: This feature can only work in Unity Editor
-    Text: Sprites
-    Tooltip:
-      Title: Export sprites
-      Description: Export every single sprites to different folders
-    OnClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6202265288993495959}
-          m_TargetAssemblyTypeName: CharacterStudio.ExportToolbarItem, CharacterStudio.Runtime
-          m_MethodName: OnSpritesButtonClicked
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - EditorExclusive: 0
-    EditorExclusiveMessage: Unity Editor only
-    EditorExclusiveMessageTooltip: This feature can only work in Unity Editor
-    Text: Sprite Library
-    Tooltip:
-      Title: Export sprite library
-      Description: Export a spritesheet and a fully set-up sprite library in the
-        same folder
-    OnClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6202265288993495959}
-          m_TargetAssemblyTypeName: CharacterStudio.ExportToolbarItem, CharacterStudio.Runtime
-          m_MethodName: OnSpriteLibraryButtonClicked
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &8719304122659588319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,6 +150,27 @@ MonoBehaviour:
   Data:
     Title: Load
     Description: Load your work
+--- !u!114 &5069837872515491283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627954077632371439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8735f3bc8dd10a44e96b62ae9d0a37c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 2
+  HasContextMenu: 0
+  Text: 
+  _itemContainer: {fileID: 0}
+  _item: {fileID: 0}
+  ContextMenuList: []
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6828802029905010493
 GameObject:
   m_ObjectHideFlags: 0

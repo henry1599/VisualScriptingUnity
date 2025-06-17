@@ -8,7 +8,6 @@ namespace CharacterStudio
 {
     public class CSCharacterLayout : CSLayout
     {
-        [SerializeField] Button _settingButton;
         public override eLayoutType LayoutType => eLayoutType.Character;
 
         public override void Setup()

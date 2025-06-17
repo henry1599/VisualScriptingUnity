@@ -26,6 +26,7 @@ namespace CharacterStudio
 
 
         [Header("UI")]
+        [SerializeField] private RawImage _characterRawImage;
         [SerializeField] CanvasGroup _canvasGroup;
         [SerializeField] private List<eCharacterPart> _availableParts;
         [SerializeField] private List<eCharacterPart> _emptyPartsAsStart;
@@ -45,6 +46,7 @@ namespace CharacterStudio
         public bool IsSetup {get; private set;}
         public List<eCharacterPart> EmptyPartsAsStart => _emptyPartsAsStart;
         public eCharacterPart SelectedCategory => _selectedCategory;
+        public Texture CharacterTexture => _characterRawImage.texture;
 
         protected override bool Awake()
         {

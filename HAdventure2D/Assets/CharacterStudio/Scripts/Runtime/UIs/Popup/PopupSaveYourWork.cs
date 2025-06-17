@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,35 @@ using UnityEngine.UI;
 
 namespace CharacterStudio
 {
+    [Serializable]
+    public class ProgressSaveData
+    {
+        public List<eCharacterPart> Parts;
+        public List<string> Selections;
+        public static ProgressSaveData ToProgress(SerializedDictionary<eCharacterPart, string> selections)
+        {
+            ProgressSaveData progress = new ProgressSaveData
+            {
+                Parts = new List<eCharacterPart>(),
+                Selections = new List<string>()
+            };
+            foreach (var kvp in selections)
+            {
+                progress.Parts.Add(kvp.Key);
+                progress.Selections.Add(kvp.Value);
+            }
+            return progress;
+        }
+        public SerializedDictionary<eCharacterPart, string> ToSelections()
+        {
+            SerializedDictionary<eCharacterPart, string> selections = new SerializedDictionary<eCharacterPart, string>();
+            for (int i = 0; i < Parts.Count; i++)
+            {
+                selections[Parts[i]] = Selections[i];
+            }
+            return selections;
+        }
+    }
     public class PopupSaveYourWork : PopupBase
     {
         [SerializeField] Button _saveButton;
@@ -23,8 +53,9 @@ namespace CharacterStudio
         private void OnSaveButtonClicked()
         {
             var savePath = DataManager.Instance.DataConfig.GetSaveLoadFolderPath();
-            var selection = CharacterAnimation.Instance.CharacterSelection;
+            var selection = ProgressSaveData.ToProgress(CharacterAnimation.Instance.CharacterSelection);
             Texture2D icon = CharacterAnimation.Instance.GenerateIcon();
+            icon.filterMode = FilterMode.Point; 
             string json = JsonUtility.ToJson(selection);
             if (string.IsNullOrEmpty(savePath))
             {
@@ -48,15 +79,24 @@ namespace CharacterStudio
                 File.WriteAllBytes(iconPath, icon.EncodeToPNG());
                 Debug.Log($"Saved character selection to {filePath} and icon to {iconPath}");
                 EventBus.Instance.Publish(new HidePopupArg(PopupType));
-                //EventBus.Instance.Publish(new SaveSuccessArg());
 #if UNITY_EDITOR
                 AssetDatabase.Refresh();
+                // Set filter mode to Point using TextureImporter
+                string assetIconPath = iconPath.Substring(iconPath.IndexOf("Assets"));
+                TextureImporter importer = AssetImporter.GetAtPath(assetIconPath) as TextureImporter;
+                if (importer != null)
+                {
+                    importer.filterMode = FilterMode.Point;
+                    importer.SaveAndReimport();
+                }
 #endif
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to save character selection: {e.Message}");
             }
+
+            EventBus.Instance.Publish(new HidePopupArg(PopupType));
         }
     }
 }

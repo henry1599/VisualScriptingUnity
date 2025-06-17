@@ -888,6 +888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animationPanel: {fileID: 2362080749080264050}
   _characterDatabase: {fileID: 11400000, guid: 70045ac41230dc34b87076da1a2c1b56, type: 2}
+  _characterRawImage: {fileID: 1931026005}
   _canvasGroup: {fileID: 115287696}
   _availableParts: 020000000400000001000000030000000a000000
   _emptyPartsAsStart: 01000000040000000a00000003000000
@@ -925,7 +926,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6e3b35d97afde41a231da64fef2a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _settingButton: {fileID: 0}
 --- !u!1 &134997505
 GameObject:
   m_ObjectHideFlags: 0
@@ -4510,7 +4510,7 @@ MonoBehaviour:
   _toolbarItemPrefabs:
   - {fileID: 6202265288993495959, guid: efc6d1a3ac5ad0d4e8671955fa09ca09, type: 3}
   - {fileID: 6202265288993495959, guid: cd5c96feb534679458a40d2f93b9e409, type: 3}
-  - {fileID: 6202265288993495959, guid: 6e96c9d66f015d240ab7dc47f52c7e82, type: 3}
+  - {fileID: 5069837872515491283, guid: 6e96c9d66f015d240ab7dc47f52c7e82, type: 3}
   _itemContainer: {fileID: 1262092022}
   _separattor: {fileID: 5852063389143952352, guid: c3e4475cadd42514e91985fe1fd479f2,
     type: 3}

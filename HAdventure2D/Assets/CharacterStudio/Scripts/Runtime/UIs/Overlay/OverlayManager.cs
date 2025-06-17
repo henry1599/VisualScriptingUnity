@@ -143,6 +143,11 @@ namespace CharacterStudio
             currentZoom = Mathf.Clamp( currentZoom, _minZoom, _maxZoom );
             _characterCamera.orthographicSize = currentZoom;
         }
+        public void SetDefaultZoom()
+        {
+            currentZoom = _defaultZoom;
+            _characterCamera.orthographicSize = currentZoom;
+        }
         private void OnZoomOutButtonClicked()
         {
             currentZoom += _zoomSpeed;

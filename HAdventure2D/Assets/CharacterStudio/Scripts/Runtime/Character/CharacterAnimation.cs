@@ -100,40 +100,28 @@ namespace CharacterStudio
         }
         public Texture2D GenerateIcon()
         {
-            eCharacterAnimation previousAnimation = _currentAnimation;
-            SetAnimation(eCharacterAnimation.Idle);
-
-            if (_currentAnimationTextures.Count == 0 || !_currentAnimationTextures.ContainsKey(_currentAnimation))
-                return null;
-
-            var texturesByPart = _currentAnimationTextures[_currentAnimation];
-            if (texturesByPart == null || texturesByPart.Count == 0)
-                return null;
-
-            List<(int sortingOrder, Texture2D texture)> sortedTextures = new List<(int, Texture2D)>();
-            foreach (var (part, textures) in texturesByPart)
-            {
-                if (textures == null || textures.Count == 0)
-                    continue;
-
-                int sortingOrder = 0;
-                DataManager.Instance.CharacterDatabase.SortedData.TryGetValue(part, out sortingOrder);
-                sortedTextures.Add((sortingOrder, textures[0]));
-            }
-
-            sortedTextures = sortedTextures.OrderBy(x => x.sortingOrder).ToList();
-
-            Texture2D iconTexture = AssembleTextures(sortedTextures.Select(x => x.texture).ToList());
-            if (iconTexture == null)
-                return null;
-
-            iconTexture = CropTexture(iconTexture, (float)size / (float)iconTexture.width);
-
-            SetAnimation(previousAnimation);
-
+            OverlayManager.Instance.SetDefaultZoom();
+            Texture texture = CharacterStudioMain.Instance.CharacterTexture;
+            Texture2D iconTexture = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+            RenderTexture renderTexture = new RenderTexture(texture.width, texture.height, 0);
+            RenderTexture.active = renderTexture;
+            Graphics.Blit(texture, renderTexture);
+            iconTexture.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
+            iconTexture.Apply();
+            RenderTexture.active = null;
+            iconTexture.filterMode = FilterMode.Point;
+            iconTexture.wrapMode = TextureWrapMode.Clamp;
             return iconTexture;
         }
-
+        public void SetupFromSelection(SerializedDictionary<eCharacterPart, string> selection)
+        {
+            _characterSelection = selection;
+            var clonedDictionary = new SerializedDictionary<eCharacterPart, string>(_characterSelection);
+            foreach (var (part, id) in clonedDictionary)
+            {
+                EventBus.Instance.Publish(new ChangePartArg(part, id));
+            }
+        }
         void ReloadAnimation()
         {
             SetAnimation(_currentAnimation);
