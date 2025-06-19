@@ -51,7 +51,7 @@ namespace CharacterStudio
         public virtual void SetupId(CSIFileData csiData, eCharacterPart part, string id, bool selected = false)
         {
             _locKButtonToggle.gameObject.SetActive(false);
-            _removeButton.gameObject.SetActive(csiData.IsCustom);
+            _removeButton.gameObject.SetActive(false);
             Rect rect = CSUtils.GetIconRect(csiData.Texture, ICON_SIZE);
             csiData.Texture.filterMode = FilterMode.Point;
             this._iconImage.sprite = Sprite.Create(csiData.Texture, rect, new Vector2(0.5f, 0.5f));

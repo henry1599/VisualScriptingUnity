@@ -11,6 +11,7 @@ namespace CharacterStudio
 {
     public class CSPaintingManager : MonoSingleton<CSPaintingManager>
     {
+        public bool IsAdmin = false;
         [Header("Setting")]
         [SerializeField] private CSPaintingSetting _paintingSetting;
         [SerializeField] private CanvasGroup _canvasGroup;
@@ -123,7 +124,7 @@ namespace CharacterStudio
                 ChosenPart.ToString(),
                 $"{ChosenPart.ToString()}_{fileCount + 1:00}.csi"
             );
-            CSIFile.SaveAsCsiFile(paintingTexture, path, true);
+            CSIFile.SaveAsCsiFile(paintingTexture, path, !IsAdmin);
             Debug.Log($"Painting saved to: {path}");
             DataManager.Instance.InitConfigs();
         }
