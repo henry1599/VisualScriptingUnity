@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace CharacterStudio
@@ -10,57 +6,57 @@ namespace CharacterStudio
     {
         public virtual string ToJson()
         {
-            return JsonUtility.ToJson( this );
+            return JsonUtility.ToJson(this);
         }
-        public virtual bool FromJson( string json )
+        public virtual bool FromJson(string json)
         {
             try
             {
-                JsonUtility.FromJsonOverwrite( json, this );
+                JsonUtility.FromJsonOverwrite(json, this);
                 return true;
             }
-            catch ( System.Exception e )
+            catch (System.Exception e)
             {
-                Debug.LogErrorFormat( "Failed to load from json type {0}", this.GetType());
+                Debug.LogErrorFormat("Failed to load from json type {0}", this.GetType());
                 return false;
             }
         }
-        public virtual bool FromJsonPath( string jsonPath )
+        public virtual bool FromJsonPath(string jsonPath)
         {
             try
             {
-                var json = System.IO.File.ReadAllText( jsonPath );
-                FromJson( json );
+                var json = System.IO.File.ReadAllText(jsonPath);
+                FromJson(json);
                 return true;
             }
-            catch ( System.Exception e )
+            catch (System.Exception e)
             {
-                Debug.LogErrorFormat( "Failed to load from json type {0}", this.GetType() );
+                Debug.LogErrorFormat("Failed to load from json type {0}", this.GetType());
                 return false;
             }
         }
 #if UNITY_EDITOR
-            [Button]
+        [ContextMenu("Save Json")]
         public void SaveJson()
         {
             var json = ToJson();
-            var path = UnityEditor.EditorUtility.SaveFilePanel( "Save Json", "", name + ".json", "json" );
-            if ( !string.IsNullOrEmpty( path ) )
+            var path = UnityEditor.EditorUtility.SaveFilePanel("Save Json", "", name + ".json", "json");
+            if (!string.IsNullOrEmpty(path))
             {
-                System.IO.File.WriteAllText( path, json );
+                System.IO.File.WriteAllText(path, json);
             }
-            Debug.Log( "Saved to " + path );
+            Debug.Log("Saved to " + path);
         }
-        [Button]
+        [ContextMenu("Load Json")]
         public void LoadJson()
         {
-            var path = UnityEditor.EditorUtility.OpenFilePanel( "Load Json", "", "json" );
-            if ( !string.IsNullOrEmpty( path ) )
+            var path = UnityEditor.EditorUtility.OpenFilePanel("Load Json", "", "json");
+            if (!string.IsNullOrEmpty(path))
             {
-                var json = System.IO.File.ReadAllText( path );
-                FromJson( json );
+                var json = System.IO.File.ReadAllText(path);
+                FromJson(json);
             }
-            Debug.Log( "Loaded from " + path );
+            Debug.Log("Loaded from " + path);
         }
 #endif
     }

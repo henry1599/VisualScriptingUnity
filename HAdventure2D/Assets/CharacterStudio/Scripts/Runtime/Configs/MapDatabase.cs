@@ -22,7 +22,7 @@ namespace CharacterStudio
                 );
                 if (File.Exists(path))
                 {
-                    CSIFileData texData = CSIFile.LoadCsiFile( path );
+                    CSIFileData texData = CSIFile.LoadCsiFile(path);
                     texData.Texture.filterMode = FilterMode.Point;
                     Data[part] = texData.Texture;
                 }

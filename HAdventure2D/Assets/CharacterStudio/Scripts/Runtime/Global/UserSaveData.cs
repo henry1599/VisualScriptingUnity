@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,21 +12,21 @@ namespace CharacterStudio
 
         public void Save()
         {
-            PlayerPrefs.SetString( DataManager.SAVEDATA_KEY, ToJson() );
+            PlayerPrefs.SetString(DataManager.SAVEDATA_KEY, ToJson());
         }
         public static UserSaveData Load(DataConfig dataConfig)
         {
 #if UNITY_EDITOR
-            string json = PlayerPrefs.GetString( DataManager.SAVEDATA_KEY, "");
+            string json = PlayerPrefs.GetString(DataManager.SAVEDATA_KEY, "");
             UserSaveData result = new UserSaveData()
             {
                 DataFolderPath = dataConfig.GetFolderPath()
             };
-            if ( string.IsNullOrEmpty( json ) )
+            if (string.IsNullOrEmpty(json))
             {
                 return result;
             }
-            result = FromJson( json );
+            result = FromJson(json);
             if (string.IsNullOrEmpty(result.DataFolderPath))
             {
                 result.DataFolderPath = dataConfig.GetFolderPath();
@@ -39,11 +38,11 @@ namespace CharacterStudio
         }
         public string ToJson()
         {
-            return JsonUtility.ToJson( this );
+            return JsonUtility.ToJson(this);
         }
-        public static UserSaveData FromJson( string json )
+        public static UserSaveData FromJson(string json)
         {
-            return JsonUtility.FromJson<UserSaveData>( json );
+            return JsonUtility.FromJson<UserSaveData>(json);
         }
     }
     [Serializable]

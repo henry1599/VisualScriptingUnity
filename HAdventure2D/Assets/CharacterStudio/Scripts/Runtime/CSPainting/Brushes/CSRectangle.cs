@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CharacterStudio
@@ -11,26 +9,26 @@ namespace CharacterStudio
 
         public override eBrushType BrushType => eBrushType.Rectangle;
 
-        public override void DrawPointerDown( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color )
+        public override void DrawPointerDown(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
-            var renderer = GetRenderer( canvasType );
-            _startPosition = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT );
+            var renderer = GetRenderer(canvasType);
+            _startPosition = CSUtils.GetPixelIndex(normalizedPixelPosition, renderer.RT);
             _isDrawing = true;
         }
 
-        public override void DrawPointerMove( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color )
+        public override void DrawPointerMove(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
-            if ( _isDrawing )
+            if (_isDrawing)
             {
-                DrawPreview( normalizedPixelPosition, color );
+                DrawPreview(normalizedPixelPosition, color);
             }
         }
 
-        public override void DrawPointerUp( eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color )
+        public override void DrawPointerUp(eCanvasType canvasType, Vector2 normalizedPixelPosition, Color color)
         {
-            if ( _isDrawing )
+            if (_isDrawing)
             {
-                CSPaintingRenderer.CopyTo(GetRenderer(eCanvasType.Preview), GetRenderer(eCanvasType.Main) );
+                CSPaintingRenderer.CopyTo(GetRenderer(eCanvasType.Preview), GetRenderer(eCanvasType.Main));
                 GetRenderer(eCanvasType.Preview).ClearCanvas();
                 GetRenderer(eCanvasType.Hover).ClearCanvas();
                 RegisterState();
@@ -38,22 +36,22 @@ namespace CharacterStudio
             }
         }
 
-        public override void DrawPreview( Vector2 normalizedPixelPosition, Color color )
+        public override void DrawPreview(Vector2 normalizedPixelPosition, Color color)
         {
-            var renderer = GetRenderer( eCanvasType.Preview );
-            Vector2Int endPosition = CSUtils.GetPixelIndex( normalizedPixelPosition, renderer.RT );
+            var renderer = GetRenderer(eCanvasType.Preview);
+            Vector2Int endPosition = CSUtils.GetPixelIndex(normalizedPixelPosition, renderer.RT);
             GetRenderer(eCanvasType.Preview).ClearCanvas();
-            Draw( eCanvasType.Preview, _startPosition, endPosition, color );
+            Draw(eCanvasType.Preview, _startPosition, endPosition, color);
         }
-        private void Draw( eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color )
+        private void Draw(eCanvasType canvasType, Vector2Int start, Vector2Int end, Color color)
         {
-            if ( Input.GetKey( KeyCode.LeftShift ) || Input.GetKey( KeyCode.RightShift ) )
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                DrawSquare( canvasType, start, end, color );
+                DrawSquare(canvasType, start, end, color);
             }
             else
             {
-                DrawRectangle( canvasType, start, end, color );
+                DrawRectangle(canvasType, start, end, color);
             }
         }
         public override void IncreaseSize()
@@ -64,9 +62,9 @@ namespace CharacterStudio
         {
         }
 
-        public override void HandleCursor( bool isEnter )
+        public override void HandleCursor(bool isEnter)
         {
-            if ( isEnter )
+            if (isEnter)
             {
                 SetSelfCursor();
             }
@@ -78,9 +76,9 @@ namespace CharacterStudio
 
         public override void SetSelfCursor()
         {
-            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor( BrushType );
-            Vector2 hotpot = new Vector2( icon.width / 2f, icon.height / 2f );
-            Cursor.SetCursor( icon, hotpot, CursorMode.Auto );
+            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor(BrushType);
+            Vector2 hotpot = new Vector2(icon.width / 2f, icon.height / 2f);
+            Cursor.SetCursor(icon, hotpot, CursorMode.Auto);
             Cursor.visible = true;
         }
     }

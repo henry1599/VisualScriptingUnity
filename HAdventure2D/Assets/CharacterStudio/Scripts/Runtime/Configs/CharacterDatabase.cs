@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
-using NaughtyAttributes;
 using System.Linq;
 using System.IO;
 
@@ -68,12 +66,12 @@ namespace CharacterStudio
         {
             return parts.OrderBy(x => SortedData[x]).ToList();
         }
-        public string GetRandomId( eCharacterPart part )
+        public string GetRandomId(eCharacterPart part)
         {
-            if ( Data.ContainsKey( part ) )
+            if (Data.ContainsKey(part))
             {
-                var keys = Data[ part ].TextureDict.Keys.ToList();
-                return keys[ UnityEngine.Random.Range( 0, keys.Count ) ];
+                var keys = Data[part].TextureDict.Keys.ToList();
+                return keys[UnityEngine.Random.Range(0, keys.Count)];
             }
             return string.Empty;
         }
@@ -86,20 +84,20 @@ namespace CharacterStudio
                 eCharacterPart.LHand,
                 eCharacterPart.RHand,
             };
-            foreach ( var part in Data.Keys )
+            foreach (var part in Data.Keys)
             {
-                var keys = Data[ part ].TextureDict.Keys.ToList();
-                int rand = UnityEngine.Random.Range( -1, keys.Count );
-                string id = rand < 0 && !mandatoryParts.Contains(part) ? string.Empty : keys[ Mathf.Clamp( rand, 0, keys.Count - 1 ) ];
-                result.Add( (id, part) );
+                var keys = Data[part].TextureDict.Keys.ToList();
+                int rand = UnityEngine.Random.Range(-1, keys.Count);
+                string id = rand < 0 && !mandatoryParts.Contains(part) ? string.Empty : keys[Mathf.Clamp(rand, 0, keys.Count - 1)];
+                result.Add((id, part));
             }
             return result;
         }
-        public bool IsValid( eCharacterPart part, string id )
+        public bool IsValid(eCharacterPart part, string id)
         {
-            if ( Data.ContainsKey( part ) )
+            if (Data.ContainsKey(part))
             {
-                return Data[ part ].TextureDict.ContainsKey( id );
+                return Data[part].TextureDict.ContainsKey(id);
             }
             return false;
         }
@@ -110,14 +108,14 @@ namespace CharacterStudio
                 DataManager.Instance.SaveData.DataFolderPath,
                 "SortedDataList.json"
             );
-            if ( !string.IsNullOrEmpty( json ) )
+            if (!string.IsNullOrEmpty(json))
             {
                 var data = new SortedDataList();
-                if ( data.FromJsonPath( json ) )
+                if (data.FromJsonPath(json))
                 {
-                    foreach ( var item in data.SortedData )
+                    foreach (var item in data.SortedData)
                     {
-                        SortedData.TryAdd( item.Part, item.Order );
+                        SortedData.TryAdd(item.Part, item.Order);
                     }
                 }
             }
@@ -129,14 +127,14 @@ namespace CharacterStudio
                 DataManager.Instance.SaveData.DataFolderPath,
                 "DefaultPartDataList.json"
             );
-            if ( !string.IsNullOrEmpty( json ) )
+            if (!string.IsNullOrEmpty(json))
             {
                 var data = new DefaultPartDataList();
-                if ( data.FromJsonPath( json ) )
+                if (data.FromJsonPath(json))
                 {
-                    foreach ( var item in data.DefaultParts )
+                    foreach (var item in data.DefaultParts)
                     {
-                        DefaultParts.Add( item.Part, item.DefaultPart );
+                        DefaultParts.Add(item.Part, item.DefaultPart);
                     }
                 }
             }
@@ -163,7 +161,7 @@ namespace CharacterStudio
                 {
                     if (instructionFilePath.EndsWith(".csi"))
                     {
-                        CSIFileData texData = CSIFile.LoadCsiFile( instructionFilePath );
+                        CSIFileData texData = CSIFile.LoadCsiFile(instructionFilePath);
                         texData.Texture.filterMode = FilterMode.Point;
                         Instruction.TryAdd(part, texData);
                     }
@@ -190,7 +188,7 @@ namespace CharacterStudio
                         if (file.EndsWith(".csi"))
                         {
                             string id = Path.GetFileNameWithoutExtension(file);
-                            CSIFileData texData = CSIFile.LoadCsiFile( file );
+                            CSIFileData texData = CSIFile.LoadCsiFile(file);
                             texData.Texture.filterMode = FilterMode.Point;
                             characterData.TextureDict.TryAdd(id, texData);
                         }
@@ -212,7 +210,7 @@ namespace CharacterStudio
                 {
                     if (categoryFilePath.EndsWith(".csi"))
                     {
-                        CSIFileData texData = CSIFile.LoadCsiFile( categoryFilePath );
+                        CSIFileData texData = CSIFile.LoadCsiFile(categoryFilePath);
                         texData.Texture.filterMode = FilterMode.Point;
 
                         categoryData.Icon = texData.Texture;

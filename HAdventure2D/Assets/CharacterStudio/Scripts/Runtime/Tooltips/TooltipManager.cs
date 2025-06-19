@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CharacterStudio
@@ -18,7 +16,8 @@ namespace CharacterStudio
                 }
                 return _mainCanvas;
             }
-        } private Canvas _mainCanvas;
+        }
+        private Canvas _mainCanvas;
         private Vector2 mouseScreenPosition
         {
             get

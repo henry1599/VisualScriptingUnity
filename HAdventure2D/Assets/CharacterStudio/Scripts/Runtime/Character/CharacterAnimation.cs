@@ -1,6 +1,5 @@
 using AYellowpaper.SerializedCollections;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,7 +12,7 @@ using UnityEngine.U2D.Animation;
 
 namespace CharacterStudio
 {
-    
+
     public class CharacterAnimation : MonoSingleton<CharacterAnimation>
     {
         [SerializeField] Transform _spriteContainer;
@@ -28,7 +27,8 @@ namespace CharacterStudio
                 _frameIndex = value;
                 EventBus.Instance.Publish(new FrameIndexUpdateArg(_frameIndex));
             }
-        } private int _frameIndex = 0;
+        }
+        private int _frameIndex = 0;
         private float _counter = 0;
         private float _animationInterval = 0.15f;
         private bool _isSetup = false;
@@ -43,7 +43,8 @@ namespace CharacterStudio
                 }
                 return _longestTextureCount;
             }
-        } private int _longestTextureCount = 0;
+        }
+        private int _longestTextureCount = 0;
 
         [SerializeField] private SerializedDictionary<eCharacterPart, string> _characterSelection = new SerializedDictionary<eCharacterPart, string>();
         public SerializedDictionary<eCharacterPart, string> CharacterSelection => _characterSelection;
@@ -93,7 +94,7 @@ namespace CharacterStudio
                 _currentAnimationTexturesMap.TryAdd(newAnimation, new Dictionary<eCharacterPart, List<Texture2D>>());
                 _currentAnimationTexturesMap[newAnimation].TryAdd(part, data.Textures);
             }
-            _currentAnimationTextures = new ();
+            _currentAnimationTextures = new();
             UpdateInterval();
             _counter = _animationInterval;
             _isSetup = true;
@@ -179,55 +180,55 @@ namespace CharacterStudio
             _exportSeparatedSpritesSubscription = EventBus.Instance.Subscribe<SeparatedSpritesExportArg>(OnExportSeparatedSprites);
             _exportSpriteLibrarySubscription = EventBus.Instance.Subscribe<SpriteLibraryExportArg>(OnExportSpriteLibrary);
             _exportSpriteSheetSubscription = EventBus.Instance.Subscribe<SpritesheetExportArg>(OnExportSpriteSheet);
-            _changepartRandomlySubscription = EventBus.Instance.Subscribe<ChangePartRandomlyArg>( OnChangePartRandomly );
-            _resetPartSubscription = EventBus.Instance.Subscribe<ResetPartArg>( OnResetPart );
+            _changepartRandomlySubscription = EventBus.Instance.Subscribe<ChangePartRandomlyArg>(OnChangePartRandomly);
+            _resetPartSubscription = EventBus.Instance.Subscribe<ResetPartArg>(OnResetPart);
 
-            SetAnimation(_currentAnimation);   
+            SetAnimation(_currentAnimation);
             SelectDefault();
             ApplySelection();
         }
 
-        private void OnResetPart( ResetPartArg arg )
+        private void OnResetPart(ResetPartArg arg)
         {
-            foreach (var (part, id) in DataManager.Instance.CharacterDatabase.DefaultParts )
+            foreach (var (part, id) in DataManager.Instance.CharacterDatabase.DefaultParts)
             {
-                if ( CharacterStudioMain.Instance.GetLockParts().Contains( part ) )
+                if (CharacterStudioMain.Instance.GetLockParts().Contains(part))
                 {
                     continue;
                 }
-                if ( CharacterStudioMain.Instance.EmptyPartsAsStart.Contains( part ) )
+                if (CharacterStudioMain.Instance.EmptyPartsAsStart.Contains(part))
                 {
-                    Select( part, string.Empty );
+                    Select(part, string.Empty);
                     continue;
                 }
-                Select( part, id );
+                Select(part, id);
             }
             ApplySelection();
         }
 
-        private void OnChangePartRandomly( ChangePartRandomlyArg arg )
+        private void OnChangePartRandomly(ChangePartRandomlyArg arg)
         {
             List<(string id, eCharacterPart part)> randomParts = DataManager.Instance.CharacterDatabase.GetRandomAll();
             List<eCharacterPart> lockParts = CharacterStudioMain.Instance.GetLockParts();
-            foreach ( var (id, part) in randomParts )
+            foreach (var (id, part) in randomParts)
             {
-                if ( lockParts.Contains( part ) )
+                if (lockParts.Contains(part))
                 {
                     continue;
                 }
-                Select( part, id );
+                Select(part, id);
             }
             ApplySelection();
         }
-        private void OnExportSeparatedSprites( SeparatedSpritesExportArg arg )
+        private void OnExportSeparatedSprites(SeparatedSpritesExportArg arg)
         {
             _ = ExportSeparatedSprites(arg);
         }
-        private void OnExportSpriteLibrary( SpriteLibraryExportArg arg )
+        private void OnExportSpriteLibrary(SpriteLibraryExportArg arg)
         {
             _ = ExportSpriteLibrary(arg);
         }
-        private void OnExportSpriteSheet( SpritesheetExportArg arg )
+        private void OnExportSpriteSheet(SpritesheetExportArg arg)
         {
             SpriteSheetResult result = ExportSpriteSheet(arg);
             if (arg.AutoSlice)
@@ -292,7 +293,7 @@ namespace CharacterStudio
                 if (createdAsset != null)
                 {
                     EditorGUIUtility.PingObject(createdAsset);
-                    Selection.activeObject = createdAsset; 
+                    Selection.activeObject = createdAsset;
                 }
             }
             else
@@ -302,17 +303,17 @@ namespace CharacterStudio
 #endif
             return result;
         }
-        private void FormatSprite( string path )
+        private void FormatSprite(string path)
         {
             // path is full path, just get the part from Assets/
-            if ( string.IsNullOrEmpty( path ) || !path.Contains( "Assets" ) )
+            if (string.IsNullOrEmpty(path) || !path.Contains("Assets"))
                 return;
-            string assetPath = path.Substring( path.IndexOf( "Assets" ) );
+            string assetPath = path.Substring(path.IndexOf("Assets"));
 
 #if UNITY_EDITOR
             // Load the texture at the specified path
-            TextureImporter textureImporter = AssetImporter.GetAtPath( assetPath ) as TextureImporter;
-            if ( textureImporter != null )
+            TextureImporter textureImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (textureImporter != null)
             {
                 // Apply texture import settings
                 textureImporter.spritePixelsPerUnit = 48;
@@ -331,14 +332,14 @@ namespace CharacterStudio
         private void FormatSpritesheet(string path)
         {
             // path is full path, just get the part from Assets/
-            if ( string.IsNullOrEmpty( path ) || !path.Contains( "Assets" ) )
+            if (string.IsNullOrEmpty(path) || !path.Contains("Assets"))
                 return;
-            string assetPath = path.Substring( path.IndexOf( "Assets" ) );
+            string assetPath = path.Substring(path.IndexOf("Assets"));
 
 #if UNITY_EDITOR
             // Load the texture at the specified path
-            TextureImporter textureImporter = AssetImporter.GetAtPath( assetPath ) as TextureImporter;
-            if ( textureImporter != null )
+            TextureImporter textureImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (textureImporter != null)
             {
                 // Apply texture import settings
                 textureImporter.spritePixelsPerUnit = 48;
@@ -437,7 +438,7 @@ namespace CharacterStudio
                     sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
                     Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
                     float percentage = (float)this.size / (float)assembledTexture.width;
-                    assembledTexture = CropTexture( assembledTexture, percentage);
+                    assembledTexture = CropTexture(assembledTexture, percentage);
                     string path = arg.FolderPath + "/" + animation.ToString();
                     if (!System.IO.Directory.Exists(path))
                     {
@@ -451,14 +452,14 @@ namespace CharacterStudio
                     CSUtils.SaveTexture(assembledTexture, path, fileName);
 #if UNITY_EDITOR
                     AssetDatabase.Refresh();
-                    FormatSprite( fullPath );
+                    FormatSprite(fullPath);
 #endif
                 }
             }
             return result;
         }
 
-        private SpriteSheetResult ExportSpriteSheet( SpritesheetExportArg arg )
+        private SpriteSheetResult ExportSpriteSheet(SpritesheetExportArg arg)
         {
             SpriteSheetResult result = new SpriteSheetResult();
             Dictionary<eCharacterPart, Texture2D> sBaseTexture = new Dictionary<eCharacterPart, Texture2D>();
@@ -467,79 +468,79 @@ namespace CharacterStudio
             Dictionary<eCharacterPart, Dictionary<Color32, Color32>> map = new Dictionary<eCharacterPart, Dictionary<Color32, Color32>>();
 
             // Load mapped colors for each part
-            foreach ( var (part, data) in DataManager.Instance.CharacterDatabase.Data )
+            foreach (var (part, data) in DataManager.Instance.CharacterDatabase.Data)
             {
-                if ( !_characterSelection.ContainsKey( part ) )
+                if (!_characterSelection.ContainsKey(part))
                 {
                     continue;
                 }
-                if ( !data.TextureDict.ContainsKey( _characterSelection[ part ] ) )
+                if (!data.TextureDict.ContainsKey(_characterSelection[part]))
                 {
                     continue;
                 }
-                Texture2D baseTexture = data.TextureDict[ _characterSelection[ part ] ].Texture;
-                sBaseTexture.TryAdd( part, baseTexture );
-                map.TryAdd( part, CSUtils.LoadMappedColors( DataManager.Instance.MapDatabase.Data[ part ], baseTexture ) );
+                Texture2D baseTexture = data.TextureDict[_characterSelection[part]].Texture;
+                sBaseTexture.TryAdd(part, baseTexture);
+                map.TryAdd(part, CSUtils.LoadMappedColors(DataManager.Instance.MapDatabase.Data[part], baseTexture));
             }
 
             // Calculate the dimensions of the sprite sheet
-            int maxFrameCount = allAnimations.Max( animation => DataManager.Instance.AnimationDatabase.Data[ animation ].AnimationsByPart.First().Value.Textures.Count );
-            int maxCellWidth = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( dataTex => dataTex.Texture.width ) );
-            int maxCellHeight = DataManager.Instance.CharacterDatabase.Data.Values.Max( data => data.TextureDict.Values.Max( dataTex => dataTex.Texture.height ) );
+            int maxFrameCount = allAnimations.Max(animation => DataManager.Instance.AnimationDatabase.Data[animation].AnimationsByPart.First().Value.Textures.Count);
+            int maxCellWidth = DataManager.Instance.CharacterDatabase.Data.Values.Max(data => data.TextureDict.Values.Max(dataTex => dataTex.Texture.width));
+            int maxCellHeight = DataManager.Instance.CharacterDatabase.Data.Values.Max(data => data.TextureDict.Values.Max(dataTex => dataTex.Texture.height));
             maxCellWidth = maxCellWidth * this.size / maxCellWidth;
             maxCellHeight = maxCellHeight * this.size / maxCellHeight;
             int sheetWidth = maxCellWidth * maxFrameCount;
             int sheetHeight = maxCellHeight * allAnimations.Count;
-            List<(eCharacterAnimation anim, int animFrameCount)> frameData = new ();
+            List<(eCharacterAnimation anim, int animFrameCount)> frameData = new();
 
-            Texture2D spriteSheet = new Texture2D( sheetWidth, sheetHeight, TextureFormat.RGBA32, false ) { filterMode = FilterMode.Point };
+            Texture2D spriteSheet = new Texture2D(sheetWidth, sheetHeight, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point };
             var colors = spriteSheet.GetPixels32();
-            for ( int i = 0; i < colors.Length; i++ )
+            for (int i = 0; i < colors.Length; i++)
             {
-                colors[ i ] = new Color32( 0, 0, 0, 0 );
+                colors[i] = new Color32(0, 0, 0, 0);
             }
-            spriteSheet.SetPixels32( colors );
+            spriteSheet.SetPixels32(colors);
 
             // Generate textures for each animation and assemble them into the sprite sheet
-            for ( int animIndex = 0; animIndex < allAnimations.Count; animIndex++ )
+            for (int animIndex = 0; animIndex < allAnimations.Count; animIndex++)
             {
-                var animation = allAnimations[ animIndex ];
-                if ( !DataManager.Instance.AnimationDatabase.Data.TryGetValue( animation, out AnimationData animationData ) )
+                var animation = allAnimations[animIndex];
+                if (!DataManager.Instance.AnimationDatabase.Data.TryGetValue(animation, out AnimationData animationData))
                 {
                     return result;
                 }
                 int frameCount = animationData.AnimationsByPart.First().Value.Textures.Count;
-                frameData.Add( (animation, frameCount) );
-                for ( int frameIndex = 0; frameIndex < frameCount; frameIndex++ )
+                frameData.Add((animation, frameCount));
+                for (int frameIndex = 0; frameIndex < frameCount; frameIndex++)
                 {
                     List<(int sortingLayer, Texture2D texture)> sortedPart = new List<(int sortingLayer, Texture2D texture)>();
-                    foreach ( var (part, data) in animationData.AnimationsByPart )
+                    foreach (var (part, data) in animationData.AnimationsByPart)
                     {
-                        if ( !map.TryGetValue( part, out Dictionary<Color32, Color32> partMap ) )
+                        if (!map.TryGetValue(part, out Dictionary<Color32, Color32> partMap))
                         {
                             // return result;
                             continue;
                         }
-                        if ( frameIndex >= data.Textures.Count || frameIndex < 0 )
+                        if (frameIndex >= data.Textures.Count || frameIndex < 0)
                         {
                             continue;
                         }
-                        Texture2D generatedTexture = CSUtils.GenerateTexture( data.Textures[ frameIndex ], partMap );
-                        sortedPart.Add( (DataManager.Instance.CharacterDatabase.SortedData[ part ], generatedTexture) );
+                        Texture2D generatedTexture = CSUtils.GenerateTexture(data.Textures[frameIndex], partMap);
+                        sortedPart.Add((DataManager.Instance.CharacterDatabase.SortedData[part], generatedTexture));
                     }
-                    sortedPart = sortedPart.OrderBy( x => x.sortingLayer ).Reverse().ToList();
-                    Texture2D assembledTexture = AssembleTextures( sortedPart.Select( x => x.texture ).ToList() );
+                    sortedPart = sortedPart.OrderBy(x => x.sortingLayer).Reverse().ToList();
+                    Texture2D assembledTexture = AssembleTextures(sortedPart.Select(x => x.texture).ToList());
                     float percentage = (float)this.size / (float)assembledTexture.width;
-                    assembledTexture = CropTexture( assembledTexture, percentage );
+                    assembledTexture = CropTexture(assembledTexture, percentage);
 
                     // Copy the assembled texture to the sprite sheet
                     int xOffset = frameIndex * maxCellWidth;
                     int yOffset = animIndex * maxCellHeight;
-                    for ( int x = 0; x < assembledTexture.width; x++ )
+                    for (int x = 0; x < assembledTexture.width; x++)
                     {
-                        for ( int y = 0; y < assembledTexture.height; y++ )
+                        for (int y = 0; y < assembledTexture.height; y++)
                         {
-                            spriteSheet.SetPixel( x + xOffset, y + yOffset, assembledTexture.GetPixel( x, y ) );
+                            spriteSheet.SetPixel(x + xOffset, y + yOffset, assembledTexture.GetPixel(x, y));
                         }
                     }
                 }
@@ -549,15 +550,15 @@ namespace CharacterStudio
             // Save the sprite sheet to a file
             string path = arg.FolderPath;
             string fileName = $"{arg.Name}_SpriteSheet";
-            Debug.Log( "Exporting: " + path );
-            CSUtils.SaveTexture( spriteSheet, path, fileName );
+            Debug.Log("Exporting: " + path);
+            CSUtils.SaveTexture(spriteSheet, path, fileName);
             try
             {
 #if UNITY_EDITOR
                 AssetDatabase.Refresh();
                 string fullPath = path + "/" + fileName + ".png";
-                FormatSpritesheet( fullPath );
-                result.SpriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>( fullPath.Substring( fullPath.IndexOf( "Assets" ) ) );
+                FormatSpritesheet(fullPath);
+                result.SpriteSheet = AssetDatabase.LoadAssetAtPath<Texture2D>(fullPath.Substring(fullPath.IndexOf("Assets")));
                 result.FrameCount = frameData;
                 result.OutputPath = fullPath;
                 return result;
@@ -568,34 +569,34 @@ namespace CharacterStudio
                 return result;
 #endif
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 // Debug.LogError( e );
                 return result;
             }
         }
-        private Texture2D CropTexture( Texture2D texture, float percentage )
+        private Texture2D CropTexture(Texture2D texture, float percentage)
         {
-            if ( texture == null || percentage <= 0 || percentage > 1 )
+            if (texture == null || percentage <= 0 || percentage > 1)
             {
-                throw new ArgumentException( "Invalid texture or percentage" );
+                throw new ArgumentException("Invalid texture or percentage");
             }
-            if ( percentage == 1 )
+            if (percentage == 1)
             {
                 return texture;
             }
 
-            int newWidth = Mathf.RoundToInt( texture.width * percentage );
-            int newHeight = Mathf.RoundToInt( texture.height * percentage );
+            int newWidth = Mathf.RoundToInt(texture.width * percentage);
+            int newHeight = Mathf.RoundToInt(texture.height * percentage);
 
-            Texture2D croppedTexture = new Texture2D( newWidth, newHeight, texture.format, false )
+            Texture2D croppedTexture = new Texture2D(newWidth, newHeight, texture.format, false)
             {
                 filterMode = texture.filterMode,
                 wrapMode = texture.wrapMode
             };
 
-            Color[] pixels = texture.GetPixels( (texture.width - newWidth) / 2, (texture.height - newHeight) / 2, newWidth, newHeight );
-            croppedTexture.SetPixels( pixels );
+            Color[] pixels = texture.GetPixels((texture.width - newWidth) / 2, (texture.height - newHeight) / 2, newWidth, newHeight);
+            croppedTexture.SetPixels(pixels);
             croppedTexture.Apply();
 
             return croppedTexture;
@@ -609,9 +610,9 @@ namespace CharacterStudio
                 width = Mathf.Max(width, texture.width);
                 height = Mathf.Max(height, texture.height);
             }
-            Texture2D result = new Texture2D( width, height, TextureFormat.RGBA32, false );
+            Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false);
 
-            for (int x = 0 ; x < width; x++)
+            for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
@@ -642,19 +643,19 @@ namespace CharacterStudio
             EventBus.Instance.Unsubscribe(_exportSeparatedSpritesSubscription);
             EventBus.Instance.Unsubscribe(_exportSpriteLibrarySubscription);
             EventBus.Instance.Unsubscribe(_exportSpriteSheetSubscription);
-            EventBus.Instance.Unsubscribe( _changepartRandomlySubscription );
-            EventBus.Instance.Unsubscribe( _resetPartSubscription );
+            EventBus.Instance.Unsubscribe(_changepartRandomlySubscription);
+            EventBus.Instance.Unsubscribe(_resetPartSubscription);
         }
         public void Select(eCharacterPart part, string id)
         {
-            if (string.IsNullOrEmpty( id ) )
+            if (string.IsNullOrEmpty(id))
             {
-                _characterSelection.Remove( part );
-                ClearTexture( part );
-                EventBus.Instance.Publish( new PartChangedArg( part, string.Empty ) );
+                _characterSelection.Remove(part);
+                ClearTexture(part);
+                EventBus.Instance.Publish(new PartChangedArg(part, string.Empty));
                 return;
             }
-            if ( !DataManager.Instance.CharacterDatabase.IsValid( part, id ) )
+            if (!DataManager.Instance.CharacterDatabase.IsValid(part, id))
             {
                 return;
             }
@@ -675,9 +676,9 @@ namespace CharacterStudio
                 UpdateTexture(part, id);
             }
             UpdateVisual();
-            foreach ( var (part, id) in _characterSelection )
+            foreach (var (part, id) in _characterSelection)
             {
-                EventBus.Instance.Publish( new PartChangedArg( part, id ) );
+                EventBus.Instance.Publish(new PartChangedArg(part, id));
             }
         }
         private void OnChangeAnimation(ChangeAnimationArg arg)

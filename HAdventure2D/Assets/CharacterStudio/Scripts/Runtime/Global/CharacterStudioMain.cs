@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using System.Linq;
-using NaughtyAttributes;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace CharacterStudio
@@ -37,13 +36,13 @@ namespace CharacterStudio
         [SerializeField] private Button _rightPanelBackButton;
         [SerializeField] private Button _addNewPartButton;
         [SerializeField] private TMP_Text _chosenItemPathText;
-        [ReadOnly, SerializeField] List<eCharacterPart> _actualCategories = new List<eCharacterPart>();
+        [SerializeField] List<eCharacterPart> _actualCategories = new List<eCharacterPart>();
         private eStudioState _studioState;
         private eCharacterPart _selectedCategory;
         private List<UIItem> _partItems = new List<UIItem>();
         private EventSubscription<ItemClickArg> _itemClickSubscription;
         private EventSubscription<ItemRemoveArg> _itemRemoveSubscription;
-        public bool IsSetup {get; private set;}
+        public bool IsSetup { get; private set; }
         public List<eCharacterPart> EmptyPartsAsStart => _emptyPartsAsStart;
         public eCharacterPart SelectedCategory => _selectedCategory;
         public Texture CharacterTexture => _characterRawImage.texture;
@@ -87,7 +86,7 @@ namespace CharacterStudio
             _canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
             _canvasGroup.interactable = false;
-            EventBus.Instance.Unsubscribe( _itemClickSubscription );
+            EventBus.Instance.Unsubscribe(_itemClickSubscription);
             EventBus.Instance.Unsubscribe(_itemRemoveSubscription);
             _addNewPartButton.onClick.RemoveAllListeners();
             _rightPanelBackButton.onClick.RemoveAllListeners();
@@ -202,9 +201,9 @@ namespace CharacterStudio
             bool selected = false;
             if (CharacterAnimation.Instance != null)
             {
-                selected = _emptyPartsAsStart.Contains(category) && !CharacterAnimation.Instance.CharacterSelection.ContainsKey( category );
+                selected = _emptyPartsAsStart.Contains(category) && !CharacterAnimation.Instance.CharacterSelection.ContainsKey(category);
             }
-            uiRemoveItem.SetupId(null, category, string.Empty, selected );
+            uiRemoveItem.SetupId(null, category, string.Empty, selected);
 
             // * Create items
             foreach (var item in DataManager.Instance.CharacterDatabase.Data[category].TextureDict)
@@ -213,13 +212,13 @@ namespace CharacterStudio
                 selected = false;
                 if (CharacterAnimation.Instance != null)
                 {
-                    selected = CharacterAnimation.Instance.CharacterSelection.ContainsKey( category ) && CharacterAnimation.Instance.CharacterSelection[ category ] == item.Key;
+                    selected = CharacterAnimation.Instance.CharacterSelection.ContainsKey(category) && CharacterAnimation.Instance.CharacterSelection[category] == item.Key;
                 }
                 if (_emptyPartsAsStart.Contains(category) && item.Key == string.Empty)
                 {
                     selected = false;
                 }
-                uiItem.SetupId(item.Value, category, item.Key, selected );
+                uiItem.SetupId(item.Value, category, item.Key, selected);
             }
         }
     }

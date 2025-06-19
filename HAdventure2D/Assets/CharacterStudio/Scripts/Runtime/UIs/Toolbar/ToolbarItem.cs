@@ -1,5 +1,3 @@
-using NaughtyAttributes;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,9 +10,9 @@ namespace CharacterStudio
         public bool HasContextMenu;
         public string Text;
         [SerializeField] protected Transform _itemContainer;
-        [ShowIf(nameof(HasContextMenu)), SerializeField] protected GameObject _item;
-        [ShowIf(nameof(HasContextMenu))] public List<ToolbarContextMenuItem> ContextMenuList;
-        [HideIf(nameof(HasContextMenu))] public UnityEvent OnClick;
+        [SerializeField] protected GameObject _item;
+        public List<ToolbarContextMenuItem> ContextMenuList;
+        public UnityEvent OnClick;
         private bool _isShowing = false;
         public void ShowContextMenu()
         {
@@ -36,7 +34,7 @@ namespace CharacterStudio
             float width = 0;
             foreach (var item in ContextMenuList)
             {
-                if (item.EditorExclusive )
+                if (item.EditorExclusive)
                 {
                     item.Text += $" ({item.EditorExclusiveMessage})";
                     item.Tooltip.Description += $"\n~ {item.EditorExclusiveMessageTooltip} ~";

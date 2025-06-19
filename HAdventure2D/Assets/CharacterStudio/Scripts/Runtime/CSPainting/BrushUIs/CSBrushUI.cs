@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +37,7 @@ namespace CharacterStudio
             var shortcutable = gameObject.SafeAddComponent<Shortcutable>();
             shortcutable.Data = brush.Shortcut;
             shortcutable.Data.Callback.AddListener(SelectBrush);
-            
+
 
             _icon.sprite = brushIcon;
             _background.color = _unselectedColor;

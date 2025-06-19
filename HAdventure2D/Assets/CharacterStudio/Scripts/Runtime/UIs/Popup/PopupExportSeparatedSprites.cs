@@ -1,10 +1,7 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
-using NaughtyAttributes;
 using System.IO;
 
 namespace CharacterStudio
@@ -13,7 +10,7 @@ namespace CharacterStudio
     {
         [SerializeField] Button _explorerButton;
         [SerializeField] Button _exportButton;
-        [ShowNativeProperty] override public ePopupType PopupType => ePopupType.ExportSeparatedSprites;
+        override public ePopupType PopupType => ePopupType.ExportSeparatedSprites;
         public override void Show()
         {
             base.Show();

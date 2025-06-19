@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
-using UnityEngine;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.ShortcutManagement;
-using System.Linq;
+using UnityEngine;
 
 [InitializeOnLoad]
 public class SwitchShortcutsProfileOnPlay

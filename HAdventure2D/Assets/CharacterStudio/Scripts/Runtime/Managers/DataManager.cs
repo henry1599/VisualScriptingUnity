@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -25,7 +24,7 @@ namespace CharacterStudio
         }
         public void Save()
         {
-            if ( SaveData == null )
+            if (SaveData == null)
             {
                 SaveData = new UserSaveData();
             }
@@ -45,22 +44,22 @@ namespace CharacterStudio
             return null;
 #endif
         }
-        public void AddCustomPart( eCharacterPart part, string path )
+        public void AddCustomPart(eCharacterPart part, string path)
         {
-            if ( SaveData == null )
+            if (SaveData == null)
             {
                 Load();
             }
-            if ( SaveData.CustomParts.DataDict.TryGetValue( part, out UserResourceData val ) )
+            if (SaveData.CustomParts.DataDict.TryGetValue(part, out UserResourceData val))
             {
-                if ( !val.Paths.Contains( path ) )
+                if (!val.Paths.Contains(path))
                 {
-                    val.Paths.Add( path );
+                    val.Paths.Add(path);
                 }
             }
             else
             {
-                SaveData.CustomParts.DataDict[ part ] = new UserResourceData
+                SaveData.CustomParts.DataDict[part] = new UserResourceData
                 {
                     Paths = new List<string> { path }
                 };
@@ -68,20 +67,20 @@ namespace CharacterStudio
         }
         public void RemoveCustomPart(eCharacterPart part, string path)
         {
-            if ( SaveData == null )
+            if (SaveData == null)
             {
                 Load();
             }
-            if ( SaveData.CustomParts.DataDict.TryGetValue( part, out UserResourceData val ) )
+            if (SaveData.CustomParts.DataDict.TryGetValue(part, out UserResourceData val))
             {
-                val.Paths.Remove( path );
+                val.Paths.Remove(path);
             }
         }
         public void ValidateData()
         {
-            foreach ( var part in SaveData.CustomParts.DataDict.Keys )
+            foreach (var part in SaveData.CustomParts.DataDict.Keys)
             {
-                SaveData.CustomParts.DataDict[ part ].Paths.RemoveAll( x => !File.Exists( x ) );
+                SaveData.CustomParts.DataDict[part].Paths.RemoveAll(x => !File.Exists(x));
             }
         }
         public void InitConfigs()

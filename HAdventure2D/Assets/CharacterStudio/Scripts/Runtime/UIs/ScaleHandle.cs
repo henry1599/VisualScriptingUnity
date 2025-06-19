@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -26,7 +23,7 @@ namespace CharacterStudio
         [SerializeField] eDirection direction;
         [Tooltip("Indicate which direction makes the panel expand")]
         [SerializeField] eScaleDirection expandDirection;
-        [MinMaxSlider(50, 1920), SerializeField] Vector2 sizeRange;
+        [SerializeField] Vector2 sizeRange;
         [SerializeField] Texture2D scaleCursor;
 
         private bool isDragging = false;

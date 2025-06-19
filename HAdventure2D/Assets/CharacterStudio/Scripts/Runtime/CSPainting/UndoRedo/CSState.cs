@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CharacterStudio
@@ -29,7 +27,7 @@ namespace CharacterStudio
             return base.GetHashCode();
         }
     }
-    public class RegisterStateArg: EventArgs
+    public class RegisterStateArg : EventArgs
     {
         public CSState State;
         public RegisterStateArg(CSState state)

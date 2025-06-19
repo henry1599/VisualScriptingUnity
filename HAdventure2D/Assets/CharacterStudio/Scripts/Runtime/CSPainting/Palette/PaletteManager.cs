@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,19 +18,19 @@ namespace CharacterStudio
         {
             InitPalette();
 
-            _addButton.onClick.AddListener( OnAddButtonClick );
-            _resetToDefaultButton.onClick.AddListener( OnResetToDefaultButtonClick );
-            _clearPaletteButton.onClick.AddListener( OnClearPaletteButtonClick );
-            _removeColorSubscription = EventBus.Instance.Subscribe<OnRemoveColorArgs>( OnRemoveColor );
+            _addButton.onClick.AddListener(OnAddButtonClick);
+            _resetToDefaultButton.onClick.AddListener(OnResetToDefaultButtonClick);
+            _clearPaletteButton.onClick.AddListener(OnClearPaletteButtonClick);
+            _removeColorSubscription = EventBus.Instance.Subscribe<OnRemoveColorArgs>(OnRemoveColor);
         }
 
         private void OnClearPaletteButtonClick()
         {
             _paletteButtons = new List<PaletteButton>();
             int childCount = _paletteContainer.childCount;
-            for (int i = childCount - 1; i >= 0; i-- )
+            for (int i = childCount - 1; i >= 0; i--)
             {
-                Destroy( _paletteContainer.GetChild( i ).gameObject );
+                Destroy(_paletteContainer.GetChild(i).gameObject);
             }
         }
 
@@ -44,24 +42,24 @@ namespace CharacterStudio
         private void OnAddButtonClick()
         {
             Color currentColor = CSPaintingManager.Instance.CuurentColor;
-            if ( _paletteButtons.Exists( x => x.Color == currentColor ) )
+            if (_paletteButtons.Exists(x => x.Color == currentColor))
             {
                 return;
             }
-            var button = Instantiate( _paletteButtonPrefab, _paletteContainer );
-            button.Setup( currentColor );
-            _paletteButtons.Add( button );
+            var button = Instantiate(_paletteButtonPrefab, _paletteContainer);
+            button.Setup(currentColor);
+            _paletteButtons.Add(button);
         }
 
-        private void OnRemoveColor( OnRemoveColorArgs args )
+        private void OnRemoveColor(OnRemoveColorArgs args)
         {
-            _paletteButtons.Remove( args.Btn );
-            Destroy( args.Btn.gameObject );
+            _paletteButtons.Remove(args.Btn);
+            Destroy(args.Btn.gameObject);
         }
 
         private void OnDestroy()
         {
-            EventBus.Instance.Unsubscribe( _removeColorSubscription );
+            EventBus.Instance.Unsubscribe(_removeColorSubscription);
             _addButton.onClick.RemoveAllListeners();
             _resetToDefaultButton.onClick.RemoveAllListeners();
             _clearPaletteButton.onClick.RemoveAllListeners();
@@ -70,15 +68,15 @@ namespace CharacterStudio
         {
             _paletteButtons = new List<PaletteButton>();
             int childCount = _paletteContainer.childCount;
-            for (int i = childCount - 1; i >= 0; i-- )
+            for (int i = childCount - 1; i >= 0; i--)
             {
-                Destroy( _paletteContainer.GetChild( i ).gameObject );
+                Destroy(_paletteContainer.GetChild(i).gameObject);
             }
-            foreach ( var color in CSPaintingManager.Instance.Setting.DefaultPalette )
+            foreach (var color in CSPaintingManager.Instance.Setting.DefaultPalette)
             {
-                var button = Instantiate( _paletteButtonPrefab, _paletteContainer );
-                button.Setup( color );
-                _paletteButtons.Add( button );
+                var button = Instantiate(_paletteButtonPrefab, _paletteContainer);
+                button.Setup(color);
+                _paletteButtons.Add(button);
             }
         }
     }

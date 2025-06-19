@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using TMPro;
@@ -41,9 +38,9 @@ namespace CharacterStudio
                 _nameInputField.text + ".csi"
             );
             Texture2D texture = CSPaintingManager.Instance.GetPaintingTexture();
-            CSIFile.SaveAsCsiFile( texture, path );
+            CSIFile.SaveAsCsiFile(texture, path);
             DataManager.Instance.InitConfigs();
-            EventBus.Instance.Publish( new HidePopupArg( PopupType ) );
+            EventBus.Instance.Publish(new HidePopupArg(PopupType));
         }
     }
 }

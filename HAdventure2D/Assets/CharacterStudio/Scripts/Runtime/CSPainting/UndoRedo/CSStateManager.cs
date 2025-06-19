@@ -1,8 +1,7 @@
+using BatteryAcid.Serializables;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BatteryAcid.Serializables;
 
 namespace CharacterStudio
 {

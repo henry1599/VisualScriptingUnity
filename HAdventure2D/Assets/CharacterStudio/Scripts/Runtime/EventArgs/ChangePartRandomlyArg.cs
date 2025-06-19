@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace CharacterStudio
 {
@@ -11,6 +8,6 @@ namespace CharacterStudio
     }
     public class ResetPartArg : EventArgs
     {
-        
+
     }
 }

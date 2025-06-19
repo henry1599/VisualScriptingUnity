@@ -1,6 +1,5 @@
 using AYellowpaper.SerializedCollections;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 #if UNITY_EDITOR
@@ -56,7 +55,7 @@ namespace CharacterStudio
             var savePath = DataManager.Instance.DataConfig.GetSaveLoadFolderPath();
             var selection = ProgressSaveData.ToProgress(CharacterAnimation.Instance.CharacterSelection);
             Texture2D icon = CharacterAnimation.Instance.GenerateIcon();
-            icon.filterMode = FilterMode.Point; 
+            icon.filterMode = FilterMode.Point;
             string json = JsonUtility.ToJson(selection);
             if (string.IsNullOrEmpty(savePath))
             {

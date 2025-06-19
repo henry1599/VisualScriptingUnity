@@ -1,14 +1,10 @@
-using AYellowpaper.SerializedCollections;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using NaughtyAttributes;
 
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 namespace CharacterStudio
@@ -24,7 +20,7 @@ namespace CharacterStudio
         public float BaseAnimationSpeed = 0.1f;
         public Dictionary<eCharacterAnimation, AnimationData> Data;
         private int index = 0;
-        private void Awake() 
+        private void Awake()
         {
             index = 0;
         }
@@ -90,9 +86,9 @@ namespace CharacterStudio
                         {
                             if (file.EndsWith(".csi"))
                             {
-                                CSIFileData texData = CSIFile.LoadCsiFile( file );
+                                CSIFileData texData = CSIFile.LoadCsiFile(file);
                                 texData.Texture.filterMode = FilterMode.Point;
-                                data.AnimationsByPart[part].Textures.Add( texData.Texture );
+                                data.AnimationsByPart[part].Textures.Add(texData.Texture);
                             }
                         }
                         if (Data.ContainsKey(anim))

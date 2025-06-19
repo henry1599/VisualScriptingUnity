@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using System.Linq;
-using System;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace CharacterStudio
@@ -121,9 +119,9 @@ namespace CharacterStudio
 
             int frameCount = DataManager.Instance.AnimationDatabase.GetAnimationFrameCount(arg.AnimationType);
             // * Minus to left and right of _sliderRect
-            
 
-            float totalWidth = _sliderParentRect.rect.width - Mathf.Abs(_sliderRect.offsetMax.x) - Mathf.Abs(_sliderRect.offsetMin.x) - 10.5f; 
+
+            float totalWidth = _sliderParentRect.rect.width - Mathf.Abs(_sliderRect.offsetMax.x) - Mathf.Abs(_sliderRect.offsetMin.x) - 10.5f;
             float fragmentWidth = totalWidth / (frameCount - 1);
             for (int i = 0; i < frameCount - 2; i++)
             {

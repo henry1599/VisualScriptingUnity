@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CharacterStudio
@@ -38,7 +37,7 @@ namespace CharacterStudio
             _previousPixelPosition = null;
             RegisterState();
         }
-        
+
         public override void DrawPreview(Vector2 normalizedPixelPosition, Color color)
         {
         }

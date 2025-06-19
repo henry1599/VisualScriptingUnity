@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,12 +18,12 @@ namespace CharacterStudio
 
 
         [Header("Reference")]
-        [Label("Main Painter"), SerializeField] private CSImage _csImage;
-        [Foldout("Renderers"), SerializeField] private CSPaintingRenderer _paintingRenderer;
-        [Foldout("Renderers"), SerializeField] private CSPaintingRenderer _paintingPreview;
-        [Foldout("Renderers"), SerializeField] private CSPaintingRenderer _paintingHover;
-        [Foldout("Renderers"), SerializeField] private CSPaintingBackgroundRenderer _backgroundRenderer;
-        [Foldout("Renderers"), SerializeField] private Image _guideLineRenderer;
+        [SerializeField] private CSImage _csImage;
+        [SerializeField] private CSPaintingRenderer _paintingRenderer;
+        [SerializeField] private CSPaintingRenderer _paintingPreview;
+        [SerializeField] private CSPaintingRenderer _paintingHover;
+        [SerializeField] private CSPaintingBackgroundRenderer _backgroundRenderer;
+        [SerializeField] private Image _guideLineRenderer;
         [SerializeField] private Transform _brushContainer;
         [SerializeField] private Transform _brushUIContainer;
         [SerializeField] private FlexibleColorPicker _colorPicker;
@@ -38,8 +35,8 @@ namespace CharacterStudio
         [SerializeField] private CSBrushUI _brushUIPrefab;
 
 
-        Dictionary<eBrushType, CSBrush> _brushes = new ();
-        Dictionary<eBrushType, CSBrushUI> _brushUIs = new ();
+        Dictionary<eBrushType, CSBrush> _brushes = new();
+        Dictionary<eBrushType, CSBrushUI> _brushUIs = new();
         CSBrush _activeBrush;
         EventSubscription<PointerDownArgs> _pointerDownSubscription;
         EventSubscription<PointerMoveArgs> _pointerMoveSubscription;
@@ -56,8 +53,8 @@ namespace CharacterStudio
         public CSPaintingSetting Setting => _paintingSetting;
         public Color CuurentColor => _colorPicker.color;
         public CSBrush ActiveBrush => _activeBrush;
-        public bool IsSetup {get; private set;} = false;
-        public eCharacterPart ChosenPart {get; private set;}
+        public bool IsSetup { get; private set; } = false;
+        public eCharacterPart ChosenPart { get; private set; }
 
         protected override bool Awake()
         {
@@ -65,25 +62,25 @@ namespace CharacterStudio
         }
         public void Setup()
         {
-            var part = CharacterStudioMain.Instance.SelectedCategory;   
+            var part = CharacterStudioMain.Instance.SelectedCategory;
             ChosenPart = part;
             _canvasGroup.alpha = 1;
             _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
 
-            _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>( OnPointerHover );
-            _pointerDownSubscription = EventBus.Instance.Subscribe<PointerDownArgs>( OnPointerDown );
-            _pointerUpSubscription = EventBus.Instance.Subscribe<PointerUpArgs>( OnPointerUp );
-            _pointerEnterSubscription = EventBus.Instance.Subscribe<PointerEnterArgs>( OnPointerEnter );
-            _pointerExitSubscription = EventBus.Instance.Subscribe<PointerExitArgs>( OnPointerExit );
-            _brushSelectedSubscription = EventBus.Instance.Subscribe<OnBrushSelectedArgs>( OnBrushSelected );
-            _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>( OnColorPicked );
-            _undoSubscription = EventBus.Instance.Subscribe<OnUndoArg>( OnUndo );
-            _redoSubscription = EventBus.Instance.Subscribe<OnRedoArg>( OnRedo );
-            _savePaintingSubscription = EventBus.Instance.Subscribe<SavePaintingArg>( OnSavePainting );
+            _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>(OnPointerHover);
+            _pointerDownSubscription = EventBus.Instance.Subscribe<PointerDownArgs>(OnPointerDown);
+            _pointerUpSubscription = EventBus.Instance.Subscribe<PointerUpArgs>(OnPointerUp);
+            _pointerEnterSubscription = EventBus.Instance.Subscribe<PointerEnterArgs>(OnPointerEnter);
+            _pointerExitSubscription = EventBus.Instance.Subscribe<PointerExitArgs>(OnPointerExit);
+            _brushSelectedSubscription = EventBus.Instance.Subscribe<OnBrushSelectedArgs>(OnBrushSelected);
+            _colorPickedSubscription = EventBus.Instance.Subscribe<OnColorPickedArgs>(OnColorPicked);
+            _undoSubscription = EventBus.Instance.Subscribe<OnUndoArg>(OnUndo);
+            _redoSubscription = EventBus.Instance.Subscribe<OnRedoArg>(OnRedo);
+            _savePaintingSubscription = EventBus.Instance.Subscribe<SavePaintingArg>(OnSavePainting);
 
-            _backgroundRenderer.Setup( _paintingSetting );
-            Cursor.SetCursor( null, Vector2.zero, CursorMode.Auto );
+            _backgroundRenderer.Setup(_paintingSetting);
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             Texture2D texture = DataManager.Instance.CharacterDatabase.GetInstructionTexture(part);
             if (texture == null)
             {
@@ -93,17 +90,17 @@ namespace CharacterStudio
             _guideLineRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
 
 
-            
+
             foreach (var brushPrefab in _paintingSetting.GetAllBrushes())
             {
-                CSBrush brush = Instantiate( brushPrefab, _brushContainer );
-                brush.Setup( _paintingRenderer, _paintingPreview, _paintingHover );
-                brush.gameObject.SetActive( false );
-                _brushes.TryAdd( brush.BrushType, brush );
-                
-                CSBrushUI brushUI = Instantiate( _brushUIPrefab, _brushUIContainer );
-                brushUI.Setup( brush );
-                _brushUIs.TryAdd( brush.BrushType, brushUI );
+                CSBrush brush = Instantiate(brushPrefab, _brushContainer);
+                brush.Setup(_paintingRenderer, _paintingPreview, _paintingHover);
+                brush.gameObject.SetActive(false);
+                _brushes.TryAdd(brush.BrushType, brush);
+
+                CSBrushUI brushUI = Instantiate(_brushUIPrefab, _brushUIContainer);
+                brushUI.Setup(brush);
+                _brushUIs.TryAdd(brush.BrushType, brushUI);
             }
             SelectBrush(_paintingSetting.DefaultBrush);
             SetCurrentColor(_colorPicker.StartingColor);
@@ -139,17 +136,17 @@ namespace CharacterStudio
         }
         public void Unsetup()
         {
-            EventBus.Instance.Unsubscribe( _pointerDownSubscription );
-            EventBus.Instance.Unsubscribe( _pointerMoveSubscription );
-            EventBus.Instance.Unsubscribe( _pointerUpSubscription );
-            EventBus.Instance.Unsubscribe( _pointerHoverSubscription );
-            EventBus.Instance.Unsubscribe( _pointerEnterSubscription );
-            EventBus.Instance.Unsubscribe( _pointerExitSubscription );
-            EventBus.Instance.Unsubscribe( _brushSelectedSubscription );
-            EventBus.Instance.Unsubscribe( _colorPickedSubscription );
-            EventBus.Instance.Unsubscribe( _undoSubscription );
-            EventBus.Instance.Unsubscribe( _redoSubscription );
-            EventBus.Instance.Unsubscribe( _savePaintingSubscription );
+            EventBus.Instance.Unsubscribe(_pointerDownSubscription);
+            EventBus.Instance.Unsubscribe(_pointerMoveSubscription);
+            EventBus.Instance.Unsubscribe(_pointerUpSubscription);
+            EventBus.Instance.Unsubscribe(_pointerHoverSubscription);
+            EventBus.Instance.Unsubscribe(_pointerEnterSubscription);
+            EventBus.Instance.Unsubscribe(_pointerExitSubscription);
+            EventBus.Instance.Unsubscribe(_brushSelectedSubscription);
+            EventBus.Instance.Unsubscribe(_colorPickedSubscription);
+            EventBus.Instance.Unsubscribe(_undoSubscription);
+            EventBus.Instance.Unsubscribe(_redoSubscription);
+            EventBus.Instance.Unsubscribe(_savePaintingSubscription);
             _activeBrush?.Unsetup();
             foreach (var brush in _brushes.Values)
             {
@@ -179,16 +176,16 @@ namespace CharacterStudio
         }
         private void Update()
         {
-            if ( !IsSetup )
+            if (!IsSetup)
                 return;
-            if ( Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl ) )
+            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
             {
                 float mouseVScroll = Input.mouseScrollDelta.y;
-                if ( mouseVScroll < 0 )
+                if (mouseVScroll < 0)
                 {
                     _activeBrush?.DecreaseSize();
                 }
-                else if ( mouseVScroll > 0 )
+                else if (mouseVScroll > 0)
                 {
                     _activeBrush?.IncreaseSize();
                 }
@@ -219,15 +216,15 @@ namespace CharacterStudio
             DrawHover(args.Data);
         }
 
-        private void OnPointerDown( PointerDownArgs args )
+        private void OnPointerDown(PointerDownArgs args)
         {
-            StartDrawing( args.Data );
+            StartDrawing(args.Data);
         }
-        private void OnPointerMove( PointerMoveArgs args )
+        private void OnPointerMove(PointerMoveArgs args)
         {
-            Draw( args.Data );
+            Draw(args.Data);
         }
-        private void OnPointerUp( PointerUpArgs args )
+        private void OnPointerUp(PointerUpArgs args)
         {
             StopDrawing();
         }
@@ -265,7 +262,7 @@ namespace CharacterStudio
             _activeBrush = null;
             foreach (var brush in _brushes.Values)
             {
-                brush.gameObject.SetActive( false );
+                brush.gameObject.SetActive(false);
             }
 
             // * Select brush
@@ -274,7 +271,7 @@ namespace CharacterStudio
                 Debug.LogError("Brush not found");
                 return;
             }
-            _activeBrush.gameObject.SetActive( true );
+            _activeBrush.gameObject.SetActive(true);
 
             if (!_brushUIs.TryGetValue(brushType, out CSBrushUI brushUI))
             {
@@ -291,35 +288,35 @@ namespace CharacterStudio
         }
         void ReloadBrush()
         {
-            _activeBrush?.Setup( _paintingRenderer, _paintingPreview, _paintingHover );
+            _activeBrush?.Setup(_paintingRenderer, _paintingPreview, _paintingHover);
         }
         void HandleCursor(bool isEnter)
         {
-            _activeBrush.HandleCursor( isEnter );
+            _activeBrush.HandleCursor(isEnter);
             _paintingHover.ClearCanvas();
         }
         void StopDrawing()
         {
-            _activeBrush.DrawPointerUp( eCanvasType.Main, Vector2.zero, CuurentColor );
-            EventBus.Instance.Unsubscribe( _pointerMoveSubscription );
+            _activeBrush.DrawPointerUp(eCanvasType.Main, Vector2.zero, CuurentColor);
+            EventBus.Instance.Unsubscribe(_pointerMoveSubscription);
         }
         void Draw(PointerEventData evt)
         {
-            Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas( evt, _csImage.RectTransform );
-            _activeBrush.DrawPointerMove( eCanvasType.Main, normalizedVector, CuurentColor );
+            Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas(evt, _csImage.RectTransform);
+            _activeBrush.DrawPointerMove(eCanvasType.Main, normalizedVector, CuurentColor);
         }
-        void DrawHover( PointerEventData evt )
+        void DrawHover(PointerEventData evt)
         {
-            Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas( evt, _csImage.RectTransform );
-            _activeBrush.DrawOnHover( normalizedVector, CuurentColor );
+            Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas(evt, _csImage.RectTransform);
+            _activeBrush.DrawOnHover(normalizedVector, CuurentColor);
         }
-        void StartDrawing( PointerEventData evt )
+        void StartDrawing(PointerEventData evt)
         {
-            Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas( evt, _csImage.RectTransform );
-            _activeBrush.DrawPointerDown( eCanvasType.Main, normalizedVector, CuurentColor );
-            _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>( OnPointerMove );
+            Vector2 normalizedVector = CSUtils.GetNormalizedPositionOnPaintingCanvas(evt, _csImage.RectTransform);
+            _activeBrush.DrawPointerDown(eCanvasType.Main, normalizedVector, CuurentColor);
+            _pointerMoveSubscription = EventBus.Instance.Subscribe<PointerMoveArgs>(OnPointerMove);
         }
-        [Button("Clear")]
+        [ContextMenu("Clear")]
         public void Clear()
         {
             _paintingRenderer.ClearCanvas();

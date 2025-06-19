@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace CharacterStudio
         public eCharacterPart Part;
         public string DefaultPart;
     }
-    [CreateAssetMenu( fileName = "DefaultPartDataList", menuName = "CharacterStudio/Configs/Default Part Data List" )]
+    [CreateAssetMenu(fileName = "DefaultPartDataList", menuName = "CharacterStudio/Configs/Default Part Data List")]
     public class DefaultPartDataList : CSJson
     {
         public List<DefaultPartData> DefaultParts;

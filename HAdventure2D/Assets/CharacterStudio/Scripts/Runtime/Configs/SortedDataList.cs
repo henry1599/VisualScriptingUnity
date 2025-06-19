@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace CharacterStudio
         public eCharacterPart Part;
         public int Order;
     }
-    [CreateAssetMenu( fileName = "SortedDataList", menuName = "CharacterStudio/Configs/SortedDataList" )]
+    [CreateAssetMenu(fileName = "SortedDataList", menuName = "CharacterStudio/Configs/SortedDataList")]
     public class SortedDataList : CSJson
     {
         public List<SortedData> SortedData;

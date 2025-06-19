@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace CharacterStudio
 {
@@ -22,7 +19,7 @@ namespace CharacterStudio
     {
         public eCharacterPart Part { get; private set; }
         public string Id { get; private set; }
-        public PartChangedArg( eCharacterPart part, string id )
+        public PartChangedArg(eCharacterPart part, string id)
         {
             Part = part;
             Id = id;

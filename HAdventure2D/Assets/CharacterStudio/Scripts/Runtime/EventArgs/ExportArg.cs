@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace CharacterStudio
 {
@@ -25,7 +22,7 @@ namespace CharacterStudio
     }
     public class SpritesheetExportArg : ExportArg
     {
-        public bool AutoSlice {get; private set;}
+        public bool AutoSlice { get; private set; }
         public SpritesheetExportArg(string folderPath, bool autoSlice, string name) : base(eExportType.SpriteSheet, folderPath, name)
         {
             AutoSlice = autoSlice;

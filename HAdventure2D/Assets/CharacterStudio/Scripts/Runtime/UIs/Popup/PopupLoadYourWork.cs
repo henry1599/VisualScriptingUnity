@@ -1,6 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,7 +13,7 @@ namespace CharacterStudio
         public override ePopupType PopupType => ePopupType.Load_Your_Work;
         public UISaveItem itemPrefab;
         public Transform itemContainer;
-        private List<(string name, ProgressSaveData data)> _saveDataList = new ();
+        private List<(string name, ProgressSaveData data)> _saveDataList = new();
         private UISaveItem _selectedItem = null;
         public Button _confirmButton;
         private void Start()

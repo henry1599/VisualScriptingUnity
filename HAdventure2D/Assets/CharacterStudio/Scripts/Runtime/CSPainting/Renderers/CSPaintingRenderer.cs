@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace CharacterStudio
 {
@@ -18,11 +15,11 @@ namespace CharacterStudio
         protected virtual void Start()
         {
             _isSetup = false;
-            _drawingTexture = new Texture2D( _renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false )
+            _drawingTexture = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false)
             {
                 filterMode = FilterMode.Point
             };
-            _pixelColors = new Color[ _renderTexture.width * _renderTexture.height ];
+            _pixelColors = new Color[_renderTexture.width * _renderTexture.height];
             ClearCanvas();
             _isSetup = true;
         }
@@ -32,8 +29,8 @@ namespace CharacterStudio
         }
         public Color[] GetClonedPixelColors()
         {
-            Color[] clonedColors = new Color[ _pixelColors.Length ];
-            _pixelColors.CopyTo( clonedColors, 0 );
+            Color[] clonedColors = new Color[_pixelColors.Length];
+            _pixelColors.CopyTo(clonedColors, 0);
             return clonedColors;
         }
         public void SetPixelColors(Color[] pixelColors)
@@ -44,100 +41,100 @@ namespace CharacterStudio
         {
             if (_pixelColors == null)
                 return;
-            for ( int i = 0; i < _pixelColors.Length; i++ )
+            for (int i = 0; i < _pixelColors.Length; i++)
             {
-                _pixelColors[ i ] = Color.clear;
+                _pixelColors[i] = Color.clear;
             }
             UpdateRenderTexture();
         }
-        public void ClearCanvasWithouRect( Vector2Int startIndex, Vector2Int endIndex )
+        public void ClearCanvasWithouRect(Vector2Int startIndex, Vector2Int endIndex)
         {
-            int minX = Mathf.Min( startIndex.x, endIndex.x );
-            int maxX = Mathf.Max( startIndex.x, endIndex.x );
-            int minY = Mathf.Min( startIndex.y, endIndex.y );
-            int maxY = Mathf.Max( startIndex.y, endIndex.y );
-            for ( int i = 0; i < _pixelColors.Length; i++ )
+            int minX = Mathf.Min(startIndex.x, endIndex.x);
+            int maxX = Mathf.Max(startIndex.x, endIndex.x);
+            int minY = Mathf.Min(startIndex.y, endIndex.y);
+            int maxY = Mathf.Max(startIndex.y, endIndex.y);
+            for (int i = 0; i < _pixelColors.Length; i++)
             {
                 int x = i % _renderTexture.width;
                 int y = i / _renderTexture.width;
-                if ( x >= minX && x <= maxX && y >= minY && y <= maxY )
+                if (x >= minX && x <= maxX && y >= minY && y <= maxY)
                     continue;
-                _pixelColors[ i ] = Color.clear;
+                _pixelColors[i] = Color.clear;
             }
         }
-        public void ClearInRect( Vector2Int startIndex, Vector2Int endIndex )
+        public void ClearInRect(Vector2Int startIndex, Vector2Int endIndex)
         {
-            int minX = Mathf.Min( startIndex.x, endIndex.x );
-            int maxX = Mathf.Max( startIndex.x, endIndex.x );
-            int minY = Mathf.Min( startIndex.y, endIndex.y );
-            int maxY = Mathf.Max( startIndex.y, endIndex.y );
-            for ( int y = minY; y <= maxY; y++ )
+            int minX = Mathf.Min(startIndex.x, endIndex.x);
+            int maxX = Mathf.Max(startIndex.x, endIndex.x);
+            int minY = Mathf.Min(startIndex.y, endIndex.y);
+            int maxY = Mathf.Max(startIndex.y, endIndex.y);
+            for (int y = minY; y <= maxY; y++)
             {
-                for ( int x = minX; x <= maxX; x++ )
+                for (int x = minX; x <= maxX; x++)
                 {
                     int i = y * _renderTexture.width + x;
-                    if ( i >= _pixelColors.Length || i < 0 )
+                    if (i >= _pixelColors.Length || i < 0)
                         continue;
-                    _pixelColors[ i ] = Color.clear;
+                    _pixelColors[i] = Color.clear;
                 }
             }
             UpdateRenderTexture();
         }
-        public Color GetColorAtIndex( int x, int y )
+        public Color GetColorAtIndex(int x, int y)
         {
-            return _pixelColors[ y * _renderTexture.width + x ];
+            return _pixelColors[y * _renderTexture.width + x];
         }
-        public Color GetColorAtIndex( Vector2Int index )
+        public Color GetColorAtIndex(Vector2Int index)
         {
-            return GetColorAtIndex( index.x, index.y );
+            return GetColorAtIndex(index.x, index.y);
         }
-        public Color GetColorAtIndex( int i )
+        public Color GetColorAtIndex(int i)
         {
-            return _pixelColors[ i ];
+            return _pixelColors[i];
         }
         public void UpdateRenderTexture()
         {
             RenderTexture currentActiveRT = RenderTexture.active;
             RenderTexture.active = _renderTexture;
-            _drawingTexture.SetPixels( _pixelColors );
+            _drawingTexture.SetPixels(_pixelColors);
             _drawingTexture.Apply();
-            Graphics.Blit( _drawingTexture, _renderTexture );
+            Graphics.Blit(_drawingTexture, _renderTexture);
             RenderTexture.active = currentActiveRT;
         }
-        public static void CopyTo( CSPaintingRenderer from, CSPaintingRenderer to )
+        public static void CopyTo(CSPaintingRenderer from, CSPaintingRenderer to)
         {
-            for ( int i = 0; i < from.PixelColors.Length; i++ )
+            for (int i = 0; i < from.PixelColors.Length; i++)
             {
-                if ( i >= from.PixelColors.Length || i < 0 )
+                if (i >= from.PixelColors.Length || i < 0)
                     continue;
-                if ( from.PixelColors[ i ] == Color.clear )
+                if (from.PixelColors[i] == Color.clear)
                     continue;
-                to.PixelColors[ i ] = from.PixelColors[ i ];
+                to.PixelColors[i] = from.PixelColors[i];
             }
             to.UpdateRenderTexture();
         }
-        public static void CopyToRect( CSPaintingRenderer from, CSPaintingRenderer to, Vector2Int startIndex, Vector2Int endIndex )
+        public static void CopyToRect(CSPaintingRenderer from, CSPaintingRenderer to, Vector2Int startIndex, Vector2Int endIndex)
         {
-            int minX = Mathf.Min( startIndex.x, endIndex.x );
-            int maxX = Mathf.Max( startIndex.x, endIndex.x );
-            int minY = Mathf.Min( startIndex.y, endIndex.y );
-            int maxY = Mathf.Max( startIndex.y, endIndex.y );
-            for ( int y = minY; y <= maxY; y++ )
+            int minX = Mathf.Min(startIndex.x, endIndex.x);
+            int maxX = Mathf.Max(startIndex.x, endIndex.x);
+            int minY = Mathf.Min(startIndex.y, endIndex.y);
+            int maxY = Mathf.Max(startIndex.y, endIndex.y);
+            for (int y = minY; y <= maxY; y++)
             {
-                for ( int x = minX; x <= maxX; x++ )
+                for (int x = minX; x <= maxX; x++)
                 {
                     int i = y * from.RT.width + x;
-                    if ( i >= from.PixelColors.Length || i < 0)
+                    if (i >= from.PixelColors.Length || i < 0)
                         continue;
-                    if ( from.PixelColors[ i ] == Color.clear )
+                    if (from.PixelColors[i] == Color.clear)
                         continue;
-                    to.PixelColors[ i ] = from.PixelColors[ i ];
+                    to.PixelColors[i] = from.PixelColors[i];
                 }
             }
             to.UpdateRenderTexture();
         }
         // * Save a rect on a renderer into a separated array
-        public static Color[] SaveToArray( CSPaintingRenderer renderer, Vector2Int startIndex, Vector2Int endIndex )
+        public static Color[] SaveToArray(CSPaintingRenderer renderer, Vector2Int startIndex, Vector2Int endIndex)
         {
             int minX = Mathf.Min(startIndex.x, endIndex.x);
             int maxX = Mathf.Max(startIndex.x, endIndex.x);
@@ -164,7 +161,7 @@ namespace CharacterStudio
             }
             return results;
         }
-        public static void LoadArrayToRenderer( CSPaintingRenderer renderer, Color[] pixelArray, Vector2Int startIndex, Vector2Int endIndex )
+        public static void LoadArrayToRenderer(CSPaintingRenderer renderer, Color[] pixelArray, Vector2Int startIndex, Vector2Int endIndex)
         {
             int minX = Mathf.Min(startIndex.x, endIndex.x);
             int maxX = Mathf.Max(startIndex.x, endIndex.x);

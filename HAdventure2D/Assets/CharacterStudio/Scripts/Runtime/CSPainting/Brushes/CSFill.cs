@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -73,9 +72,9 @@ namespace CharacterStudio
                 result.Add(right);
             return result;
         }
-        public override void HandleCursor( bool isEnter )
+        public override void HandleCursor(bool isEnter)
         {
-            if ( isEnter )
+            if (isEnter)
             {
                 SetSelfCursor();
             }
@@ -87,9 +86,9 @@ namespace CharacterStudio
 
         public override void SetSelfCursor()
         {
-            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor( BrushType );
-            Vector2 hotpot = new Vector2( icon.width / 2f, icon.height / 2f );
-            Cursor.SetCursor( icon, hotpot, CursorMode.Auto );
+            Texture2D icon = CSPaintingManager.Instance.Setting.GetBrushCursor(BrushType);
+            Vector2 hotpot = new Vector2(icon.width / 2f, icon.height / 2f);
+            Cursor.SetCursor(icon, hotpot, CursorMode.Auto);
             Cursor.visible = true;
         }
 
